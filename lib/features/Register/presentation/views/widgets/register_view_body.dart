@@ -1,4 +1,5 @@
 import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/features/Register/presentation/views/widgets/custom_button.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
@@ -116,17 +117,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     const Gap(10),
 
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Please enter your name";
-                        }
-
-                        if (value.trim().length < 3) {
-                          return "Name is too short";
-                        }
-
-                        return null;
-                      },
+                      validator: (value) => Validators.name(value),
                       controller: fullNameController,
                       hintText: "Alex Johnson",
                       prefixIcon: const Icon(Icons.person_outline),
@@ -139,21 +130,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     const Gap(10),
 
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Please enter your email";
-                        }
-
-                        final emailRegex = RegExp(
-                          r'^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$',
-                        );
-
-                        if (!emailRegex.hasMatch(value.trim())) {
-                          return "Please enter a valid email";
-                        }
-
-                        return null;
-                      },
+                      validator: (value) => Validators.email(value),
                       controller: emailController,
                       hintText: "alex@email.com",
                       keyboardType: TextInputType.emailAddress,
@@ -167,17 +144,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     const Gap(10),
 
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Please enter your password";
-                        }
-
-                        if (value.length < 8) {
-                          return "Password must be at least 8 characters";
-                        }
-
-                        return null;
-                      },
+                      validator: (value) => Validators.password(value),
                       controller: passwordController,
                       hintText: "Min. 8 characters",
                       obscureText: true,
@@ -191,17 +158,10 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     const Gap(10),
 
                     CustomTextField(
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return "Confirm your password";
-                        }
-
-                        if (value != passwordController.text) {
-                          return "Passwords do not match";
-                        }
-
-                        return null;
-                      },
+                      validator: (value) => Validators.confirmPassword(
+                        value,
+                        confirmPasswordController.text,
+                      ),
                       controller: confirmPasswordController,
                       hintText: "Repeat your password",
                       obscureText: true,
