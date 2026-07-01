@@ -8,8 +8,13 @@ class AuthRepoIplm implements AuthRepo {
   Future<UserCredential> register({
     required String email,
     required String password,
+    required String name,
   }) {
-    return firebaseAuthService.register(email: email, password: password);
+    return firebaseAuthService.register(
+      email: email,
+      password: password,
+      name: name,
+    );
   }
 
   @override

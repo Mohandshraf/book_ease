@@ -4,6 +4,7 @@ abstract class AuthRepo {
   Future<UserCredential> register({
     required String email,
     required String password,
+    required String name,
   });
 
   Future<UserCredential> signIn({
