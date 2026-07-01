@@ -45,9 +45,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                 width: 50,
                 height: 50,
                 decoration: BoxDecoration(
-                  border: Border.all(
-                    color: Colors.black,
-                    width: 0.3),
+                  border: Border.all(color: Colors.black, width: 0.3),
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(30),
                 ),
