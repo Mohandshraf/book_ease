@@ -1,5 +1,10 @@
-import 'package:book_ease/features/home/presentation/views/widgets/home_view.dart';
+import 'package:book_ease/custom_provider_view.dart';
+import 'package:book_ease/custom_root_view.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class RootView extends StatefulWidget {
   const RootView({super.key});
@@ -9,64 +14,38 @@ class RootView extends StatefulWidget {
 }
 
 class _RootViewState extends State<RootView> {
-  int currentIndex = 0;
-
-  final List<Widget> pages = const [
-    HomeView(),
-    Scaffold(
-      body: Center(child: Text("Bookings", style: TextStyle(fontSize: 24))),
-    ),
-
-    Scaffold(
-      body: Center(child: Text("Admin", style: TextStyle(fontSize: 24))),
-    ),
-  ];
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserCubit>().getCurrentUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: IndexedStack(index: currentIndex, children: pages),
+    return BlocBuilder<UserCubit, UserCubitState>(
+      builder: (context, state) {
+        if (state is UserDataLoading) {
+          return const Scaffold(
+            body: Center(child: CircularProgressIndicator()),
+          );
+        }
 
-      bottomNavigationBar: NavigationBar(
-        height: 78,
-        selectedIndex: currentIndex,
-        backgroundColor: Colors.white,
-        indicatorColor: const Color(0xffDDFBF0),
+        if (state is UserDataFailure) {
+          return Scaffold(body: Center(child: Text(state.errorMessage)));
+        }
 
-        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+        if (state is UserDataLoaded) {
+          final role = state.userData["role"];
 
-        onDestinationSelected: (index) {
-          setState(() {
-            currentIndex = index;
-          });
-        },
+          if (role == "customer") {
+            return const CustomerRootView();
+          }
 
-        destinations: const [
-          NavigationDestination(
-            icon: Icon(Icons.home_outlined),
-            selectedIcon: Icon(Icons.home),
-            label: "Home",
-          ),
+          return const ProviderRootView();
+        }
 
-          NavigationDestination(
-            icon: Icon(Icons.menu_book_outlined),
-            selectedIcon: Icon(Icons.menu_book),
-            label: "Bookings",
-          ),
-
-          NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: "Profile",
-          ),
-
-          NavigationDestination(
-            icon: Icon(Icons.bar_chart_outlined),
-            selectedIcon: Icon(Icons.bar_chart),
-            label: "Admin",
-          ),
-        ],
-      ),
+        return const SizedBox();
+      },
     );
   }
 }

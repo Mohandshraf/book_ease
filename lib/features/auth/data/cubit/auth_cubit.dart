@@ -40,4 +40,16 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthFailure('Something went wrong. Please try again.'));
     }
   }
+
+  Future<void> saveRole({required String role}) async {
+    emit(AuthLoading());
+
+    try {
+      await authRepo.saveRole(role: role);
+
+      emit(AuthSuccess());
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
+    }
+  }
 }

@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 abstract class AuthRepo {
@@ -11,4 +12,6 @@ abstract class AuthRepo {
     required String email,
     required String password,
   });
+  Future<void> saveRole({required String role});
+  Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData();
 }

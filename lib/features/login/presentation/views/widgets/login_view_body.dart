@@ -1,3 +1,4 @@
+import 'package:book_ease/choose_role_view.dart';
 import 'package:book_ease/core/app_colors.dart';
 import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/core/widgets/custom_text_field.dart';
@@ -47,7 +48,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (_) => const HomeView()),
+              MaterialPageRoute(builder: (_) => ChooseRoleView()),
             );
           }
 
@@ -140,11 +141,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                         color: Color(0xff8A9AB0),
                       ),
                     ),
-
                     const SizedBox(height: 10),
-
                     CustomTextField(
-                      validator: (value) => Validators.password(value),
                       controller: passwordcontroller,
                       fillColor: const Color(0xffF7FAFC),
                       hintText: "Password",
