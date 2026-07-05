@@ -1,4 +1,5 @@
 import 'package:book_ease/features/SplashView/presentation/views/splash_view.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/repo/auth_repo_iplm.dart';
 import 'package:book_ease/firebase_options.dart';
@@ -18,8 +19,12 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => AuthCubit(AuthRepoIplm()),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => AuthCubit(AuthRepoIplm())),
+
+        BlocProvider(create: (_) => UserCubit(AuthRepoIplm())),
+      ],
 
       child: const MaterialApp(
         debugShowCheckedModeBanner: false,

@@ -9,6 +9,7 @@ import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
 import 'package:book_ease/features/home/presentation/views/widgets/home_view.dart';
 import 'package:book_ease/features/login/presentation/views/login_view.dart';
 import 'package:book_ease/features/login/presentation/views/widgets/selection_button.dart';
+import 'package:book_ease/root_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -46,10 +47,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               ),
             );
 
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (_) => ChooseRoleView()),
-            );
+            if (state.hasRole) {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const RootView()),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const ChooseRoleView()),
+              );
+            }
           }
 
           if (state is AuthFailure) {
