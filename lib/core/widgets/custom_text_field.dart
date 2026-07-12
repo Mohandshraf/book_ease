@@ -46,13 +46,11 @@ class CustomTextField extends StatelessWidget {
         validator: validator,
         decoration: InputDecoration(
           hintText: hintText,
-          hintStyle: const TextStyle(color: Color(0xff93A2B8), fontSize: 18),
+          hintStyle: hintStyle,
           prefixIcon: prefixIcon,
           suffixIcon: suffixIcon,
-
           filled: true,
           fillColor: fillColor ?? const Color(0xffF7FAFC),
-
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 20,
             vertical: 22,

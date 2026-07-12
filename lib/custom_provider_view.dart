@@ -1,13 +1,67 @@
+import 'package:book_ease/features/Admin/presentation/views/admin_view.dart';
+import 'package:book_ease/features/booking/presentation/views/booking_view.dart';
+import 'package:book_ease/features/home/presentation/views/widgets/home_view.dart';
+import 'package:book_ease/features/profile/presentation/views/profile_view.dart';
 import 'package:flutter/material.dart';
 
-class ProviderRootView extends StatelessWidget {
+class ProviderRootView extends StatefulWidget {
   const ProviderRootView({super.key});
 
   @override
+  State<ProviderRootView> createState() => _ProviderRootViewState();
+}
+
+class _ProviderRootViewState extends State<ProviderRootView> {
+  int currentIndex = 0;
+
+  final List<Widget> pages = const [
+    HomeView(),
+    BookingView(),
+    ProfileView(),
+    AdminView(),
+  ];
+  @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text("Provider Home", style: TextStyle(fontSize: 24)),
+    return Scaffold(
+      body: IndexedStack(index: currentIndex, children: pages),
+      bottomNavigationBar: NavigationBar(
+        height: 78,
+        selectedIndex: currentIndex,
+        backgroundColor: Colors.white,
+        indicatorColor: const Color(0xffDDFBF0),
+        labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+
+        onDestinationSelected: (index) {
+          setState(() {
+            currentIndex = index;
+          });
+        },
+
+        destinations: const [
+          NavigationDestination(
+            icon: Icon(Icons.home_outlined),
+            selectedIcon: Icon(Icons.home),
+            label: "Home",
+          ),
+
+          NavigationDestination(
+            icon: Icon(Icons.menu_book_outlined),
+            selectedIcon: Icon(Icons.menu_book),
+            label: "Bookings",
+          ),
+
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: "Profile",
+          ),
+
+          NavigationDestination(
+            icon: Icon(Icons.bar_chart_outlined),
+            selectedIcon: Icon(Icons.bar_chart),
+            label: "Admin",
+          ),
+        ],
       ),
     );
   }
