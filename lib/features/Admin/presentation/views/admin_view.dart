@@ -73,10 +73,10 @@ class AdminView extends StatelessWidget {
                 const SizedBox(height: 22),
 
                 CustomTextField(
+                  style: TextStyle(color: Colors.white),
                   hintText: "Live · 34 appointments today",
-                  fillColor: const Color(0xff2B354D),
-
-                  prefixIcon: const Padding(
+                  fillColor: Color(0xff2B354D),
+                  prefixIcon: Padding(
                     padding: EdgeInsets.only(left: 16),
                     child: Icon(
                       Icons.circle,
@@ -84,7 +84,6 @@ class AdminView extends StatelessWidget {
                       size: 12,
                     ),
                   ),
-
                   suffixIcon: const Padding(
                     padding: EdgeInsets.only(right: 18),
                     child: Icon(
@@ -104,7 +103,7 @@ class AdminView extends StatelessWidget {
         ),
       ),
 
-      body: const AdminViewBody(),
+      body: AdminViewBody(),
     );
   }
 }

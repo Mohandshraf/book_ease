@@ -14,7 +14,7 @@ class ProfileView extends StatelessWidget {
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
         elevation: 0,
-        toolbarHeight: 360,
+        toolbarHeight: 300,
 
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,7 +26,7 @@ class ProfileView extends StatelessWidget {
                     "Profile",
                     style: TextStyle(
                       color: Color(0xff0B1F44),
-                      fontSize: 34,
+                      fontSize: 30,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
@@ -157,7 +157,7 @@ class ProfileView extends StatelessWidget {
         ),
       ),
 
-      body:  ProfileViewBody(),
+      body: ProfileViewBody(),
     );
   }
 }

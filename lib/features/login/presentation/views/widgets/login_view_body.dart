@@ -6,8 +6,6 @@ import 'package:book_ease/core/widgets/custom_text_field.dart';
 import 'package:book_ease/features/Register/presentation/views/register_view.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
-import 'package:book_ease/features/home/presentation/views/widgets/home_view.dart';
-import 'package:book_ease/features/login/presentation/views/login_view.dart';
 import 'package:book_ease/features/login/presentation/views/widgets/selection_button.dart';
 import 'package:book_ease/root_view.dart';
 import 'package:flutter/material.dart';

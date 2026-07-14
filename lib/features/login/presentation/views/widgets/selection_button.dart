@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class SocialButton extends StatelessWidget {
-  const SocialButton({required this.title, required this.icon});
+  const SocialButton({super.key, required this.title, required this.icon});
 
   final String title;
   final String icon;

@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.hintStyle,
     this.fillColor,
     this.onChanged,
+    this.style,
   });
 
   final Widget? label;
@@ -27,6 +28,7 @@ class CustomTextField extends StatelessWidget {
   final TextStyle? hintStyle;
   final Color? fillColor;
   final void Function(String)? onChanged;
+  final TextStyle? style;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +44,7 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChanged,
         controller: controller,
         obscureText: obscureText,
+        style: style,
         keyboardType: keyboardType,
         validator: validator,
         decoration: InputDecoration(
@@ -55,22 +58,18 @@ class CustomTextField extends StatelessWidget {
             horizontal: 20,
             vertical: 22,
           ),
-
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Color(0xffD9E3EE), width: 1),
           ),
-
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Color(0xff0B9B7B), width: 1.5),
           ),
-
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Colors.red),
           ),
-
           focusedErrorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
             borderSide: const BorderSide(color: Colors.red),

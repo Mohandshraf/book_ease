@@ -1,8 +1,6 @@
 import 'package:book_ease/features/home/presentation/views/widgets/category_item.dart';
 import 'package:book_ease/features/home/presentation/views/widgets/featured_provider_card.dart';
-import 'package:book_ease/features/home/presentation/views/widgets/home_header.dart';
 import 'package:book_ease/features/home/presentation/views/widgets/popular_services_item.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -85,7 +83,7 @@ class HomeViewBody extends StatelessWidget {
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemBuilder: (_, index) => const FeaturedProviderCard(),
-                      separatorBuilder: (_, __) => const SizedBox(width: 18),
+                      separatorBuilder: (_, _) => const SizedBox(width: 18),
                       itemCount: 5,
                     ),
                   ),
@@ -119,7 +117,7 @@ class HomeViewBody extends StatelessWidget {
                     shrinkWrap: true,
                     physics: const NeverScrollableScrollPhysics(),
                     itemBuilder: (_, index) => const PopularServiceItem(),
-                    separatorBuilder: (_, __) => const SizedBox(height: 18),
+                    separatorBuilder: (_, _) => const SizedBox(height: 18),
                     itemCount: 6,
                   ),
                 ],

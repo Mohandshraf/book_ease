@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ProfileStatCard extends StatelessWidget {
-  const ProfileStatCard({required this.number, required this.title});
+  const ProfileStatCard({super.key, required this.number, required this.title});
 
   final String number;
   final String title;
@@ -9,7 +9,6 @@ class ProfileStatCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 95,
       decoration: BoxDecoration(
         color: const Color(0xffF8FAFC),
         borderRadius: BorderRadius.circular(22),
@@ -21,7 +20,7 @@ class ProfileStatCard extends StatelessWidget {
           Text(
             number,
             style: const TextStyle(
-              fontSize: 34,
+              fontSize: 30,
               color: Color(0xff0B9B7B),
               fontWeight: FontWeight.bold,
             ),
@@ -32,7 +31,7 @@ class ProfileStatCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
-              fontSize: 16,
+              fontSize: 13,
               color: Color(0xff64748B),
               fontWeight: FontWeight.w600,
             ),
