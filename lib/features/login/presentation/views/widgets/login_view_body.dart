@@ -4,6 +4,7 @@ import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/core/widgets/custom_text_field.dart';
 
 import 'package:book_ease/features/Register/presentation/views/register_view.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
 import 'package:book_ease/features/login/presentation/views/widgets/selection_button.dart';
@@ -46,6 +47,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             );
 
             if (state.hasRole) {
+              if (state.userData != null) {
+                context.read<UserCubit>().setUserData(state.userData!);
+              }
               Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (_) => const RootView()),

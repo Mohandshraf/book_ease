@@ -1,4 +1,5 @@
 import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
 import 'package:book_ease/root_view.dart';
@@ -14,6 +15,9 @@ class ChooseRoleView extends StatelessWidget {
     return BlocListener<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is AuthSuccess) {
+          if (state.userData != null) {
+            context.read<UserCubit>().setUserData(state.userData!);
+          }
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (_) => const RootView()),

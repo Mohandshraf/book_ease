@@ -17,8 +17,8 @@ class _ProviderRootViewState extends State<ProviderRootView> {
   final List<Widget> pages = const [
     HomeView(),
     BookingView(),
-    ProfileView(),
     AdminView(),
+    ProfileView(),
   ];
   @override
   Widget build(BuildContext context) {
@@ -51,15 +51,15 @@ class _ProviderRootViewState extends State<ProviderRootView> {
           ),
 
           NavigationDestination(
-            icon: Icon(Icons.person_outline),
-            selectedIcon: Icon(Icons.person),
-            label: "Profile",
-          ),
-
-          NavigationDestination(
             icon: Icon(Icons.bar_chart_outlined),
             selectedIcon: Icon(Icons.bar_chart),
             label: "Admin",
+          ),
+
+          NavigationDestination(
+            icon: Icon(Icons.person_outline),
+            selectedIcon: Icon(Icons.person),
+            label: "Profile",
           ),
         ],
       ),

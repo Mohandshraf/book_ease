@@ -1,7 +1,9 @@
 import 'package:book_ease/features/Admin/data/dashboard_state_model.dart';
 import 'package:book_ease/features/Admin/data/quick_actions_model.dart';
+import 'package:book_ease/features/Admin/data/recent_booking_model.dart';
 import 'package:book_ease/features/Admin/presentation/views/widgets/dashboard_state_card.dart';
 import 'package:book_ease/features/Admin/presentation/views/widgets/quick_actions_widget.dart';
+import 'package:book_ease/features/Admin/presentation/views/widgets/recent_bookings_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -60,6 +62,8 @@ class AdminViewBody extends StatelessWidget {
                 },
               ),
             ),
+            const Gap(20),
+            RecentBookingsSection(bookings: recentBookings),
           ],
         ),
       ),

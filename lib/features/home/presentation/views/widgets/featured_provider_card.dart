@@ -1,3 +1,5 @@
+import 'package:book_ease/features/service_details/data/service_details_model.dart';
+import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
 import 'package:flutter/material.dart';
 
 class FeaturedProviderCard extends StatelessWidget {
@@ -5,7 +7,16 @@ class FeaturedProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ServiceDetailsView(model: mockServiceDetails),
+          ),
+        );
+      },
+      child: Container(
       width: 260,
       decoration: BoxDecoration(
         color: Colors.white,
@@ -108,6 +119,7 @@ class FeaturedProviderCard extends StatelessWidget {
           )
         ],
       ),
+     ),
     );
   }
 }

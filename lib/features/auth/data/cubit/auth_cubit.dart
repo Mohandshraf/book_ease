@@ -40,7 +40,7 @@ class AuthCubit extends Cubit<AuthState> {
           userDoc.data() != null &&
           userDoc.data()!["role"] != null;
 
-      emit(AuthSuccess(hasRole: hasRole));
+      emit(AuthSuccess(hasRole: hasRole, userData: userDoc.data()));
     } on CustomException catch (e) {
       emit(AuthFailure(e.message));
     } catch (_) {
@@ -53,8 +53,9 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       await authRepo.saveRole(role: role);
+      final userDoc = await authRepo.getCurrentUserData();
 
-      emit(AuthSuccess(hasRole: true));
+      emit(AuthSuccess(hasRole: true, userData: userDoc.data()));
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }

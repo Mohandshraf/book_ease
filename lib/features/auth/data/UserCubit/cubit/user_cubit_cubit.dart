@@ -18,4 +18,8 @@ class UserCubit extends Cubit<UserCubitState> {
       emit(UserDataFailure(e.toString()));
     }
   }
+
+  void setUserData(Map<String, dynamic> data) {
+    emit(UserDataLoaded(data));
+  }
 }

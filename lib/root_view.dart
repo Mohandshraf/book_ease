@@ -17,7 +17,10 @@ class _RootViewState extends State<RootView> {
   @override
   void initState() {
     super.initState();
-    context.read<UserCubit>().getCurrentUserData();
+    final userCubitState = context.read<UserCubit>().state;
+    if (userCubitState is! UserDataLoaded) {
+      context.read<UserCubit>().getCurrentUserData();
+    }
   }
 
   @override
