@@ -1,204 +1,163 @@
 import 'package:flutter/material.dart';
 
 class BookingCard extends StatelessWidget {
+  final String month;
+  final String day;
+  final String title;
+  final String doctorName;
+  final String time;
+  final String status;
+  final VoidCallback? onTap;
+
   const BookingCard({
     super.key,
-    required this.image,
-    required this.name,
-    required this.service,
-    required this.date,
+    required this.month,
+    required this.day,
+    required this.title,
+    required this.doctorName,
     required this.time,
-    required this.price,
     required this.status,
-    required this.onCancel,
-    required this.onReschedule,
+    this.onTap,
   });
-
-  final String image;
-  final String name;
-  final String service;
-  final String date;
-  final String time;
-  final String price;
-  final String status;
-
-  final VoidCallback onCancel;
-  final VoidCallback onReschedule;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
-      ),
-      child: Column(
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(14),
-                child: Image.network(
-                  image,
-                  width: 56,
-                  height: 56,
-                  fit: BoxFit.cover,
-                ),
+    // Determine status badge colors based on status type
+    final isCompleted = status.toLowerCase() == "completed";
+    final badgeBgColor = isCompleted ? const Color(0xffF1F5F9) : const Color(0xffEAFDF6);
+    final badgeTextColor = isCompleted ? const Color(0xff475569) : const Color(0xff0B9B7B);
+
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 14),
+        padding: const EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            // Date Badge Left
+            Container(
+              height: 64,
+              width: 64,
+              decoration: BoxDecoration(
+                color: const Color(0xffEAFDF6),
+                borderRadius: BorderRadius.circular(16),
               ),
-
-              const SizedBox(width: 14),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            name,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ),
-
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 5,
-                          ),
-                          decoration: BoxDecoration(
-                            color: const Color(0xffDDFBF0),
-                            borderRadius: BorderRadius.circular(20),
-                          ),
-                          child: Text(
-                            status,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              color: Color(0xff0B9B7B),
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    month.toUpperCase(),
+                    style: const TextStyle(
+                      color: Color(0xff0B9B7B),
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
                     ),
-
-                    const SizedBox(height: 4),
-
-                    Text(
-                      service,
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey.shade700,
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    day,
+                    style: const TextStyle(
+                      color: Color(0xff0B9B7B),
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(width: 16),
+            // Info Column Middle
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            color: Color(0xff0B1F44),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                    ),
-
-                    const SizedBox(height: 10),
-
-                    Row(
-                      children: [
-                        Icon(
-                          Icons.calendar_today_outlined,
-                          size: 15,
-                          color: Colors.grey.shade500,
+                      const SizedBox(width: 8),
+                      // Status Badge
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 10,
+                          vertical: 4,
                         ),
-                        const SizedBox(width: 4),
-                        Text(
-                          date,
+                        decoration: BoxDecoration(
+                          color: badgeBgColor,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: Text(
+                          status,
                           style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade500,
+                            color: badgeTextColor,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                        const SizedBox(width: 14),
-                        Icon(
-                          Icons.access_time,
-                          size: 15,
-                          color: Colors.grey.shade500,
-                        ),
-                        const SizedBox(width: 4),
-                        Text(
-                          time,
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: Colors.grey.shade500,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          const Divider(height: 28),
-
-          Row(
-            children: [
-              Text(
-                "\$$price",
-                style: const TextStyle(
-                  fontSize: 22,
-                  fontWeight: FontWeight.bold,
-                  color: Color(0xff0B9B7B),
-                ),
-              ),
-
-              const Spacer(),
-
-              SizedBox(
-                height: 42,
-                width: 123,
-                child: OutlinedButton(
-                  onPressed: onReschedule,
-                  style: OutlinedButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    "Reschedule",
-                    style: TextStyle(
+                  const SizedBox(height: 4),
+                  Text(
+                    doctorName,
+                    style: const TextStyle(
+                      color: Color(0xff64748B),
                       fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      const Icon(
+                        Icons.access_time_rounded,
+                        color: Color(0xff94A3B8),
+                        size: 16,
+                      ),
+                      const SizedBox(width: 6),
+                      Text(
+                        time,
+                        style: const TextStyle(
+                          color: Color(0xff64748B),
+                          fontSize: 13,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-
-              const SizedBox(width: 10),
-
-              SizedBox(
-                height: 42,
-                width: 95,
-                child: OutlinedButton(
-                  onPressed: onCancel,
-                  style: OutlinedButton.styleFrom(
-                    side: const BorderSide(color: Color(0xffFFD8D8)),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: const Text(
-                    "Cancel",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.red,
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ],
+            ),
+            const SizedBox(width: 8),
+            // Chevron Right Arrow
+            const Icon(
+              Icons.chevron_right_rounded,
+              color: Color(0xffCBD5E1),
+              size: 24,
+            ),
+          ],
+        ),
       ),
     );
   }

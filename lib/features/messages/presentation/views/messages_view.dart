@@ -1,3 +1,4 @@
+import 'package:book_ease/features/messages/presentation/views/chat_view.dart';
 import 'package:flutter/material.dart';
 
 class MessagesView extends StatelessWidget {
@@ -118,96 +119,106 @@ class MessagesView extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final chat = chats[index];
-                return Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                  child: Row(
-                    children: [
-                      Stack(
-                        children: [
-                          CircleAvatar(
-                            radius: 28,
-                            backgroundImage: NetworkImage(chat["image"]),
-                            backgroundColor: const Color(0xffE2E8F0),
-                          ),
-                          if (chat["unread"])
-                            Positioned(
-                              right: 0,
-                              top: 0,
-                              child: Container(
-                                height: 14,
-                                width: 14,
-                                decoration: BoxDecoration(
-                                  color: const Color(0xff0B9B7B),
-                                  shape: BoxShape.circle,
-                                  border: Border.all(
-                                    color: Colors.white,
-                                    width: 2.5,
-                                  ),
-                                ),
-                              ),
-                            ),
-                        ],
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ChatView(doctorName: chat["name"]),
                       ),
-                      const SizedBox(width: 16),
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                    );
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    child: Row(
+                      children: [
+                        Stack(
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  chat["name"],
-                                  style: TextStyle(
-                                    color: const Color(0xff0B1F44),
-                                    fontSize: 16,
-                                    fontWeight: chat["unread"]
-                                        ? FontWeight.bold
-                                        : FontWeight.w600,
+                            CircleAvatar(
+                              radius: 28,
+                              backgroundImage: NetworkImage(chat["image"]),
+                              backgroundColor: const Color(0xffE2E8F0),
+                            ),
+                            if (chat["unread"])
+                              Positioned(
+                                right: 0,
+                                top: 0,
+                                child: Container(
+                                  height: 14,
+                                  width: 14,
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xff0B9B7B),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white,
+                                      width: 2.5,
+                                    ),
                                   ),
                                 ),
-                                Text(
-                                  chat["time"],
-                                  style: TextStyle(
-                                    color: chat["unread"]
-                                        ? const Color(0xff0B9B7B)
-                                        : const Color(0xff94A3B8),
-                                    fontSize: 13,
-                                    fontWeight: chat["unread"]
-                                        ? FontWeight.bold
-                                        : FontWeight.normal,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              chat["specialty"],
-                              style: const TextStyle(
-                                color: Color(0xff64748B),
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            const SizedBox(height: 6),
-                            Text(
-                              chat["lastMessage"],
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: chat["unread"]
-                                    ? const Color(0xff334155)
-                                    : const Color(0xff64748B),
-                                fontSize: 14,
-                                fontWeight: chat["unread"]
-                                    ? FontWeight.w500
-                                    : FontWeight.normal,
-                              ),
-                            ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(width: 16),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    chat["name"],
+                                    style: TextStyle(
+                                      color: const Color(0xff0B1F44),
+                                      fontSize: 16,
+                                      fontWeight: chat["unread"]
+                                          ? FontWeight.bold
+                                          : FontWeight.w600,
+                                    ),
+                                  ),
+                                  Text(
+                                    chat["time"],
+                                    style: TextStyle(
+                                      color: chat["unread"]
+                                          ? const Color(0xff0B9B7B)
+                                          : const Color(0xff94A3B8),
+                                      fontSize: 13,
+                                      fontWeight: chat["unread"]
+                                          ? FontWeight.bold
+                                          : FontWeight.normal,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                chat["specialty"],
+                                style: const TextStyle(
+                                  color: Color(0xff64748B),
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 6),
+                              Text(
+                                chat["lastMessage"],
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: chat["unread"]
+                                      ? const Color(0xff334155)
+                                      : const Color(0xff64748B),
+                                  fontSize: 14,
+                                  fontWeight: chat["unread"]
+                                      ? FontWeight.w500
+                                      : FontWeight.normal,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

@@ -1,4 +1,8 @@
+import 'package:book_ease/features/profile/presentation/views/widgets/profile_card.dart';
+import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
+import 'package:book_ease/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ProfileViewBody extends StatelessWidget {
   const ProfileViewBody({super.key});
@@ -6,155 +10,103 @@ class ProfileViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20),
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(28),
-        ),
-        child: Column(
-          children: [
-            ProfileMenuTile(
-              icon: Icons.notifications_none_rounded,
-              title: "Notifications",
-              subtitle: "Manage your alerts",
-              onTap: () {},
-            ),
-
-            ProfileMenuTile(
-              icon: Icons.credit_card_outlined,
-              title: "Payment Methods",
-              subtitle: "Cards & wallets",
-              onTap: () {},
-            ),
-
-            ProfileMenuTile(
-              icon: Icons.location_on_outlined,
-              title: "Saved Addresses",
-              subtitle: "Home, Work & more",
-              onTap: () {},
-            ),
-
-            ProfileMenuTile(
-              icon: Icons.settings_outlined,
-              title: "App Settings",
-              subtitle: "Language, theme & more",
-              onTap: () {},
-            ),
-
-            ProfileMenuTile(
-              icon: Icons.call_outlined,
-              title: "Help & Support",
-              subtitle: "FAQs & contact us",
-              onTap: () {},
-            ),
-
-            ProfileMenuTile(
-              icon: Icons.logout_rounded,
-              title: "Sign Out",
-              subtitle: "Log out of account",
-              iconBackground: const Color(0xffFFF2F2),
-              iconColor: Colors.red,
-              titleColor: Colors.red,
-              showDivider: false,
-              onTap: () {},
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class ProfileMenuTile extends StatelessWidget {
-  const ProfileMenuTile({
-    super.key,
-    required this.icon,
-    required this.title,
-    required this.subtitle,
-    required this.onTap,
-    this.iconBackground = const Color(0xffDDFBF0),
-    this.iconColor = const Color(0xff0B9B7B),
-    this.titleColor = const Color(0xff0B1F44),
-    this.showDivider = true,
-  });
-
-  final IconData icon;
-  final String title;
-  final String subtitle;
-  final VoidCallback onTap;
-
-  final Color iconBackground;
-  final Color iconColor;
-  final Color titleColor;
-  final bool showDivider;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      borderRadius: BorderRadius.circular(22),
-      onTap: onTap,
+      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 18),
-            child: Row(
-              children: [
-                Container(
-                  width: 48,
-                  height: 48,
-                  decoration: BoxDecoration(
-                    color: iconBackground,
-                    shape: BoxShape.circle,
-                  ),
-                  child: Icon(icon, color: iconColor, size: 24),
+          Gap(40),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Profile",
+                style: TextStyle(
+                  color: Color(0xff0B1F44),
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
                 ),
-
-                const SizedBox(width: 18),
-
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        title,
-                        style: TextStyle(
-                          fontSize: 21,
-                          fontWeight: FontWeight.bold,
-                          color: titleColor,
-                        ),
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: Color(0xff94A3B8),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsView(),
+                    ),
+                  );
+                },
+                child: Container(
+                  height: 48,
+                  width: 48,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withValues(alpha: 0.04),
+                        blurRadius: 10,
+                        offset: const Offset(0, 4),
                       ),
                     ],
                   ),
+                  child: const Icon(
+                    Icons.settings_outlined,
+                    color: Color(0xff0B1F44),
+                    size: 22,
+                  ),
                 ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
 
-                const Icon(
-                  Icons.chevron_right_rounded,
-                  size: 30,
-                  color: Color(0xffCBD5E1),
-                ),
-              ],
-            ),
+          // Profile Card
+          ProfileCard(
+            name: "Alex Johnson",
+            email: "alex.johnson@email.com",
+            imageUrl: "https://picsum.photos/id/64/200",
+            onEditTap: () {
+              // Edit profile action
+            },
           ),
 
-          if (showDivider)
-            const Divider(
-              height: 1,
-              indent: 86,
-              endIndent: 20,
-              color: Color(0xffEDF2F7),
-            ),
+          // Menu Options
+          MenuOptionTile(
+            icon: Icons.calendar_month_outlined,
+            title: "My bookings",
+            iconColor: const Color(0xff0B9B7B),
+            iconBackgroundColor: const Color(0xffEAFDF6),
+            onTap: () {
+              // Action or navigation
+            },
+          ),
+          MenuOptionTile(
+            icon: Icons.favorite_outline_rounded,
+            title: "Saved providers",
+            iconColor: const Color(0xff0B9B7B),
+            iconBackgroundColor: const Color(0xffEAFDF6),
+            onTap: () {
+              // Action
+            },
+          ),
+          MenuOptionTile(
+            icon: Icons.chat_bubble_outline_rounded,
+            title: "Messages",
+            iconColor: const Color(0xff0B9B7B),
+            iconBackgroundColor: const Color(0xffEAFDF6),
+            onTap: () {
+              // Action
+            },
+          ),
+          MenuOptionTile(
+            icon: Icons.notifications_none_rounded,
+            title: "Notifications",
+            iconColor: const Color(0xff0B9B7B),
+            iconBackgroundColor: const Color(0xffEAFDF6),
+            onTap: () {
+              // Action
+            },
+          ),
         ],
       ),
     );
