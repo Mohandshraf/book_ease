@@ -1,6 +1,6 @@
-import 'package:bloc/bloc.dart';
 import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
 import 'package:book_ease/features/auth/data/repo/auth_repo.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class UserCubit extends Cubit<UserCubitState> {
   UserCubit(this.userRepo) : super(UserCubitInitial());

@@ -43,7 +43,6 @@ class _ServiceDetailsViewBodyState extends State<ServiceDetailsViewBody> {
                   ),
                 ),
               ),
-              // Gradient overlay for better text contrast
               Container(
                 height: 320,
                 width: double.infinity,
@@ -341,7 +340,6 @@ class _ServiceDetailsViewBodyState extends State<ServiceDetailsViewBody> {
                   ),
                 ),
                 const Gap(24),
-                // Available Times Section
                 const Text(
                   "Available Times",
                   style: TextStyle(
@@ -352,6 +350,7 @@ class _ServiceDetailsViewBodyState extends State<ServiceDetailsViewBody> {
                 ),
                 const Gap(12),
                 GridView.builder(
+                  padding: EdgeInsets.zero,
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount: widget.model.availableTimes.length,

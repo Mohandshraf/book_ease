@@ -22,7 +22,7 @@ class PopularServiceItem extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(22),
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(.05), blurRadius: 12),
+            BoxShadow(color: Colors.black.withValues(alpha: .05), blurRadius: 12),
           ],
         ),
         child: Row(

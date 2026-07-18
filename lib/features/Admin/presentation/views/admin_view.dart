@@ -55,10 +55,10 @@ class AdminView extends StatelessWidget {
                       width: 52,
                       height: 52,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(.08),
+                        color: Colors.white.withValues(alpha: .08),
                         borderRadius: BorderRadius.circular(18),
                         border: Border.all(
-                          color: Colors.white.withOpacity(.08),
+                          color: Colors.white.withValues(alpha: .08),
                         ),
                       ),
                       child: const Icon(
