@@ -48,6 +48,27 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
+  Future<void> signInWithGoogle() async {
+    emit(AuthLoading());
+
+    try {
+      await authRepo.signInWithGoogle();
+
+      final userDoc = await authRepo.getCurrentUserData();
+
+      final hasRole =
+          userDoc.exists &&
+          userDoc.data() != null &&
+          userDoc.data()!["role"] != null;
+
+      emit(AuthSuccess(hasRole: hasRole, userData: userDoc.data()));
+    } on CustomException catch (e) {
+      emit(AuthFailure(e.message));
+    } catch (_) {
+      emit(AuthFailure('Something went wrong. Please try again.'));
+    }
+  }
+
   Future<void> saveRole({required String role}) async {
     emit(AuthLoading());
 

@@ -251,6 +251,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                           child: SocialButton(
                             title: 'Google',
                             icon: 'assets/images/google.png',
+                            onTap: () {
+                              context.read<AuthCubit>().signInWithGoogle();
+                            },
                           ),
                         ),
                         const SizedBox(width: 16),

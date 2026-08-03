@@ -27,6 +27,11 @@ class AuthRepoIplm implements AuthRepo {
   }
 
   @override
+  Future<UserCredential> signInWithGoogle() {
+    return firebaseAuthService.signInWithGoogle();
+  }
+
+  @override
   Future<void> saveRole({required String role}) {
     return firebaseAuthService.saveRole(role);
   }

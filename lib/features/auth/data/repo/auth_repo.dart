@@ -12,6 +12,7 @@ abstract class AuthRepo {
     required String email,
     required String password,
   });
+  Future<UserCredential> signInWithGoogle();
   Future<void> saveRole({required String role});
   Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData();
 }
