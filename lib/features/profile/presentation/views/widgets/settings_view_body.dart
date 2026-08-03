@@ -1,8 +1,6 @@
-import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsViewBody extends StatelessWidget {
   const SettingsViewBody({super.key});
@@ -123,17 +121,11 @@ class SettingsViewBody extends StatelessWidget {
             subtitle: "Version 2.4.1",
             iconColor: iconColor,
             iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            onTap: () {},
           ),
 
           // Log out Button
-          LogoutButton(
-            onTap: () {
-              context.read<AuthCubit>().signOut();
-            },
-          ),
+          LogoutButton(onTap: () {}),
         ],
       ),
     );

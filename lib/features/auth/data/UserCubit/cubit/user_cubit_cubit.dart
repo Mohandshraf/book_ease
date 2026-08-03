@@ -13,7 +13,11 @@ class UserCubit extends Cubit<UserCubitState> {
     try {
       final userData = await userRepo.getCurrentUserData();
 
-      emit(UserDataLoaded(userData.data()!));
+      if (userData.exists && userData.data() != null) {
+        emit(UserDataLoaded(userData.data()!));
+      } else {
+        emit(UserDataFailure('User data not found'));
+      }
     } catch (e) {
       emit(UserDataFailure(e.toString()));
     }

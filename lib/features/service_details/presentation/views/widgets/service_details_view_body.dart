@@ -1,6 +1,8 @@
 import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/features/service_details/data/cubit/booking_date_cubit.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ServiceDetailsViewBody extends StatefulWidget {
@@ -293,7 +295,12 @@ class _ServiceDetailsViewBodyState extends State<ServiceDetailsViewBody> {
                           widget.selectedDate.day == option.date.day &&
                           widget.selectedDate.month == option.date.month;
                       return GestureDetector(
-                        onTap: () => widget.onDateSelected(option.date),
+                        onTap: () {
+                          context.read<BookingSelectionCubit>().selectDate(
+                            option,
+                          );
+                          widget.onDateSelected(option.date);
+                        },
                         child: Container(
                           width: 60,
                           decoration: BoxDecoration(
@@ -364,7 +371,10 @@ class _ServiceDetailsViewBodyState extends State<ServiceDetailsViewBody> {
                     final time = widget.model.availableTimes[index];
                     final isSelected = widget.selectedTime == time;
                     return GestureDetector(
-                      onTap: () => widget.onTimeSelected(time),
+                      onTap: () {
+                        context.read<BookingSelectionCubit>().selectTime(time);
+                        widget.onTimeSelected(time);
+                      },
                       child: Container(
                         decoration: BoxDecoration(
                           color: isSelected

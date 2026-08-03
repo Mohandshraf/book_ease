@@ -4,12 +4,14 @@ class SearchInputField extends StatelessWidget {
   final String hintText;
   final ValueChanged<String>? onChanged;
   final VoidCallback? onFilterTap;
+  final TextEditingController? controller;
 
   const SearchInputField({
     super.key,
     required this.hintText,
     this.onChanged,
     this.onFilterTap,
+    this.controller,
   });
 
   @override
@@ -38,6 +40,7 @@ class SearchInputField extends StatelessWidget {
           const SizedBox(width: 12),
           Expanded(
             child: TextField(
+              controller: controller,
               onChanged: onChanged,
               decoration: InputDecoration(
                 hintText: hintText,

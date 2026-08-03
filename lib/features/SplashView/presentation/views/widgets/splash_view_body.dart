@@ -1,7 +1,11 @@
+import 'package:book_ease/choose_role_view.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
 import 'package:book_ease/features/onBoarding/presentation/views/on_boarding_view.dart';
 import 'package:book_ease/root_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SplashViewBody extends StatefulWidget {
   const SplashViewBody({super.key});
@@ -72,10 +76,34 @@ class _SplashViewBodyState extends State<SplashViewBody>
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 4), () {
-      if (!mounted) return;
+    _navigateToNextScreen();
+  }
 
-      if (FirebaseAuth.instance.currentUser != null) {
+  void _navigateToNextScreen() async {
+    final minimumSplashTimer = Future.delayed(const Duration(seconds: 2));
+
+    if (FirebaseAuth.instance.currentUser == null) {
+      await minimumSplashTimer;
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const OnBoardingView()),
+      );
+      return;
+    }
+
+    final userCubit = context.read<UserCubit>();
+    await Future.wait([
+      userCubit.getCurrentUserData(),
+      minimumSplashTimer,
+    ]);
+
+    if (!mounted) return;
+
+    final state = userCubit.state;
+    if (state is UserDataLoaded) {
+      final role = state.userData['role'];
+      if (role != null && (role == 'customer' || role == 'provider')) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (_) => const RootView()),
@@ -83,10 +111,15 @@ class _SplashViewBodyState extends State<SplashViewBody>
       } else {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (_) => OnBoardingView()),
+          MaterialPageRoute(builder: (_) => const ChooseRoleView()),
         );
       }
-    });
+    } else {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (_) => const OnBoardingView()),
+      );
+    }
   }
 
   @override
