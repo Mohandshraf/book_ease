@@ -16,7 +16,6 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
-
       await FirebaseFirestore.instance
           .collection("users")
           .doc(credential.user!.uid)
@@ -30,8 +29,10 @@ class FirebaseAuthService {
       return credential;
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
-    } catch (_) {
-      throw const CustomException('Something went wrong. Please try again.');
+    } on FirebaseException catch (e) {
+      throw CustomException(e.message ?? e.toString());
+    } catch (e) {
+      throw CustomException(e.toString());
     }
   }
 
@@ -46,8 +47,10 @@ class FirebaseAuthService {
       );
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
-    } catch (_) {
-      throw const CustomException('Something went wrong. Please try again.');
+    } on FirebaseException catch (e) {
+      throw CustomException(e.message ?? e.toString());
+    } catch (e) {
+      throw CustomException(e.toString());
     }
   }
 
@@ -92,9 +95,11 @@ class FirebaseAuthService {
       return userCredential;
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
+    } on FirebaseException catch (e) {
+      throw CustomException(e.message ?? e.toString());
     } catch (e) {
       if (e is CustomException) rethrow;
-      throw const CustomException('Something went wrong with Google Sign-In.');
+      throw CustomException(e.toString());
     }
   }
 

@@ -22,8 +22,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthSuccess(hasRole: false));
     } on CustomException catch (e) {
       emit(AuthFailure(e.message));
-    } catch (_) {
-      emit(AuthFailure('Something went wrong. Please try again.'));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
     }
   }
 
@@ -43,8 +43,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthSuccess(hasRole: hasRole, userData: userDoc.data()));
     } on CustomException catch (e) {
       emit(AuthFailure(e.message));
-    } catch (_) {
-      emit(AuthFailure('Something went wrong. Please try again.'));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
     }
   }
 
@@ -64,8 +64,8 @@ class AuthCubit extends Cubit<AuthState> {
       emit(AuthSuccess(hasRole: hasRole, userData: userDoc.data()));
     } on CustomException catch (e) {
       emit(AuthFailure(e.message));
-    } catch (_) {
-      emit(AuthFailure('Something went wrong. Please try again.'));
+    } catch (e) {
+      emit(AuthFailure(e.toString()));
     }
   }
 
