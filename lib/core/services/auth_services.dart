@@ -30,7 +30,7 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
     } on FirebaseException catch (e) {
-      throw CustomException(e.message ?? e.toString());
+      throw CustomException.fromFirebaseException(e);
     } catch (e) {
       throw CustomException(e.toString());
     }
@@ -48,7 +48,7 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
     } on FirebaseException catch (e) {
-      throw CustomException(e.message ?? e.toString());
+      throw CustomException.fromFirebaseException(e);
     } catch (e) {
       throw CustomException(e.toString());
     }
@@ -96,7 +96,7 @@ class FirebaseAuthService {
     } on FirebaseAuthException catch (e) {
       throw CustomException.fromFirebaseAuthException(e);
     } on FirebaseException catch (e) {
-      throw CustomException(e.message ?? e.toString());
+      throw CustomException.fromFirebaseException(e);
     } catch (e) {
       if (e is CustomException) rethrow;
       throw CustomException(e.toString());
@@ -104,15 +104,26 @@ class FirebaseAuthService {
   }
 
   Future<void> saveRole(String role) async {
-    final uid = _auth.currentUser!.uid;
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw const CustomException("User is not logged in.");
+    }
+    final uid = user.uid;
 
-    await FirebaseFirestore.instance.collection("users").doc(uid).update({
+    await FirebaseFirestore.instance.collection("users").doc(uid).set({
+      "uid": uid,
+      "email": user.email ?? "",
+      "name": user.displayName ?? "",
       "role": role,
-    });
+    }, SetOptions(merge: true));
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData() async {
-    final uid = FirebaseAuth.instance.currentUser!.uid;
+    final user = _auth.currentUser;
+    if (user == null) {
+      throw const CustomException("User is not logged in.");
+    }
+    final uid = user.uid;
 
     return await FirebaseFirestore.instance.collection("users").doc(uid).get();
   }

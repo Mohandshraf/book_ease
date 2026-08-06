@@ -77,6 +77,8 @@ class AuthCubit extends Cubit<AuthState> {
       final userDoc = await authRepo.getCurrentUserData();
 
       emit(AuthSuccess(hasRole: true, userData: userDoc.data()));
+    } on CustomException catch (e) {
+      emit(AuthFailure(e.message));
     } catch (e) {
       emit(AuthFailure(e.toString()));
     }

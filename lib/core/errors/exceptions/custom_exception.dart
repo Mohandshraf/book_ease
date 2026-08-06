@@ -35,4 +35,21 @@ class CustomException implements Exception {
         return CustomException(e.message ?? 'Something went wrong.');
     }
   }
+
+  factory CustomException.fromFirebaseException(FirebaseException e) {
+    switch (e.code) {
+      case 'permission-denied':
+        return const CustomException(
+          'Firestore Permission Denied. Please enable rules in Firebase Console.',
+        );
+
+      case 'unavailable':
+        return const CustomException(
+          'Service temporarily unavailable. Check your connection.',
+        );
+
+      default:
+        return CustomException(e.message ?? 'Firebase error occurred.');
+    }
+  }
 }
