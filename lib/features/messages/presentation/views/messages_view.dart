@@ -1,35 +1,68 @@
+import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
+import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
+import 'package:book_ease/features/messages/data/models/chat_conversation_model.dart';
 import 'package:book_ease/features/messages/presentation/views/chat_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class MessagesView extends StatelessWidget {
+class MessagesView extends StatefulWidget {
   const MessagesView({super.key});
 
-  final List<Map<String, dynamic>> chats = const [
-    {
-      "name": "Dr. Sarah Mitchell",
-      "specialty": "Cardiology Specialist",
-      "lastMessage": "Your lab results are ready. Let's discuss them during our appointment.",
-      "time": "10:30 AM",
-      "unread": true,
-      "image": "https://picsum.photos/id/64/200",
-    },
-    {
-      "name": "City Medical Clinic",
-      "specialty": "Clinic Support",
-      "lastMessage": "Your booking for City Medical Clinic has been confirmed.",
-      "time": "Yesterday",
-      "unread": false,
-      "image": "https://picsum.photos/id/100/200",
-    },
-    {
-      "name": "Dr. Emily Stone",
-      "specialty": "Pediatric Dentist",
-      "lastMessage": "Please remember to bring your previous medical history documents.",
-      "time": "Jul 15",
-      "unread": false,
-      "image": "https://picsum.photos/id/102/200",
-    },
-  ];
+  @override
+  State<MessagesView> createState() => _MessagesViewState();
+}
+
+class _MessagesViewState extends State<MessagesView> {
+  final TextEditingController _searchController = TextEditingController();
+  String _searchQuery = '';
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<ChatCubit>().initConversations();
+    _searchController.addListener(() {
+      setState(() {
+        _searchQuery = _searchController.text.trim().toLowerCase();
+      });
+    });
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
+
+  String _formatConversationTime(DateTime dt) {
+    final now = DateTime.now();
+    final today = DateTime(now.year, now.month, now.day);
+    final chatDate = DateTime(dt.year, dt.month, dt.day);
+
+    if (chatDate == today) {
+      final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
+      final minute = dt.minute.toString().padLeft(2, '0');
+      final period = dt.hour >= 12 ? 'PM' : 'AM';
+      return '$hour:$minute $period';
+    } else if (today.difference(chatDate).inDays == 1) {
+      return 'Yesterday';
+    } else {
+      final months = [
+        'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'May',
+        'Jun',
+        'Jul',
+        'Aug',
+        'Sep',
+        'Oct',
+        'Nov',
+        'Dec'
+      ];
+      return '${months[dt.month - 1]} ${dt.day}';
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +91,9 @@ class MessagesView extends StatelessWidget {
                 color: const Color(0xffF1F5F9),
                 borderRadius: BorderRadius.circular(24),
               ),
-              child: const TextField(
-                decoration: InputDecoration(
+              child: TextField(
+                controller: _searchController,
+                decoration: const InputDecoration(
                   hintText: "Search messages...",
                   hintStyle: TextStyle(color: Color(0xff94A3B8), fontSize: 15),
                   prefixIcon: Icon(Icons.search_rounded, color: Color(0xff64748B)),
@@ -71,8 +105,30 @@ class MessagesView extends StatelessWidget {
           ],
         ),
       ),
-      body: chats.isEmpty
-          ? Center(
+      body: BlocBuilder<ChatCubit, ChatState>(
+        builder: (context, state) {
+          if (state is ChatLoading) {
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xff0B9B7B)),
+            );
+          }
+
+          List<ChatConversationModel> chats = [];
+          if (state is ConversationsLoaded) {
+            chats = state.conversations;
+          }
+
+          if (_searchQuery.isNotEmpty) {
+            chats = chats.where((c) {
+              final nameMatch = c.otherUserName.toLowerCase().contains(_searchQuery);
+              final msgMatch = c.lastMessage.toLowerCase().contains(_searchQuery);
+              final specMatch = (c.otherUserSpecialty ?? '').toLowerCase().contains(_searchQuery);
+              return nameMatch || msgMatch || specMatch;
+            }).toList();
+          }
+
+          if (chats.isEmpty) {
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -108,121 +164,144 @@ class MessagesView extends StatelessWidget {
                   ),
                 ],
               ),
-            )
-          : ListView.separated(
-              padding: const EdgeInsets.symmetric(vertical: 20),
-              itemCount: chats.length,
-              separatorBuilder: (context, index) => const Divider(
-                color: Color(0xffF1F5F9),
-                height: 1,
-                indent: 80,
-              ),
-              itemBuilder: (context, index) {
-                final chat = chats[index];
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ChatView(doctorName: chat["name"]),
+            );
+          }
+
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(vertical: 20),
+            itemCount: chats.length,
+            separatorBuilder: (context, index) => const Divider(
+              color: Color(0xffF1F5F9),
+              height: 1,
+              indent: 80,
+            ),
+            itemBuilder: (context, index) {
+              final chat = chats[index];
+              final timeStr = _formatConversationTime(chat.lastMessageTime);
+
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ChatView(
+                        otherUserId: chat.otherUserId,
+                        doctorName: chat.otherUserName,
+                        otherUserImage: chat.otherUserImage,
+                        otherUserSpecialty: chat.otherUserSpecialty,
                       ),
-                    );
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    child: Row(
-                      children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 28,
-                              backgroundImage: NetworkImage(chat["image"]),
-                              backgroundColor: const Color(0xffE2E8F0),
-                            ),
-                            if (chat["unread"])
-                              Positioned(
-                                right: 0,
-                                top: 0,
-                                child: Container(
-                                  height: 14,
-                                  width: 14,
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xff0B9B7B),
-                                    shape: BoxShape.circle,
-                                    border: Border.all(
-                                      color: Colors.white,
-                                      width: 2.5,
-                                    ),
+                    ),
+                  );
+                },
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  child: Row(
+                    children: [
+                      Stack(
+                        children: [
+                          CircleAvatar(
+                            radius: 28,
+                            backgroundImage: chat.otherUserImage != null &&
+                                    chat.otherUserImage!.isNotEmpty
+                                ? NetworkImage(chat.otherUserImage!)
+                                : null,
+                            backgroundColor: const Color(0xffE2E8F0),
+                            child: (chat.otherUserImage == null ||
+                                    chat.otherUserImage!.isEmpty)
+                                ? const Icon(Icons.person_rounded,
+                                    color: Color(0xff64748B), size: 28)
+                                : null,
+                          ),
+                          if (chat.unread)
+                            Positioned(
+                              right: 0,
+                              top: 0,
+                              child: Container(
+                                height: 14,
+                                width: 14,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xff0B9B7B),
+                                  shape: BoxShape.circle,
+                                  border: Border.all(
+                                    color: Colors.white,
+                                    width: 2.5,
                                   ),
                                 ),
                               ),
-                          ],
-                        ),
-                        const SizedBox(width: 16),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                children: [
-                                  Text(
-                                    chat["name"],
-                                    style: TextStyle(
-                                      color: const Color(0xff0B1F44),
-                                      fontSize: 16,
-                                      fontWeight: chat["unread"]
-                                          ? FontWeight.bold
-                                          : FontWeight.w600,
-                                    ),
+                            ),
+                        ],
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  chat.otherUserName,
+                                  style: TextStyle(
+                                    color: const Color(0xff0B1F44),
+                                    fontSize: 16,
+                                    fontWeight: chat.unread
+                                        ? FontWeight.bold
+                                        : FontWeight.w600,
                                   ),
-                                  Text(
-                                    chat["time"],
-                                    style: TextStyle(
-                                      color: chat["unread"]
-                                          ? const Color(0xff0B9B7B)
-                                          : const Color(0xff94A3B8),
-                                      fontSize: 13,
-                                      fontWeight: chat["unread"]
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
+                                ),
+                                Text(
+                                  timeStr,
+                                  style: TextStyle(
+                                    color: chat.unread
+                                        ? const Color(0xff0B9B7B)
+                                        : const Color(0xff94A3B8),
+                                    fontSize: 13,
+                                    fontWeight: chat.unread
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
                                   ),
-                                ],
-                              ),
+                                ),
+                              ],
+                            ),
+                            if (chat.otherUserSpecialty != null &&
+                                chat.otherUserSpecialty!.isNotEmpty) ...[
                               const SizedBox(height: 4),
                               Text(
-                                chat["specialty"],
+                                chat.otherUserSpecialty!,
                                 style: const TextStyle(
                                   color: Color(0xff64748B),
                                   fontSize: 13,
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(height: 6),
-                              Text(
-                                chat["lastMessage"],
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: chat["unread"]
-                                      ? const Color(0xff334155)
-                                      : const Color(0xff64748B),
-                                  fontSize: 14,
-                                  fontWeight: chat["unread"]
-                                      ? FontWeight.w500
-                                      : FontWeight.normal,
-                                ),
-                              ),
                             ],
-                          ),
+                            const SizedBox(height: 6),
+                            Text(
+                              chat.lastMessage,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: chat.unread
+                                    ? const Color(0xff334155)
+                                    : const Color(0xff64748B),
+                                fontSize: 14,
+                                fontWeight: chat.unread
+                                    ? FontWeight.w500
+                                    : FontWeight.normal,
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              },
-            ),
+                ),
+              );
+            },
+          );
+        },
+      ),
     );
   }
 }
+

@@ -68,7 +68,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
       price: 80.0,
       priceUnit: "per session",
       imageUrl:
-          "https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=800",
+          "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=800",
       aboutText:
           "Dr. Maya Patel is a leading board-certified dermatologist specializing in advanced clinical skincare, dermatological wellness, and anti-aging therapies.",
       specialties: const ["Dermatology", "Skincare Clinic", "Anti-Aging"],
@@ -116,7 +116,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
         "reviews": "284",
         "price": "From \$80",
         "image":
-            "https://images.unsplash.com/photo-1594824813573-246434de83fb?auto=format&fit=crop&q=80&w=200",
+            "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&q=80&w=200",
         "model": mayaPatelModel,
       },
     ];

@@ -40,6 +40,21 @@ class ServiceDetailsModel {
   });
 }
 
+List<DateOption> generateDynamicDateOptions([int count = 7]) {
+  final now = DateTime.now();
+  const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  return List.generate(count, (i) {
+    final date = now.add(Duration(days: i));
+    final dayName = dayNames[date.weekday - 1];
+    return DateOption(
+      dayName: dayName,
+      dayNumber: date.day,
+      date: DateTime(date.year, date.month, date.day),
+    );
+  });
+}
+
 final ServiceDetailsModel mockServiceDetails = ServiceDetailsModel(
   title: "City Medical Clinic",
   providerName: "Dr. Sarah Mitchell",
@@ -53,14 +68,7 @@ final ServiceDetailsModel mockServiceDetails = ServiceDetailsModel(
   aboutText:
       "Dr. Sarah Mitchell is a board-certified physician with over 15 years of experience in family and general medicine, specializing in preventive care and chronic disease management.",
   specialties: const ["General Medicine", "Family Care", "Preventive"],
-  availableDates: [
-    DateOption(dayName: "Mon", dayNumber: 15, date: DateTime(2026, 7, 15)),
-    DateOption(dayName: "Tue", dayNumber: 16, date: DateTime(2026, 7, 16)),
-    DateOption(dayName: "Wed", dayNumber: 17, date: DateTime(2026, 7, 17)),
-    DateOption(dayName: "Thu", dayNumber: 18, date: DateTime(2026, 7, 18)),
-    DateOption(dayName: "Fri", dayNumber: 19, date: DateTime(2026, 7, 19)),
-    DateOption(dayName: "Sat", dayNumber: 20, date: DateTime(2026, 7, 20)),
-  ],
+  availableDates: generateDynamicDateOptions(),
   availableTimes: const [
     "9:00 AM",
     "9:30 AM",

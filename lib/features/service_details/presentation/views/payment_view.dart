@@ -573,11 +573,14 @@ class _PaymentViewState extends State<PaymentView> {
                       ? null
                       : (widget.onPayPressed ??
                           () {
-                            final currentUserId =
-                                FirebaseAuth.instance.currentUser?.uid ?? "";
+                            final currentUser =
+                                FirebaseAuth.instance.currentUser;
+                            final currentUserId = currentUser?.uid ?? "";
 
                             final booking = BookingModel(
                               customerId: currentUserId,
+                              customerName: currentUser?.displayName,
+                              customerEmail: currentUser?.email,
                               providerId: widget.model.providerName,
                               serviceId: widget.model.title,
                               bookingDate: widget.selectedDate,
