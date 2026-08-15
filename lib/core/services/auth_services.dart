@@ -127,4 +127,55 @@ class FirebaseAuthService {
 
     return await FirebaseFirestore.instance.collection("users").doc(uid).get();
   }
+
+  Future<void> updateUserProfile({
+    required String name,
+    String? photoUrl,
+    String? phone,
+  }) async {
+    try {
+      final user = _auth.currentUser;
+      if (user == null) {
+        throw const CustomException("User is not logged in.");
+      }
+      final uid = user.uid;
+
+      await user.updateDisplayName(name);
+      if (photoUrl != null && photoUrl.isNotEmpty) {
+        await user.updatePhotoURL(photoUrl);
+      }
+
+      final updateMap = <String, dynamic>{
+        "name": name,
+        "photoUrl": ?photoUrl,
+        "phone": ?phone,
+        "updatedAt": FieldValue.serverTimestamp(),
+      };
+
+      await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .set(updateMap, SetOptions(merge: true));
+    } on FirebaseAuthException catch (e) {
+      throw CustomException.fromFirebaseAuthException(e);
+    } on FirebaseException catch (e) {
+      throw CustomException.fromFirebaseException(e);
+    } catch (e) {
+      if (e is CustomException) rethrow;
+      throw CustomException(e.toString());
+    }
+  }
+
+  Future<void> signOut() async {
+    try {
+      await _auth.signOut();
+      final GoogleSignIn googleSignIn = GoogleSignIn();
+      if (await googleSignIn.isSignedIn()) {
+        await googleSignIn.signOut();
+      }
+    } catch (e) {
+      throw CustomException(e.toString());
+    }
+  }
 }
+

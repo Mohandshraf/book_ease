@@ -23,7 +23,29 @@ class UserCubit extends Cubit<UserCubitState> {
     }
   }
 
+  Future<void> updateUserProfile({
+    required String name,
+    String? photoUrl,
+    String? phone,
+  }) async {
+    emit(UserDataLoading());
+    try {
+      await userRepo.updateUserProfile(
+        name: name,
+        photoUrl: photoUrl,
+        phone: phone,
+      );
+      await getCurrentUserData();
+    } catch (e) {
+      emit(UserDataFailure(e.toString()));
+    }
+  }
+
   void setUserData(Map<String, dynamic> data) {
     emit(UserDataLoaded(data));
+  }
+
+  void clearUserData() {
+    emit(UserCubitInitial());
   }
 }

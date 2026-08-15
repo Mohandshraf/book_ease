@@ -9,6 +9,8 @@ class MessageModel {
   final String messageText;
   final DateTime timestamp;
   final bool isRead;
+  final bool isEdited;
+  final bool isDeleted;
 
   MessageModel({
     this.id,
@@ -19,6 +21,8 @@ class MessageModel {
     required this.messageText,
     required this.timestamp,
     this.isRead = false,
+    this.isEdited = false,
+    this.isDeleted = false,
   });
 
   factory MessageModel.fromJson(Map<String, dynamic> json, [String? docId]) {
@@ -33,6 +37,8 @@ class MessageModel {
           ? (json['timestamp'] as Timestamp).toDate()
           : DateTime.now(),
       isRead: json['isRead'] ?? false,
+      isEdited: json['isEdited'] ?? false,
+      isDeleted: json['isDeleted'] ?? false,
     );
   }
 
@@ -45,6 +51,8 @@ class MessageModel {
       'messageText': messageText,
       'timestamp': Timestamp.fromDate(timestamp),
       'isRead': isRead,
+      'isEdited': isEdited,
+      'isDeleted': isDeleted,
     };
   }
 }

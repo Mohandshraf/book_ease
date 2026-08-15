@@ -25,6 +25,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
   final TextEditingController emailcontroller = TextEditingController();
   final TextEditingController passwordcontroller = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  bool isObscure = true;
+
   @override
   void dispose() {
     emailcontroller.dispose();
@@ -156,14 +158,23 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                       controller: passwordcontroller,
                       fillColor: const Color(0xffF7FAFC),
                       hintText: "Password",
-                      obscureText: true,
+                      obscureText: isObscure,
                       prefixIcon: const Icon(
                         Icons.lock_outline,
                         color: Color(0xff93A2B8),
                       ),
-                      suffixIcon: const Icon(
-                        Icons.visibility_outlined,
-                        color: Color(0xff93A2B8),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isObscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: const Color(0xff93A2B8),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isObscure = !isObscure;
+                          });
+                        },
                       ),
                     ),
 

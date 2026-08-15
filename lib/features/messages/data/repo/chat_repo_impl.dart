@@ -37,6 +37,40 @@ class ChatRepoImpl implements ChatRepo {
   }
 
   @override
+  Future<void> editMessage({
+    required String otherUserId,
+    required String messageId,
+    required String newText,
+  }) async {
+    await _chatServices.editMessage(
+      otherUserId: otherUserId,
+      messageId: messageId,
+      newText: newText,
+    );
+  }
+
+  @override
+  Future<void> deleteMessage({
+    required String otherUserId,
+    required String messageId,
+  }) async {
+    await _chatServices.deleteMessage(
+      otherUserId: otherUserId,
+      messageId: messageId,
+    );
+  }
+
+  @override
+  Future<void> deleteConversation(String otherUserId) async {
+    await _chatServices.deleteConversation(otherUserId);
+  }
+
+  @override
+  Future<void> clearChatMessages(String otherUserId) async {
+    await _chatServices.clearChatMessages(otherUserId);
+  }
+
+  @override
   Future<void> markAsRead(String otherUserId) async {
     await _chatServices.markConversationAsRead(otherUserId);
   }

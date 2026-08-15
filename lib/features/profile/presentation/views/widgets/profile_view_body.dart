@@ -1,11 +1,29 @@
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
+import 'package:book_ease/features/messages/presentation/views/messages_view.dart';
+import 'package:book_ease/features/profile/presentation/views/edit_profile_view.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/profile_card.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
 import 'package:book_ease/features/settings/presentation/views/settings_view.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class ProfileViewBody extends StatelessWidget {
+class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key});
+
+  @override
+  State<ProfileViewBody> createState() => _ProfileViewBodyState();
+}
+
+class _ProfileViewBodyState extends State<ProfileViewBody> {
+  @override
+  void initState() {
+    super.initState();
+    // Load user data on open if needed
+    context.read<UserCubit>().getCurrentUserData();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -14,7 +32,7 @@ class ProfileViewBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Gap(40),
+          const Gap(40),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -60,13 +78,48 @@ class ProfileViewBody extends StatelessWidget {
           ),
           const SizedBox(height: 24),
 
-          // Profile Card
-          ProfileCard(
-            name: "Alex Johnson",
-            email: "alex.johnson@email.com",
-            imageUrl: "https://picsum.photos/id/64/200",
-            onEditTap: () {
-              // Edit profile action
+          // Reactive Profile Card linked to UserCubit & Firebase
+          BlocBuilder<UserCubit, UserCubitState>(
+            builder: (context, state) {
+              final currentUser = FirebaseAuth.instance.currentUser;
+              String name = currentUser?.displayName ?? "User";
+              String email = currentUser?.email ?? "";
+              String? photoUrl = currentUser?.photoURL;
+              String? phone = currentUser?.phoneNumber;
+
+              if (state is UserDataLoaded) {
+                name = (state.userData['name'] as String?)?.trim().isNotEmpty == true
+                    ? state.userData['name']
+                    : name;
+                email = (state.userData['email'] as String?)?.trim().isNotEmpty == true
+                    ? state.userData['email']
+                    : email;
+                photoUrl = (state.userData['photoUrl'] as String?)?.isNotEmpty == true
+                    ? state.userData['photoUrl']
+                    : photoUrl;
+                phone = (state.userData['phone'] as String?)?.isNotEmpty == true
+                    ? state.userData['phone']
+                    : phone;
+              }
+
+              return ProfileCard(
+                name: name,
+                email: email,
+                imageUrl: photoUrl,
+                onEditTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditProfileView(
+                        currentName: name,
+                        currentEmail: email,
+                        currentPhotoUrl: photoUrl,
+                        currentPhone: phone,
+                      ),
+                    ),
+                  );
+                },
+              );
             },
           ),
 
@@ -95,7 +148,12 @@ class ProfileViewBody extends StatelessWidget {
             iconColor: const Color(0xff0B9B7B),
             iconBackgroundColor: const Color(0xffEAFDF6),
             onTap: () {
-              // Action
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const MessagesView(),
+                ),
+              );
             },
           ),
           MenuOptionTile(

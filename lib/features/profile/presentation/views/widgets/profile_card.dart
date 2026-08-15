@@ -1,16 +1,17 @@
+import 'package:book_ease/core/widgets/user_avatar.dart';
 import 'package:flutter/material.dart';
 
 class ProfileCard extends StatelessWidget {
   final String name;
   final String email;
-  final String imageUrl;
+  final String? imageUrl;
   final VoidCallback onEditTap;
 
   const ProfileCard({
     super.key,
     required this.name,
     required this.email,
-    required this.imageUrl,
+    this.imageUrl,
     required this.onEditTap,
   });
 
@@ -34,10 +35,13 @@ class ProfileCard extends StatelessWidget {
         child: Row(
           children: [
             // User Avatar
-            CircleAvatar(
-              radius: 36,
-              backgroundImage: NetworkImage(imageUrl),
-              backgroundColor: const Color(0xffE2E8F0),
+            GestureDetector(
+              onTap: onEditTap,
+              child: UserAvatar(
+                imageUrl: imageUrl,
+                name: name,
+                radius: 36,
+              ),
             ),
             const SizedBox(width: 16),
             // User Info
@@ -47,19 +51,23 @@ class ProfileCard extends StatelessWidget {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    name,
+                    name.isNotEmpty ? name : "User",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Color(0xff0B1F44),
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    email,
+                    email.isNotEmpty ? email : "No email",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
                       color: Color(0xff64748B),
-                      fontSize: 14,
+                      fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -75,13 +83,24 @@ class ProfileCard extends StatelessWidget {
                   color: const Color(0xffEAFDF6),
                   borderRadius: BorderRadius.circular(16),
                 ),
-                child: const Text(
-                  "Edit",
-                  style: TextStyle(
-                    color: Color(0xff0B9B7B),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.edit_outlined,
+                      size: 14,
+                      color: Color(0xff0B9B7B),
+                    ),
+                    SizedBox(width: 4),
+                    Text(
+                      "Edit",
+                      style: TextStyle(
+                        color: Color(0xff0B9B7B),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),

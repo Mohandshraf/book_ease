@@ -1,11 +1,9 @@
-import 'package:book_ease/choose_role_view.dart';
 import 'package:book_ease/core/app_colors.dart';
 import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/features/Register/presentation/views/widgets/custom_button.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
-import 'package:book_ease/root_view.dart';
+import 'package:book_ease/features/login/presentation/views/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -28,6 +26,8 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  bool isPasswordObscure = true;
+  bool isConfirmPasswordObscure = true;
   bool agree = false;
 
   @override
@@ -51,25 +51,16 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
               if (state is AuthSuccess) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
-                    content: Text("Account created successfully"),
+                    content: Text("Account created successfully. Please sign in."),
                     behavior: SnackBarBehavior.floating,
                   ),
                 );
 
-                if (state.hasRole) {
-                  if (state.userData != null) {
-                    context.read<UserCubit>().setUserData(state.userData!);
-                  }
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const RootView()),
-                  );
-                } else {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(builder: (_) => const ChooseRoleView()),
-                  );
-                }
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(builder: (_) => const LoginView()),
+                  (route) => false,
+                );
               }
 
               if (state is AuthFailure) {
@@ -159,8 +150,21 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                       validator: (value) => Validators.password(value),
                       controller: passwordController,
                       hintText: "Min. 8 characters",
-                      obscureText: true,
+                      obscureText: isPasswordObscure,
                       prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isPasswordObscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: const Color(0xff93A2B8),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isPasswordObscure = !isPasswordObscure;
+                          });
+                        },
+                      ),
                     ),
 
                     const Gap(24),
@@ -176,8 +180,21 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                       ),
                       controller: confirmPasswordController,
                       hintText: "Repeat your password",
-                      obscureText: true,
+                      obscureText: isConfirmPasswordObscure,
                       prefixIcon: const Icon(Icons.lock_outline),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          isConfirmPasswordObscure
+                              ? Icons.visibility_off_outlined
+                              : Icons.visibility_outlined,
+                          color: const Color(0xff93A2B8),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isConfirmPasswordObscure = !isConfirmPasswordObscure;
+                          });
+                        },
+                      ),
                     ),
 
                     const Gap(28),

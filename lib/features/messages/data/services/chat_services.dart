@@ -136,6 +136,160 @@ class ChatServices {
         .update({'unread': false}).catchError((_) {});
   }
 
+  Future<void> editMessage({
+    required String otherUserId,
+    required String messageId,
+    required String newText,
+  }) async {
+    final uid = currentUserId;
+    if (uid.isEmpty ||
+        otherUserId.isEmpty ||
+        messageId.isEmpty ||
+        newText.trim().isEmpty) {
+      return;
+    }
+
+    final chatId = getChatId(uid, otherUserId);
+    final messageRef = _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .doc(messageId);
+
+    await messageRef.update({
+      'messageText': newText.trim(),
+      'isEdited': true,
+    });
+
+    // Check if this was the latest message and update conversations if needed
+    final latestMessages = await _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    if (latestMessages.docs.isNotEmpty &&
+        latestMessages.docs.first.id == messageId) {
+      await _firestore
+          .collection('users')
+          .doc(uid)
+          .collection('conversations')
+          .doc(otherUserId)
+          .update({'lastMessage': newText.trim()}).catchError((_) {});
+
+      await _firestore
+          .collection('users')
+          .doc(otherUserId)
+          .collection('conversations')
+          .doc(uid)
+          .update({'lastMessage': newText.trim()}).catchError((_) {});
+    }
+  }
+
+  Future<void> deleteMessage({
+    required String otherUserId,
+    required String messageId,
+  }) async {
+    final uid = currentUserId;
+    if (uid.isEmpty || otherUserId.isEmpty || messageId.isEmpty) {
+      return;
+    }
+
+    final chatId = getChatId(uid, otherUserId);
+    await _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .doc(messageId)
+        .delete();
+
+    // Update conversation last message with remaining latest message
+    final remainingMessages = await _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .orderBy('timestamp', descending: true)
+        .limit(1)
+        .get();
+
+    String lastMsg = 'No messages';
+    DateTime lastTime = DateTime.now();
+
+    if (remainingMessages.docs.isNotEmpty) {
+      final data = remainingMessages.docs.first.data();
+      lastMsg = data['messageText'] ?? '';
+      if (data['timestamp'] is Timestamp) {
+        lastTime = (data['timestamp'] as Timestamp).toDate();
+      }
+    }
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('conversations')
+        .doc(otherUserId)
+        .update({
+      'lastMessage': lastMsg,
+      'lastMessageTime': Timestamp.fromDate(lastTime),
+    }).catchError((_) {});
+
+    await _firestore
+        .collection('users')
+        .doc(otherUserId)
+        .collection('conversations')
+        .doc(uid)
+        .update({
+      'lastMessage': lastMsg,
+      'lastMessageTime': Timestamp.fromDate(lastTime),
+    }).catchError((_) {});
+  }
+
+  Future<void> deleteConversation(String otherUserId) async {
+    final uid = currentUserId;
+    if (uid.isEmpty || otherUserId.isEmpty) {
+      return;
+    }
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('conversations')
+        .doc(otherUserId)
+        .delete();
+  }
+
+  Future<void> clearChatMessages(String otherUserId) async {
+    final uid = currentUserId;
+    if (uid.isEmpty || otherUserId.isEmpty) {
+      return;
+    }
+
+    final chatId = getChatId(uid, otherUserId);
+    final messagesSnapshot = await _firestore
+        .collection('chats')
+        .doc(chatId)
+        .collection('messages')
+        .get();
+
+    final batch = _firestore.batch();
+    for (var doc in messagesSnapshot.docs) {
+      batch.delete(doc.reference);
+    }
+    await batch.commit();
+
+    await _firestore
+        .collection('users')
+        .doc(uid)
+        .collection('conversations')
+        .doc(otherUserId)
+        .update({
+      'lastMessage': 'Chat cleared',
+      'lastMessageTime': Timestamp.now(),
+    }).catchError((_) {});
+  }
+
   Future<void> seedInitialConversationsIfEmpty() async {
     final uid = currentUserId;
     if (uid.isEmpty) return;

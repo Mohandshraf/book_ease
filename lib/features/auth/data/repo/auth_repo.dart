@@ -15,4 +15,10 @@ abstract class AuthRepo {
   Future<UserCredential> signInWithGoogle();
   Future<void> saveRole({required String role});
   Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData();
+  Future<void> updateUserProfile({
+    required String name,
+    String? photoUrl,
+    String? phone,
+  });
+  Future<void> signOut();
 }

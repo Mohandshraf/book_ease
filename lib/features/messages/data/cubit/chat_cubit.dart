@@ -14,38 +14,76 @@ class ChatCubit extends Cubit<ChatState> {
   ChatCubit(this.chatRepo) : super(ChatInitial());
 
   void initConversations() async {
-    emit(ChatLoading());
+    if (state.conversations.isEmpty) {
+      emit(ChatLoading(
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    }
     try {
       await chatRepo.seedInitialConversations();
       _conversationsSub?.cancel();
       _conversationsSub = chatRepo.getConversations().listen(
         (conversations) {
-          emit(ConversationsLoaded(conversations));
+          emit(ConversationsLoaded(
+            conversations,
+            messages: state.messages,
+            activeChatUserId: state.activeChatUserId,
+          ));
         },
         onError: (e) {
-          emit(ChatFailure(e.toString()));
+          emit(ChatFailure(
+            e.toString(),
+            conversations: state.conversations,
+            messages: state.messages,
+            activeChatUserId: state.activeChatUserId,
+          ));
         },
       );
     } catch (e) {
-      emit(ChatFailure(e.toString()));
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
     }
   }
 
   void getMessages(String otherUserId) {
-    emit(ChatLoading());
+    emit(ChatLoading(
+      conversations: state.conversations,
+      messages: state.activeChatUserId == otherUserId ? state.messages : const [],
+      activeChatUserId: otherUserId,
+    ));
     try {
       chatRepo.markAsRead(otherUserId);
       _messagesSub?.cancel();
       _messagesSub = chatRepo.getMessages(otherUserId).listen(
         (messages) {
-          emit(MessagesLoaded(messages));
+          emit(MessagesLoaded(
+            messages,
+            conversations: state.conversations,
+            activeChatUserId: otherUserId,
+          ));
         },
         onError: (e) {
-          emit(ChatFailure(e.toString()));
+          emit(ChatFailure(
+            e.toString(),
+            conversations: state.conversations,
+            messages: state.messages,
+            activeChatUserId: otherUserId,
+          ));
         },
       );
     } catch (e) {
-      emit(ChatFailure(e.toString()));
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: otherUserId,
+      ));
     }
   }
 
@@ -65,10 +103,80 @@ class ChatCubit extends Cubit<ChatState> {
         receiverSpecialty: receiverSpecialty,
       );
     } catch (e) {
-      emit(ChatFailure(e.toString()));
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
     }
   }
 
+  Future<void> editMessage({
+    required String otherUserId,
+    required String messageId,
+    required String newText,
+  }) async {
+    try {
+      await chatRepo.editMessage(
+        otherUserId: otherUserId,
+        messageId: messageId,
+        newText: newText,
+      );
+    } catch (e) {
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    }
+  }
+
+  Future<void> deleteMessage({
+    required String otherUserId,
+    required String messageId,
+  }) async {
+    try {
+      await chatRepo.deleteMessage(
+        otherUserId: otherUserId,
+        messageId: messageId,
+      );
+    } catch (e) {
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    }
+  }
+
+  Future<void> deleteConversation(String otherUserId) async {
+    try {
+      await chatRepo.deleteConversation(otherUserId);
+    } catch (e) {
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    }
+  }
+
+  Future<void> clearChatMessages(String otherUserId) async {
+    try {
+      await chatRepo.clearChatMessages(otherUserId);
+    } catch (e) {
+      emit(ChatFailure(
+        e.toString(),
+        conversations: state.conversations,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    }
+  }
   @override
   Future<void> close() {
     _conversationsSub?.cancel();

@@ -40,4 +40,22 @@ class AuthRepoIplm implements AuthRepo {
   Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData() {
     return firebaseAuthService.getCurrentUserData();
   }
+
+  @override
+  Future<void> updateUserProfile({
+    required String name,
+    String? photoUrl,
+    String? phone,
+  }) {
+    return firebaseAuthService.updateUserProfile(
+      name: name,
+      photoUrl: photoUrl,
+      phone: phone,
+    );
+  }
+
+  @override
+  Future<void> signOut() {
+    return firebaseAuthService.signOut();
+  }
 }

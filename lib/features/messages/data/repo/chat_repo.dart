@@ -11,6 +11,17 @@ abstract class ChatRepo {
     String? receiverImage,
     String? receiverSpecialty,
   });
+  Future<void> editMessage({
+    required String otherUserId,
+    required String messageId,
+    required String newText,
+  });
+  Future<void> deleteMessage({
+    required String otherUserId,
+    required String messageId,
+  });
+  Future<void> deleteConversation(String otherUserId);
+  Future<void> clearChatMessages(String otherUserId);
   Future<void> markAsRead(String otherUserId);
   Future<void> seedInitialConversations();
 }
