@@ -1,5 +1,5 @@
 import 'package:book_ease/core/app_colors.dart';
-import 'package:book_ease/features/Admin/data/recent_booking_model.dart';
+import 'package:book_ease/features/admin/data/recent_booking_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

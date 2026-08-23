@@ -1,8 +1,7 @@
-import 'package:book_ease/choose_role_view.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
-import 'package:book_ease/features/onBoarding/presentation/views/on_boarding_view.dart';
-import 'package:book_ease/root_view.dart';
+import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
+import 'package:book_ease/features/on_boarding/presentation/views/on_boarding_view.dart';
+import 'package:book_ease/features/role_selection/presentation/views/choose_role_view.dart';
+import 'package:book_ease/features/root/presentation/views/root_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

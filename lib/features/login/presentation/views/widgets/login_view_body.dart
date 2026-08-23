@@ -1,14 +1,12 @@
-import 'package:book_ease/choose_role_view.dart';
 import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/core/widgets/custom_text_field.dart';
 
-import 'package:book_ease/features/Register/presentation/views/register_view.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
 import 'package:book_ease/features/login/presentation/views/widgets/selection_button.dart';
-import 'package:book_ease/root_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -52,15 +50,9 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               if (state.userData != null) {
                 context.read<UserCubit>().setUserData(state.userData!);
               }
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const RootView()),
-              );
+              Navigator.pushReplacementNamed(context, AppRoutes.root);
             } else {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const ChooseRoleView()),
-              );
+              Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
             }
           }
 
@@ -285,19 +277,21 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                           style: TextStyle(color: Colors.black, fontSize: 18),
                         ),
                         GestureDetector(
-                          onTap: () => Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) {
-                                return RegisterView();
-                              },
+                          behavior: HitTestBehavior.opaque,
+                          onTap: () =>
+                              Navigator.pushNamed(context, AppRoutes.register),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 8.0,
+                              vertical: 4.0,
                             ),
-                          ),
-                          child: Text(
-                            "Sign Up",
-                            style: TextStyle(
-                              color: AppColors.ksecondColor,
-                              fontSize: 18,
+                            child: Text(
+                              "Sign Up",
+                              style: TextStyle(
+                                color: AppColors.ksecondColor,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
                           ),
                         ),

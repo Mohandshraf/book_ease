@@ -11,6 +11,9 @@ class DateOption {
 }
 
 class ServiceDetailsModel {
+  final String? serviceId;
+  final String? providerId;
+  final String? providerImage;
   final String title;
   final String providerName;
   final String location;
@@ -25,6 +28,9 @@ class ServiceDetailsModel {
   final List<String> availableTimes;
 
   const ServiceDetailsModel({
+    this.serviceId,
+    this.providerId,
+    this.providerImage,
     required this.title,
     required this.providerName,
     required this.location,
@@ -56,6 +62,10 @@ List<DateOption> generateDynamicDateOptions([int count = 7]) {
 }
 
 final ServiceDetailsModel mockServiceDetails = ServiceDetailsModel(
+  serviceId: "mock_service_sarah",
+  providerId: "dr_sarah_mitchell",
+  providerImage:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200",
   title: "City Medical Clinic",
   providerName: "Dr. Sarah Mitchell",
   location: "Downtown, 0.8 km",

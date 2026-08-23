@@ -1,5 +1,5 @@
 import 'package:book_ease/core/app_colors.dart';
-import 'package:book_ease/root_view.dart';
+import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -192,11 +192,9 @@ class BookingSuccessView extends StatelessWidget {
                       onPressed: onViewBookingsPressed ??
                           () {
                             // Pop to root home view
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.pushNamedAndRemoveUntil(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const RootView(),
-                              ),
+                              AppRoutes.root,
                               (route) => false,
                             );
                           },
@@ -224,11 +222,9 @@ class BookingSuccessView extends StatelessWidget {
                     child: OutlinedButton(
                       onPressed: onBackHomePressed ??
                           () {
-                            Navigator.pushAndRemoveUntil(
+                            Navigator.pushNamedAndRemoveUntil(
                               context,
-                              MaterialPageRoute(
-                                builder: (context) => const RootView(),
-                              ),
+                              AppRoutes.root,
                               (route) => false,
                             );
                           },

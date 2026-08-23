@@ -1,4 +1,4 @@
-import 'package:book_ease/features/onBoarding/presentation/views/widgets/on_boarding_view_body.dart';
+import 'package:book_ease/features/on_boarding/presentation/views/widgets/on_boarding_view_body.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingView extends StatelessWidget {

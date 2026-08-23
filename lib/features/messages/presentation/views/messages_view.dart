@@ -58,7 +58,7 @@ class _MessagesViewState extends State<MessagesView> {
         'Sep',
         'Oct',
         'Nov',
-        'Dec'
+        'Dec',
       ];
       return '${months[dt.month - 1]} ${dt.day}';
     }
@@ -71,7 +71,10 @@ class _MessagesViewState extends State<MessagesView> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           "Delete Chat",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff0B1F44)),
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xff0B1F44),
+          ),
         ),
         content: Text(
           "Are you sure you want to delete the chat with ${chat.otherUserName}?",
@@ -80,12 +83,17 @@ class _MessagesViewState extends State<MessagesView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xff64748B))),
+            child: const Text(
+              "Cancel",
+              style: TextStyle(color: Color(0xff64748B)),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.redAccent,
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
             ),
             onPressed: () {
               Navigator.pop(dialogContext);
@@ -130,7 +138,10 @@ class _MessagesViewState extends State<MessagesView> {
                 decoration: const InputDecoration(
                   hintText: "Search messages...",
                   hintStyle: TextStyle(color: Color(0xff94A3B8), fontSize: 15),
-                  prefixIcon: Icon(Icons.search_rounded, color: Color(0xff64748B)),
+                  prefixIcon: Icon(
+                    Icons.search_rounded,
+                    color: Color(0xff64748B),
+                  ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 12),
                 ),
@@ -151,9 +162,15 @@ class _MessagesViewState extends State<MessagesView> {
 
           if (_searchQuery.isNotEmpty) {
             chats = chats.where((c) {
-              final nameMatch = c.otherUserName.toLowerCase().contains(_searchQuery);
-              final msgMatch = c.lastMessage.toLowerCase().contains(_searchQuery);
-              final specMatch = (c.otherUserSpecialty ?? '').toLowerCase().contains(_searchQuery);
+              final nameMatch = c.otherUserName.toLowerCase().contains(
+                _searchQuery,
+              );
+              final msgMatch = c.lastMessage.toLowerCase().contains(
+                _searchQuery,
+              );
+              final specMatch = (c.otherUserSpecialty ?? '')
+                  .toLowerCase()
+                  .contains(_searchQuery);
               return nameMatch || msgMatch || specMatch;
             }).toList();
           }
@@ -188,10 +205,7 @@ class _MessagesViewState extends State<MessagesView> {
                   const SizedBox(height: 8),
                   const Text(
                     "Chat messages from providers will appear here",
-                    style: TextStyle(
-                      color: Color(0xff64748B),
-                      fontSize: 14,
-                    ),
+                    style: TextStyle(color: Color(0xff64748B), fontSize: 14),
                   ),
                 ],
               ),
@@ -201,11 +215,8 @@ class _MessagesViewState extends State<MessagesView> {
           return ListView.separated(
             padding: const EdgeInsets.symmetric(vertical: 20),
             itemCount: chats.length,
-            separatorBuilder: (context, index) => const Divider(
-              color: Color(0xffF1F5F9),
-              height: 1,
-              indent: 80,
-            ),
+            separatorBuilder: (context, index) =>
+                const Divider(color: Color(0xffF1F5F9), height: 1, indent: 80),
             itemBuilder: (context, index) {
               final chat = chats[index];
               final timeStr = _formatConversationTime(chat.lastMessageTime);
@@ -220,9 +231,19 @@ class _MessagesViewState extends State<MessagesView> {
                   child: const Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(Icons.delete_outline_rounded, color: Colors.white, size: 24),
+                      Icon(
+                        Icons.delete_outline_rounded,
+                        color: Colors.white,
+                        size: 24,
+                      ),
                       SizedBox(width: 8),
-                      Text("Delete", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+                      Text(
+                        "Delete",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -246,22 +267,30 @@ class _MessagesViewState extends State<MessagesView> {
                   },
                   onLongPress: () => _showDeleteConversationDialog(chat),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
                     child: Row(
                       children: [
                         Stack(
                           children: [
                             CircleAvatar(
                               radius: 28,
-                              backgroundImage: chat.otherUserImage != null &&
+                              backgroundImage:
+                                  chat.otherUserImage != null &&
                                       chat.otherUserImage!.isNotEmpty
                                   ? NetworkImage(chat.otherUserImage!)
                                   : null,
                               backgroundColor: const Color(0xffE2E8F0),
-                              child: (chat.otherUserImage == null ||
+                              child:
+                                  (chat.otherUserImage == null ||
                                       chat.otherUserImage!.isEmpty)
-                                  ? const Icon(Icons.person_rounded,
-                                      color: Color(0xff64748B), size: 28)
+                                  ? const Icon(
+                                      Icons.person_rounded,
+                                      color: Color(0xff64748B),
+                                      size: 28,
+                                    )
                                   : null,
                             ),
                             if (chat.unread)
@@ -289,7 +318,8 @@ class _MessagesViewState extends State<MessagesView> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     chat.otherUserName,
@@ -357,4 +387,3 @@ class _MessagesViewState extends State<MessagesView> {
     );
   }
 }
-

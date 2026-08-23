@@ -1,6 +1,1 @@
-import 'package:flutter/material.dart';
-
-class AppColors {
-  static const kprimaryColor = Colors.white;
-  static const ksecondColor = Color(0xff0a9482);
-}
+export 'package:book_ease/core/theme/app_colors.dart';

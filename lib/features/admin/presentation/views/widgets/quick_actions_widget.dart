@@ -1,4 +1,4 @@
-import 'package:book_ease/features/Admin/data/quick_actions_model.dart';
+import 'package:book_ease/features/admin/data/quick_actions_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

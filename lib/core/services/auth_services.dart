@@ -16,6 +16,7 @@ class FirebaseAuthService {
         email: email,
         password: password,
       );
+      await credential.user?.updateDisplayName(name);
       await FirebaseFirestore.instance
           .collection("users")
           .doc(credential.user!.uid)
@@ -110,12 +111,13 @@ class FirebaseAuthService {
     }
     final uid = user.uid;
 
-    await FirebaseFirestore.instance.collection("users").doc(uid).set({
-      "uid": uid,
-      "email": user.email ?? "",
-      "name": user.displayName ?? "",
-      "role": role,
-    }, SetOptions(merge: true));
+    await FirebaseFirestore.instance.collection("users").doc(uid).set(
+      {
+        "uid": uid,
+        "role": role,
+      },
+      SetOptions(merge: true),
+    );
   }
 
   Future<DocumentSnapshot<Map<String, dynamic>>> getCurrentUserData() async {
@@ -125,7 +127,26 @@ class FirebaseAuthService {
     }
     final uid = user.uid;
 
-    return await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    final doc =
+        await FirebaseFirestore.instance.collection("users").doc(uid).get();
+
+    // If Firestore doc has empty name but Firebase Auth displayName exists, sync it
+    if (doc.exists) {
+      final currentDocName = doc.data()?['name'] as String?;
+      if (currentDocName == null || currentDocName.trim().isEmpty) {
+        final displayName = user.displayName;
+        if (displayName != null && displayName.trim().isNotEmpty) {
+          try {
+            await FirebaseFirestore.instance
+                .collection("users")
+                .doc(uid)
+                .set({"name": displayName.trim()}, SetOptions(merge: true));
+          } catch (_) {}
+        }
+      }
+    }
+
+    return doc;
   }
 
   Future<void> updateUserProfile({

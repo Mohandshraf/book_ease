@@ -1,6 +1,6 @@
 import 'package:book_ease/features/login/presentation/views/login_view.dart';
-import 'package:book_ease/features/onBoarding/data/models/on_boarding_model.dart';
-import 'package:book_ease/features/onBoarding/presentation/views/on_boarding_page.dart';
+import 'package:book_ease/features/on_boarding/data/models/on_boarding_model.dart';
+import 'package:book_ease/features/on_boarding/presentation/views/on_boarding_page.dart';
 import 'package:flutter/material.dart';
 
 class OnBoardingPageViewBody extends StatefulWidget {

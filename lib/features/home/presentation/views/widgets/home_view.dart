@@ -1,5 +1,5 @@
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_state.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/home/presentation/views/widgets/home_view_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -32,6 +32,8 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return BlocBuilder<UserCubit, UserCubitState>(
       builder: (context, state) {
+        final userName = _getUserName(state);
+
         return Scaffold(
           appBar: AppBar(
             toolbarHeight: 210,
@@ -51,7 +53,7 @@ class _HomeViewState extends State<HomeView> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              "Good morning, ${_getUserName(state)}",
+                              "Good morning, ${userName.isNotEmpty ? userName : 'User'}",
                               style: const TextStyle(
                                 color: Colors.white70,
                                 fontSize: 16,
@@ -68,34 +70,39 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           ],
                         ),
-                        Container(
-                          width: 48,
-                          height: 48,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: Colors.white.withValues(alpha: .15),
-                          ),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              const Icon(
-                                Icons.notifications_none_rounded,
-                                color: Colors.white,
-                                size: 26,
-                              ),
-                              Positioned(
-                                top: 12,
-                                right: 12,
-                                child: Container(
-                                  width: 8,
-                                  height: 8,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.amber,
-                                    shape: BoxShape.circle,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pushNamed(context, AppRoutes.notifications);
+                          },
+                          child: Container(
+                            width: 48,
+                            height: 48,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white.withValues(alpha: .15),
+                            ),
+                            child: Stack(
+                              alignment: Alignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.notifications_none_rounded,
+                                  color: Colors.white,
+                                  size: 26,
+                                ),
+                                Positioned(
+                                  top: 12,
+                                  right: 12,
+                                  child: Container(
+                                    width: 8,
+                                    height: 8,
+                                    decoration: const BoxDecoration(
+                                      color: Colors.amber,
+                                      shape: BoxShape.circle,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -144,9 +151,8 @@ class _HomeViewState extends State<HomeView> {
               ),
             ),
           ),
-
-          backgroundColor: Color(0xffF8FAFC),
-          body: HomeViewBody(),
+          backgroundColor: const Color(0xffF8FAFC),
+          body: const HomeViewBody(),
         );
       },
     );

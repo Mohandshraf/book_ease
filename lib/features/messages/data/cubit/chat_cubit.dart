@@ -22,7 +22,6 @@ class ChatCubit extends Cubit<ChatState> {
       ));
     }
     try {
-      await chatRepo.seedInitialConversations();
       _conversationsSub?.cancel();
       _conversationsSub = chatRepo.getConversations().listen(
         (conversations) {
@@ -177,6 +176,13 @@ class ChatCubit extends Cubit<ChatState> {
       ));
     }
   }
+
+  void reset() {
+    _conversationsSub?.cancel();
+    _messagesSub?.cancel();
+    emit(ChatInitial());
+  }
+
   @override
   Future<void> close() {
     _conversationsSub?.cancel();

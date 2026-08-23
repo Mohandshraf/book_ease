@@ -1,6 +1,7 @@
 import 'dart:convert';
-import 'package:book_ease/core/widgets/user_avatar.dart';
-import 'package:book_ease/features/auth/data/UserCubit/cubit/user_cubit_cubit.dart';
+import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
+import 'package:book_ease/features/profile/presentation/views/widgets/edit_profile_avatar_picker.dart';
+import 'package:book_ease/features/profile/presentation/views/widgets/edit_profile_form_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -113,12 +114,14 @@ class _EditProfileViewState extends State<EditProfileView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xff64748B))),
+            child: const Text("Cancel",
+                style: TextStyle(color: Color(0xff64748B))),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xff0B9B7B),
-              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
               final url = urlController.text.trim();
@@ -174,8 +177,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     color: const Color(0xffEAFDF6),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.photo_library_outlined,
-                      color: Color(0xff0B9B7B)),
+                  child: const Icon(
+                    Icons.photo_library_outlined,
+                    color: Color(0xff0B9B7B),
+                  ),
                 ),
                 title: const Text(
                   "Choose from Gallery",
@@ -196,8 +201,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     color: const Color(0xffEAFDF6),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.camera_alt_outlined,
-                      color: Color(0xff0B9B7B)),
+                  child: const Icon(
+                    Icons.camera_alt_outlined,
+                    color: Color(0xff0B9B7B),
+                  ),
                 ),
                 title: const Text(
                   "Take a Photo",
@@ -218,8 +225,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                     color: const Color(0xffF1F5F9),
                     borderRadius: BorderRadius.circular(12),
                   ),
-                  child: const Icon(Icons.link_rounded,
-                      color: Color(0xff64748B)),
+                  child: const Icon(
+                    Icons.link_rounded,
+                    color: Color(0xff64748B),
+                  ),
                 ),
                 title: const Text(
                   "Enter Image URL",
@@ -241,8 +250,10 @@ class _EditProfileViewState extends State<EditProfileView> {
                       color: const Color(0xffFEE2E2),
                       borderRadius: BorderRadius.circular(12),
                     ),
-                    child: const Icon(Icons.delete_outline_rounded,
-                        color: Colors.redAccent),
+                    child: const Icon(
+                      Icons.delete_outline_rounded,
+                      color: Colors.redAccent,
+                    ),
                   ),
                   title: const Text(
                     "Remove Photo",
@@ -364,229 +375,19 @@ class _EditProfileViewState extends State<EditProfileView> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               const Gap(16),
-
-              // Avatar with Edit Badge
-              Center(
-                child: Stack(
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(
-                          color: const Color(0xff0B9B7B),
-                          width: 3,
-                        ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xff0B9B7B).withValues(alpha: 0.15),
-                            blurRadius: 16,
-                            offset: const Offset(0, 6),
-                          ),
-                        ],
-                      ),
-                      child: UserAvatar(
-                        imageUrl: _selectedPhotoUrl,
-                        name: _nameController.text,
-                        radius: 54,
-                      ),
-                    ),
-                    Positioned(
-                      bottom: 0,
-                      right: 0,
-                      child: GestureDetector(
-                        onTap: _showImageSourceActionSheet,
-                        child: Container(
-                          height: 38,
-                          width: 38,
-                          decoration: BoxDecoration(
-                            color: const Color(0xff0B9B7B),
-                            shape: BoxShape.circle,
-                            border: Border.all(color: Colors.white, width: 3),
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.1),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.camera_alt_rounded,
-                            color: Colors.white,
-                            size: 18,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              EditProfileAvatarPicker(
+                selectedPhotoUrl: _selectedPhotoUrl,
+                userName: _nameController.text,
+                onChangePhotoPressed: _showImageSourceActionSheet,
               ),
-              const Gap(8),
-              TextButton.icon(
-                onPressed: _showImageSourceActionSheet,
-                icon: const Icon(Icons.edit_outlined,
-                    size: 16, color: Color(0xff0B9B7B)),
-                label: const Text(
-                  "Change Profile Photo",
-                  style: TextStyle(
-                    color: Color(0xff0B9B7B),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
-                  ),
-                ),
-              ),
-
               const Gap(24),
-
-              // Input Card
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.03),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Full Name Field
-                    const Text(
-                      "Full Name",
-                      style: TextStyle(
-                        color: Color(0xff0B1F44),
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _nameController,
-                      validator: (value) {
-                        if (value == null || value.trim().isEmpty) {
-                          return "Please enter your name";
-                        }
-                        return null;
-                      },
-                      onChanged: (_) => setState(() {}),
-                      decoration: InputDecoration(
-                        hintText: "Your full name",
-                        prefixIcon: const Icon(Icons.person_outline_rounded,
-                            color: Color(0xff64748B)),
-                        filled: true,
-                        fillColor: const Color(0xffF8FAFC),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xffE2E8F0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xffE2E8F0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xff0B9B7B), width: 1.5),
-                        ),
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Email Field
-                    const Text(
-                      "Email Address",
-                      style: TextStyle(
-                        color: Color(0xff0B1F44),
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _emailController,
-                      readOnly: true,
-                      decoration: InputDecoration(
-                        hintText: "Your email address",
-                        prefixIcon: const Icon(Icons.email_outlined,
-                            color: Color(0xff94A3B8)),
-                        suffixIcon: const Icon(Icons.lock_outline_rounded,
-                            color: Color(0xff94A3B8), size: 18),
-                        filled: true,
-                        fillColor: const Color(0xffF1F5F9),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    const Text(
-                      "Email cannot be changed directly for security",
-                      style: TextStyle(
-                        color: Color(0xff94A3B8),
-                        fontSize: 12,
-                      ),
-                    ),
-
-                    const SizedBox(height: 20),
-
-                    // Phone Number Field
-                    const Text(
-                      "Phone Number",
-                      style: TextStyle(
-                        color: Color(0xff0B1F44),
-                        fontSize: 14,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                    TextFormField(
-                      controller: _phoneController,
-                      keyboardType: TextInputType.phone,
-                      decoration: InputDecoration(
-                        hintText: "+1 (555) 000-0000",
-                        prefixIcon: const Icon(Icons.phone_outlined,
-                            color: Color(0xff64748B)),
-                        filled: true,
-                        fillColor: const Color(0xffF8FAFC),
-                        contentPadding: const EdgeInsets.symmetric(
-                            horizontal: 16, vertical: 14),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xffE2E8F0)),
-                        ),
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xffE2E8F0)),
-                        ),
-                        focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(14),
-                          borderSide:
-                              const BorderSide(color: Color(0xff0B9B7B), width: 1.5),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+              EditProfileFormCard(
+                nameController: _nameController,
+                emailController: _emailController,
+                phoneController: _phoneController,
+                onNameChanged: (_) => setState(() {}),
               ),
-
               const Gap(32),
-
-              // Save Button
               SizedBox(
                 width: double.infinity,
                 height: 54,

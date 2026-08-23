@@ -306,12 +306,16 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                       return BookingCard(
                         month: monthStr,
                         day: dayStr,
-                        title: b.serviceId.isNotEmpty
-                            ? b.serviceId
-                            : "Medical Service",
-                        doctorName: b.providerId.isNotEmpty
-                            ? b.providerId
-                            : "Doctor",
+                        title: (b.serviceTitle != null && b.serviceTitle!.isNotEmpty)
+                            ? b.serviceTitle!
+                            : (b.serviceId.isNotEmpty
+                                ? b.serviceId
+                                : "Medical Service"),
+                        doctorName: (b.providerName != null && b.providerName!.isNotEmpty)
+                            ? b.providerName!
+                            : (b.providerId.isNotEmpty
+                                ? b.providerId
+                                : "Doctor"),
                         time: b.bookingTime,
                         status: b.status.isNotEmpty
                             ? (b.status[0].toUpperCase() +

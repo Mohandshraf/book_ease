@@ -30,7 +30,7 @@ class ChatServices {
       return snapshot.docs
           .map((doc) => ChatConversationModel.fromJson(doc.data()))
           .toList();
-    });
+    }).handleError((_) => <ChatConversationModel>[]);
   }
 
   Stream<List<MessageModel>> getMessagesStream(String otherUserId) {
@@ -49,7 +49,7 @@ class ChatServices {
       return snapshot.docs
           .map((doc) => MessageModel.fromJson(doc.data(), doc.id))
           .toList();
-    });
+    }).handleError((_) => <MessageModel>[]);
   }
 
   Future<void> sendMessage({
@@ -60,11 +60,20 @@ class ChatServices {
     String? receiverSpecialty,
   }) async {
     final senderId = currentUserId;
-    final senderName = currentUserName;
-
     if (senderId.isEmpty || receiverId.isEmpty || messageText.trim().isEmpty) {
       return;
     }
+
+    String senderName = currentUserName;
+    try {
+      final userDoc = await _firestore.collection('users').doc(senderId).get();
+      if (userDoc.exists && userDoc.data() != null) {
+        final docName = userDoc.data()!['name'] as String?;
+        if (docName != null && docName.trim().isNotEmpty) {
+          senderName = docName.trim();
+        }
+      }
+    } catch (_) {}
 
     final chatId = getChatId(senderId, receiverId);
     final now = DateTime.now();
@@ -291,69 +300,6 @@ class ChatServices {
   }
 
   Future<void> seedInitialConversationsIfEmpty() async {
-    final uid = currentUserId;
-    if (uid.isEmpty) return;
-
-    final convsDoc = await _firestore
-        .collection('users')
-        .doc(uid)
-        .collection('conversations')
-        .get();
-
-    if (convsDoc.docs.isEmpty) {
-      final initialChats = [
-        {
-          'otherUserId': 'dr_sarah_mitchell',
-          'otherUserName': 'Dr. Sarah Mitchell',
-          'otherUserSpecialty': 'Cardiology Specialist',
-          'otherUserImage':
-              'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200',
-          'lastMessage':
-              'Your lab results are ready. Let\'s discuss them during our appointment.',
-        },
-        {
-          'otherUserId': 'city_medical_clinic',
-          'otherUserName': 'City Medical Clinic',
-          'otherUserSpecialty': 'Clinic Support',
-          'otherUserImage':
-              'https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=200',
-          'lastMessage':
-              'Your booking for City Medical Clinic has been confirmed.',
-        },
-        {
-          'otherUserId': 'dr_omar_hassan',
-          'otherUserName': 'Dr. Omar Hassan',
-          'otherUserSpecialty': 'Dental Care Specialist',
-          'otherUserImage':
-              'https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=200',
-          'lastMessage':
-              'Please remember to bring your previous medical history documents.',
-        },
-      ];
-
-      final now = DateTime.now();
-
-      for (var chat in initialChats) {
-        final otherId = chat['otherUserId']!;
-        final chatId = getChatId(uid, otherId);
-        final conv = ChatConversationModel(
-          chatId: chatId,
-          otherUserId: otherId,
-          otherUserName: chat['otherUserName']!,
-          otherUserSpecialty: chat['otherUserSpecialty'],
-          otherUserImage: chat['otherUserImage'],
-          lastMessage: chat['lastMessage']!,
-          lastMessageTime: now,
-          unread: false,
-        );
-
-        await _firestore
-            .collection('users')
-            .doc(uid)
-            .collection('conversations')
-            .doc(otherId)
-            .set(conv.toJson());
-      }
-    }
+    // No mock seed data - only real user conversations
   }
 }

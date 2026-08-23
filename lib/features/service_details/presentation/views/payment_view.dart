@@ -4,6 +4,9 @@ import 'package:book_ease/features/booking/data/cubit/booking_state.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/booking_success_view.dart';
+import 'package:book_ease/features/service_details/presentation/views/widgets/payment_card_form.dart';
+import 'package:book_ease/features/service_details/presentation/views/widgets/payment_card_preview.dart';
+import 'package:book_ease/features/service_details/presentation/views/widgets/payment_method_selector.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -45,13 +48,11 @@ class _PaymentViewState extends State<PaymentView> {
   @override
   void initState() {
     super.initState();
-    // Default values matching screenshot
     numberController.text = "1234 5678 9012 4242";
     holderController.text = "Alex Johnson";
     expiryController.text = "08/28";
     cvvController.text = "•••";
 
-    // Listen to changes to update card preview dynamically
     numberController.addListener(() {
       setState(() {
         cardNumber = numberController.text.isEmpty
@@ -191,347 +192,29 @@ class _PaymentViewState extends State<PaymentView> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Gap(10),
-
-                  // 1. Credit Card Graphic Widget
-                  Container(
-                    height: 210,
-                    width: double.infinity,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(24),
-                      gradient: const LinearGradient(
-                        colors: [
-                          Color(0xff0B9B7B),
-                          Color(0xff0284c7),
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xff0B9B7B).withAlpha(40),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Stack(
-                        children: [
-                          // Decorative background shapes
-                          Positioned(
-                            right: -30,
-                            bottom: -40,
-                            child: Container(
-                              width: 180,
-                              height: 180,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withAlpha(12),
-                              ),
-                            ),
-                          ),
-                          Positioned(
-                            right: 40,
-                            top: -50,
-                            child: Container(
-                              width: 140,
-                              height: 140,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: Colors.white.withAlpha(8),
-                              ),
-                            ),
-                          ),
-
-                          // Card Content
-                          Padding(
-                            padding: const EdgeInsets.all(24),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                // Card Type Brand Logo
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    // Yellow Card Chip
-                                    Container(
-                                      width: 46,
-                                      height: 34,
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xffF59E0B),
-                                        borderRadius: BorderRadius.circular(8),
-                                      ),
-                                    ),
-                                    // Mastercard style Brand Circles
-                                    SizedBox(
-                                      width: 48,
-                                      height: 32,
-                                      child: Stack(
-                                        children: [
-                                          Positioned(
-                                            left: 0,
-                                            child: Container(
-                                              width: 32,
-                                              height: 32,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: const Color(0xffEF4444)
-                                                    .withAlpha(220),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            right: 0,
-                                            child: Container(
-                                              width: 32,
-                                              height: 32,
-                                              decoration: BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: const Color(0xffF59E0B)
-                                                    .withAlpha(200),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                // Card Number
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "CARD NUMBER",
-                                      style: TextStyle(
-                                        color: Colors.white.withAlpha(150),
-                                        fontSize: 10,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                    const Gap(6),
-                                    Text(
-                                      cardNumber,
-                                      style: const TextStyle(
-                                        color: Colors.white,
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 1.5,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-
-                                // Card Holder & Expiration
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "CARD HOLDER",
-                                          style: TextStyle(
-                                            color: Colors.white.withAlpha(150),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1,
-                                          ),
-                                        ),
-                                        const Gap(4),
-                                        Text(
-                                          cardHolder,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Column(
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "EXPIRES",
-                                          style: TextStyle(
-                                            color: Colors.white.withAlpha(150),
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                            letterSpacing: 1,
-                                          ),
-                                        ),
-                                        const Gap(4),
-                                        Text(
-                                          expiryDate,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 15,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
+                  PaymentCardPreview(
+                    cardNumber: cardNumber,
+                    cardHolder: cardHolder,
+                    expiryDate: expiryDate,
                   ),
-
                   const Gap(24),
-
-                  // 2. Payment Method Selector Row
-                  Row(
-                    children: [
-                      Expanded(
-                        child: _buildMethodButton(
-                          index: 0,
-                          label: "Credit Card",
-                        ),
-                      ),
-                      const Gap(12),
-                      Expanded(
-                        child: _buildMethodButton(
-                          index: 1,
-                          label: "PayPal",
-                        ),
-                      ),
-                      const Gap(12),
-                      Expanded(
-                        child: _buildMethodButton(
-                          index: 2,
-                          label: "Apple Pay",
-                        ),
-                      ),
-                    ],
+                  PaymentMethodSelector(
+                    selectedIndex: selectedMethodIndex,
+                    onMethodSelected: (index) {
+                      setState(() {
+                        selectedMethodIndex = index;
+                      });
+                    },
                   ),
-
                   const Gap(24),
-
-                  // 3. Conditional Content
                   if (selectedMethodIndex == 0) ...[
-                    // Card Details Form Container
-                    Container(
-                      padding: const EdgeInsets.all(20),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(24),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black.withAlpha(10),
-                            blurRadius: 18,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Card Details",
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff0B1F44),
-                            ),
-                          ),
-                          const Gap(20),
-
-                          // Card Number Field
-                          const Text(
-                            "CARD NUMBER",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff94A3B8),
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const Gap(8),
-                          _buildTextField(
-                            controller: numberController,
-                            icon: Icons.credit_card_outlined,
-                          ),
-                          const Gap(16),
-
-                          // Card Holder Field
-                          const Text(
-                            "CARD HOLDER",
-                            style: TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Color(0xff94A3B8),
-                              letterSpacing: 1,
-                            ),
-                          ),
-                          const Gap(8),
-                          _buildTextField(
-                            controller: holderController,
-                            icon: Icons.person_outline_rounded,
-                          ),
-                          const Gap(16),
-
-                          // Expiry & CVV Row
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "EXPIRY",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff94A3B8),
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                    const Gap(8),
-                                    _buildTextField(
-                                      controller: expiryController,
-                                      icon: Icons.date_range_outlined,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              const Gap(16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    const Text(
-                                      "CVV",
-                                      style: TextStyle(
-                                        fontSize: 11,
-                                        fontWeight: FontWeight.bold,
-                                        color: Color(0xff94A3B8),
-                                        letterSpacing: 1,
-                                      ),
-                                    ),
-                                    const Gap(8),
-                                    _buildTextField(
-                                      controller: cvvController,
-                                      icon: Icons.lock_outline_rounded,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
+                    PaymentCardForm(
+                      numberController: numberController,
+                      holderController: holderController,
+                      expiryController: expiryController,
+                      cvvController: cvvController,
                     ),
                   ] else if (selectedMethodIndex == 1) ...[
-                    // PayPal Message Card
                     _buildAlternateMethodCard(
                       title: "PayPal Connection",
                       description:
@@ -539,7 +222,6 @@ class _PaymentViewState extends State<PaymentView> {
                       icon: Icons.paypal_outlined,
                     ),
                   ] else ...[
-                    // Apple Pay Message Card
                     _buildAlternateMethodCard(
                       title: "Apple Pay Integration",
                       description:
@@ -547,7 +229,6 @@ class _PaymentViewState extends State<PaymentView> {
                       icon: Icons.apple_outlined,
                     ),
                   ],
-
                   const Gap(120),
                 ],
               ),
@@ -577,15 +258,27 @@ class _PaymentViewState extends State<PaymentView> {
                                 FirebaseAuth.instance.currentUser;
                             final currentUserId = currentUser?.uid ?? "";
 
+                            final effectiveProviderId = (widget.model.providerId != null &&
+                                    widget.model.providerId!.isNotEmpty)
+                                ? widget.model.providerId!
+                                : widget.model.providerName;
+                            final effectiveServiceId = (widget.model.serviceId != null &&
+                                    widget.model.serviceId!.isNotEmpty)
+                                ? widget.model.serviceId!
+                                : widget.model.title;
+
                             final booking = BookingModel(
                               customerId: currentUserId,
                               customerName: currentUser?.displayName,
                               customerEmail: currentUser?.email,
-                              providerId: widget.model.providerName,
-                              serviceId: widget.model.title,
+                              providerId: effectiveProviderId,
+                              providerName: widget.model.providerName,
+                              serviceId: effectiveServiceId,
+                              serviceTitle: widget.model.title,
+                              price: widget.totalPrice,
                               bookingDate: widget.selectedDate,
                               bookingTime: widget.selectedTime,
-                              status: "confirmed",
+                              status: "pending",
                               createdAt: DateTime.now(),
                             );
 
@@ -634,83 +327,6 @@ class _PaymentViewState extends State<PaymentView> {
           ),
         );
       },
-    );
-  }
-
-  Widget _buildMethodButton({required int index, required String label}) {
-    final isSelected = selectedMethodIndex == index;
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          selectedMethodIndex = index;
-        });
-      },
-      child: Container(
-        height: 48,
-        decoration: BoxDecoration(
-          color: isSelected ? AppColors.ksecondColor : Colors.white,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: isSelected ? AppColors.ksecondColor : const Color(0xffE2E8F0),
-            width: 1,
-          ),
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.bold,
-              color: isSelected ? Colors.white : const Color(0xff64748B),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required IconData icon,
-  }) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        prefixIcon: Icon(
-          icon,
-          color: const Color(0xff94A3B8),
-          size: 20,
-        ),
-        contentPadding: const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
-        filled: true,
-        fillColor: const Color(0xffF8FAFC),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Color(0xffE2E8F0),
-            width: 1,
-          ),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: Color(0xffE2E8F0),
-            width: 1,
-          ),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
-          borderSide: const BorderSide(
-            color: AppColors.ksecondColor,
-            width: 1,
-          ),
-        ),
-      ),
-      style: const TextStyle(
-        color: Color(0xff0B1F44),
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
-      ),
     );
   }
 

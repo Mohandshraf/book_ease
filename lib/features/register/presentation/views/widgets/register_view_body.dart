@@ -1,6 +1,6 @@
 import 'package:book_ease/core/app_colors.dart';
 import 'package:book_ease/core/utils/validators.dart';
-import 'package:book_ease/features/Register/presentation/views/widgets/custom_button.dart';
+import 'package:book_ease/features/register/presentation/views/widgets/custom_button.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
 import 'package:book_ease/features/login/presentation/views/login_view.dart';
@@ -176,7 +176,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
                     CustomTextField(
                       validator: (value) => Validators.confirmPassword(
                         value,
-                        confirmPasswordController.text,
+                        passwordController.text,
                       ),
                       controller: confirmPasswordController,
                       hintText: "Repeat your password",

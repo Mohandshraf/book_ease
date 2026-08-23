@@ -1,5 +1,5 @@
 import 'package:book_ease/core/widgets/custom_text_field.dart';
-import 'package:book_ease/features/Admin/presentation/views/widgets/admin_view_body.dart';
+import 'package:book_ease/features/admin/presentation/views/widgets/admin_view_body.dart';
 import 'package:flutter/material.dart';
 
 class AdminView extends StatelessWidget {

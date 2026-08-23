@@ -1,4 +1,4 @@
-import 'package:book_ease/features/Admin/data/dashboard_state_model.dart';
+import 'package:book_ease/features/admin/data/dashboard_state_model.dart';
 import 'package:flutter/material.dart';
 
 class DashboardStatCard extends StatelessWidget {
