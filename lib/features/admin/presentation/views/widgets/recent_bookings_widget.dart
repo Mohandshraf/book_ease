@@ -1,4 +1,5 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/admin/data/recent_booking_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -26,18 +27,18 @@ class RecentBookingsSection extends StatelessWidget {
             const Text(
               "Recent Bookings",
               style: TextStyle(
-                color: Color(0xff0B1F44),
-                fontSize: 24,
+                color: AppColors.textPrimary,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            GestureDetector(
+            ScaleOnTap(
               onTap: onViewAllPressed,
               child: const Text(
                 "View all",
                 style: TextStyle(
-                  color: AppColors.ksecondColor,
-                  fontSize: 16,
+                  color: AppColors.primary,
+                  fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -49,11 +50,12 @@ class RecentBookingsSection extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(24),
+            border: Border.all(color: AppColors.border),
             boxShadow: [
               BoxShadow(
-                color: const Color(0x0A000000),
-                blurRadius: 18,
-                offset: const Offset(0, 8),
+                color: AppColors.shadowColor.withValues(alpha: 0.04),
+                blurRadius: 16,
+                offset: const Offset(0, 6),
               ),
             ],
           ),
@@ -63,82 +65,84 @@ class RecentBookingsSection extends StatelessWidget {
               final isLast = index == bookings.length - 1;
               return Column(
                 children: [
-                  InkWell(
-                    onTap: onBookingPressed != null
-                        ? () => onBookingPressed!(booking)
-                        : null,
-                    borderRadius: BorderRadius.vertical(
-                      top: index == 0 ? const Radius.circular(24) : Radius.zero,
-                      bottom: isLast ? const Radius.circular(24) : Radius.zero,
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 20,
-                        vertical: 18,
-                      ),
-                      key: ValueKey(booking.name),
-                      child: Row(
-                        children: [
-                          Container(
-                            width: 48,
-                            height: 48,
-                            decoration: const BoxDecoration(
-                              color: AppColors.ksecondColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Center(
-                              child: Text(
-                                booking.initials,
-                                style: const TextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 16,
+                  Material(
+                    color: Colors.transparent,
+                    child: ScaleOnTap(
+                      onTap: onBookingPressed != null
+                          ? () => onBookingPressed!(booking)
+                          : null,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 18,
+                          vertical: 16,
+                        ),
+                        key: ValueKey(booking.name),
+                        child: Row(
+                          children: [
+                            Container(
+                              width: 46,
+                              height: 46,
+                              decoration: BoxDecoration(
+                                color: AppColors.accentLilacLight,
+                                shape: BoxShape.circle,
+                                border: Border.all(
+                                  color: AppColors.accentLilac.withValues(alpha: 0.2),
+                                ),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  booking.initials,
+                                  style: const TextStyle(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 15,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          const Gap(16),
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            const Gap(14),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    booking.name,
+                                    style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.textPrimary,
+                                    ),
+                                  ),
+                                  const Gap(3),
+                                  Text(
+                                    "${booking.service} · ${booking.time}",
+                                    style: const TextStyle(
+                                      fontSize: 13,
+                                      color: AppColors.textSecondary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const Gap(10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
                               children: [
                                 Text(
-                                  booking.name,
+                                  "\$${booking.price.toInt()}",
                                   style: const TextStyle(
-                                    fontSize: 17,
+                                    fontSize: 16,
                                     fontWeight: FontWeight.bold,
-                                    color: Color(0xff0B1F44),
+                                    color: AppColors.primary,
                                   ),
                                 ),
                                 const Gap(4),
-                                Text(
-                                  "${booking.service} · ${booking.time}",
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    color: Color(0xff64748B),
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
+                                _buildStatusBadge(booking.status),
                               ],
                             ),
-                          ),
-                          const Gap(12),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              Text(
-                                "\$${booking.price.toInt()}",
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.ksecondColor,
-                                ),
-                              ),
-                              const Gap(6),
-                              _buildStatusBadge(booking.status),
-                            ],
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -146,9 +150,9 @@ class RecentBookingsSection extends StatelessWidget {
                     const Divider(
                       height: 1,
                       thickness: 1,
-                      color: Color(0xffF1F5F9),
-                      indent: 20,
-                      endIndent: 20,
+                      color: AppColors.border,
+                      indent: 18,
+                      endIndent: 18,
                     ),
                 ],
               );
@@ -162,22 +166,22 @@ class RecentBookingsSection extends StatelessWidget {
   Widget _buildStatusBadge(String status) {
     final bool isConfirmed = status.toLowerCase() == 'confirmed';
     final Color backgroundColor =
-        isConfirmed ? const Color(0xffDDFBF0) : const Color(0xffFFF3D6);
+        isConfirmed ? AppColors.successLight : AppColors.warningLight;
     final Color textColor =
-        isConfirmed ? const Color(0xff0B9B7B) : const Color(0xffD97706);
+        isConfirmed ? AppColors.success : AppColors.warning;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
       ),
       child: Text(
         status,
         style: TextStyle(
           color: textColor,
           fontWeight: FontWeight.bold,
-          fontSize: 12,
+          fontSize: 11,
         ),
       ),
     );

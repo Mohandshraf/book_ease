@@ -35,75 +35,94 @@ class _ProviderRootViewState extends State<ProviderRootView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppColors.background,
+      extendBody: true,
       body: IndexedStack(index: currentIndex, children: pages),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.white,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withValues(alpha: 0.04),
-              blurRadius: 10,
-              offset: const Offset(0, -4),
+      bottomNavigationBar: SafeArea(
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(20, 0, 20, 16),
+          height: 68,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(34),
+            border: Border.all(
+              color: AppColors.border.withValues(alpha: .8),
+              width: 1,
             ),
-          ],
-        ),
-        child: SafeArea(
-          child: Container(
-            height: 80,
-            padding: const EdgeInsets.symmetric(vertical: 8),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildNavItem(0, Icons.dashboard_outlined, "Dashboard"),
-                _buildNavItem(1, Icons.calendar_month_outlined, "Bookings"),
-                _buildNavItem(2, Icons.medical_services_outlined, "Services"),
-                _buildNavItem(3, Icons.chat_bubble_outline_rounded, "Messages"),
-                _buildNavItem(4, Icons.person_outline_rounded, "Profile"),
-              ],
-            ),
+            boxShadow: [
+              BoxShadow(
+                color: const Color(0xFF0F172A).withValues(alpha: .08),
+                blurRadius: 24,
+                offset: const Offset(0, 8),
+              ),
+              BoxShadow(
+                color: const Color(0xFF0F172A).withValues(alpha: .02),
+                blurRadius: 6,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _buildNavItem(0, Icons.dashboard_rounded, Icons.dashboard_outlined, "Dashboard"),
+              _buildNavItem(1, Icons.calendar_month_rounded, Icons.calendar_month_outlined, "Bookings"),
+              _buildNavItem(2, Icons.medical_services_rounded, Icons.medical_services_outlined, "Services"),
+              _buildNavItem(3, Icons.chat_bubble_rounded, Icons.chat_bubble_outline_rounded, "Messages"),
+              _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, "Profile"),
+            ],
           ),
         ),
       ),
     );
   }
 
-  Widget _buildNavItem(int index, IconData icon, String label) {
+  Widget _buildNavItem(
+    int index,
+    IconData activeIcon,
+    IconData inactiveIcon,
+    String label,
+  ) {
     final isSelected = currentIndex == index;
-    return Expanded(
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            currentIndex = index;
-          });
-        },
-        splashColor: Colors.transparent,
-        highlightColor: Colors.transparent,
-        hoverColor: Colors.transparent,
-        child: Column(
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          currentIndex = index;
+        });
+      },
+      behavior: HitTestBehavior.opaque,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 250),
+        curve: Curves.easeOutCubic,
+        padding: EdgeInsets.symmetric(
+          horizontal: isSelected ? 14 : 10,
+          vertical: 8,
+        ),
+        decoration: BoxDecoration(
+          color: isSelected ? AppColors.primary : Colors.transparent,
+          borderRadius: BorderRadius.circular(24),
+        ),
+        child: Row(
           mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 5),
-              decoration: BoxDecoration(
-                color: isSelected ? AppColors.primaryLight : Colors.transparent,
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Icon(
-                icon,
-                color: isSelected ? AppColors.primary : const Color(0xff7E8CA0),
-                size: 24,
-              ),
+            Icon(
+              isSelected ? activeIcon : inactiveIcon,
+              color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+              size: 24,
             ),
-            const SizedBox(height: 4),
-            Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? AppColors.primary : const Color(0xff7E8CA0),
-                fontSize: 12,
-                fontWeight: isSelected ? FontWeight.bold : FontWeight.w500,
+            if (isSelected) ...[
+              const SizedBox(width: 6),
+              Text(
+                label,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 12,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: -0.2,
+                ),
               ),
-            ),
+            ],
           ],
         ),
       ),

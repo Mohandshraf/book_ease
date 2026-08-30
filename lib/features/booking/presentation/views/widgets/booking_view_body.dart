@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_state.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
@@ -31,12 +33,13 @@ class _BookingViewBodyState extends State<BookingViewBody> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: RefreshIndicator(
+        color: AppColors.primary,
         onRefresh: () async {
           _fetchBookings();
         },
         child: SingleChildScrollView(
           physics: const AlwaysScrollableScrollPhysics(),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -47,67 +50,70 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                   const Text(
                     "My bookings",
                     style: TextStyle(
-                      color: Color(0xff0B1F44),
-                      fontSize: 30,
+                      color: AppColors.textPrimary,
+                      fontSize: 28,
                       fontWeight: FontWeight.bold,
+                      letterSpacing: -0.5,
                     ),
                   ),
-                  GestureDetector(
+                  ScaleOnTap(
                     onTap: _fetchBookings,
                     child: Container(
-                      height: 48,
-                      width: 48,
+                      height: 44,
+                      width: 44,
                       decoration: BoxDecoration(
                         color: Colors.white,
-                        borderRadius: BorderRadius.circular(16),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: AppColors.border, width: 1),
                         boxShadow: [
                           BoxShadow(
                             color: Colors.black.withValues(alpha: 0.04),
                             blurRadius: 10,
-                            offset: const Offset(0, 4),
+                            offset: const Offset(0, 3),
                           ),
                         ],
                       ),
                       child: const Icon(
                         Icons.refresh_rounded,
-                        color: Color(0xff0B1F44),
-                        size: 22,
+                        color: AppColors.textPrimary,
+                        size: 20,
                       ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 18),
 
               // 2. Custom Sliding Toggle Tab Bar
               Container(
-                height: 52,
+                height: 48,
                 decoration: BoxDecoration(
-                  color: const Color(0xffF1F5F9),
-                  borderRadius: BorderRadius.circular(26),
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(24),
                 ),
                 padding: const EdgeInsets.all(4),
                 child: Row(
                   children: [
                     // Tab: Upcoming
                     Expanded(
-                      child: GestureDetector(
+                      child: ScaleOnTap(
                         onTap: () {
                           setState(() {
                             selectedTab = "Upcoming";
                           });
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             color: selectedTab == "Upcoming"
                                 ? Colors.white
                                 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: selectedTab == "Upcoming"
                                 ? [
                                     BoxShadow(
                                       color:
-                                          Colors.black.withValues(alpha: 0.04),
+                                          Colors.black.withValues(alpha: 0.06),
                                       blurRadius: 6,
                                       offset: const Offset(0, 2),
                                     ),
@@ -119,9 +125,9 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                               "Upcoming",
                               style: TextStyle(
                                 color: selectedTab == "Upcoming"
-                                    ? const Color(0xff0B1F44)
-                                    : const Color(0xff94A3B8),
-                                fontSize: 15,
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -131,23 +137,24 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                     ),
                     // Tab: Past
                     Expanded(
-                      child: GestureDetector(
+                      child: ScaleOnTap(
                         onTap: () {
                           setState(() {
                             selectedTab = "Past";
                           });
                         },
-                        child: Container(
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
                           decoration: BoxDecoration(
                             color: selectedTab == "Past"
                                 ? Colors.white
                                 : Colors.transparent,
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(20),
                             boxShadow: selectedTab == "Past"
                                 ? [
                                     BoxShadow(
                                       color:
-                                          Colors.black.withValues(alpha: 0.04),
+                                          Colors.black.withValues(alpha: 0.06),
                                       blurRadius: 6,
                                       offset: const Offset(0, 2),
                                     ),
@@ -159,9 +166,9 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                               "Past",
                               style: TextStyle(
                                 color: selectedTab == "Past"
-                                    ? const Color(0xff0B1F44)
-                                    : const Color(0xff94A3B8),
-                                fontSize: 15,
+                                    ? AppColors.primary
+                                    : AppColors.textSecondary,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -172,7 +179,7 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                   ],
                 ),
               ),
-              const SizedBox(height: 24),
+              const SizedBox(height: 20),
 
               // 3. Dynamic Bookings Content from Bloc
               BlocBuilder<BookingCubit, BookingState>(
@@ -182,7 +189,7 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                       padding: EdgeInsets.symmetric(vertical: 60),
                       child: Center(
                         child: CircularProgressIndicator(
-                          color: Color(0xff0B9B7B),
+                          color: AppColors.primary,
                         ),
                       ),
                     );
@@ -196,14 +203,14 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                           children: [
                             const Icon(
                               Icons.error_outline_rounded,
-                              color: Colors.redAccent,
-                              size: 44,
+                              color: AppColors.error,
+                              size: 40,
                             ),
                             const SizedBox(height: 12),
                             Text(
                               state.errorMessage,
                               style: const TextStyle(
-                                color: Color(0xff64748B),
+                                color: AppColors.textSecondary,
                                 fontSize: 14,
                               ),
                             ),
@@ -211,7 +218,7 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                             ElevatedButton(
                               onPressed: _fetchBookings,
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: const Color(0xff0B9B7B),
+                                backgroundColor: AppColors.primary,
                               ),
                               child: const Text("Retry",
                                   style: TextStyle(color: Colors.white)),
@@ -261,14 +268,14 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                           children: [
                             const Icon(
                               Icons.calendar_today_rounded,
-                              color: Color(0xff94A3B8),
-                              size: 48,
+                              color: AppColors.accent,
+                              size: 44,
                             ),
                             const SizedBox(height: 12),
                             Text(
                               "No $selectedTab bookings found",
                               style: const TextStyle(
-                                color: Color(0xff64748B),
+                                color: AppColors.textSecondary,
                                 fontSize: 14,
                               ),
                             ),

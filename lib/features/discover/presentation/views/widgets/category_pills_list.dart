@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class CategoryPillsList extends StatelessWidget {
@@ -23,39 +25,43 @@ class CategoryPillsList extends StatelessWidget {
           final cat = categories[index];
           final isSelected = cat == selectedCategory;
           return Padding(
-            padding: const EdgeInsets.only(right: 10.0),
-            child: GestureDetector(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: ScaleOnTap(
               onTap: () => onCategorySelected(cat),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                padding: const EdgeInsets.symmetric(horizontal: 18),
                 decoration: BoxDecoration(
-                  color: isSelected
-                      ? const Color(0xff0B9B7B)
-                      : Colors.white,
+                  color: isSelected ? AppColors.primary : Colors.white,
                   borderRadius: BorderRadius.circular(19),
-                  boxShadow: [
-                    if (!isSelected)
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.03),
-                        blurRadius: 8,
-                        offset: const Offset(0, 2),
-                      ),
-                  ],
+                  boxShadow: isSelected
+                      ? [
+                          BoxShadow(
+                            color: AppColors.primary.withValues(alpha: .25),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ]
+                      : [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.03),
+                            blurRadius: 6,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
                   border: Border.all(
-                    color: isSelected
-                        ? Colors.transparent
-                        : const Color(0xffE2E8F0),
+                    color: isSelected ? AppColors.primary : AppColors.border,
+                    width: 1,
                   ),
                 ),
                 child: Center(
                   child: Text(
                     cat,
                     style: TextStyle(
-                      color: isSelected
-                          ? Colors.white
-                          : const Color(0xff475569),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
+                      color: isSelected ? Colors.white : AppColors.textSecondary,
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.bold : FontWeight.w600,
                     ),
                   ),
                 ),

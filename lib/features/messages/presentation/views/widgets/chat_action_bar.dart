@@ -1,4 +1,7 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ChatActionBar extends StatelessWidget {
   final VoidCallback? onDetailsTap;
@@ -15,57 +18,58 @@ class ChatActionBar extends StatelessWidget {
     return Row(
       children: [
         // Button: Appointment details
-        GestureDetector(
+        ScaleOnTap(
           onTap: onDetailsTap,
           child: Container(
-            height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
             decoration: BoxDecoration(
-              color: const Color(0xffEAFDF6),
+              color: AppColors.accentLilacLight,
               borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: AppColors.border),
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: const [
                 Icon(
                   Icons.calendar_month_outlined,
-                  color: Color(0xff0B9B7B),
-                  size: 18,
+                  color: AppColors.primary,
+                  size: 16,
                 ),
-                SizedBox(width: 8),
+                Gap(6),
                 Text(
                   "Appointment details",
                   style: TextStyle(
-                    color: Color(0xff0B9B7B),
-                    fontWeight: FontWeight.bold,
-                    fontSize: 14,
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 13,
                   ),
                 ),
               ],
             ),
           ),
         ),
-        const SizedBox(width: 10),
+        const Gap(10),
         // Button: Reschedule
-        GestureDetector(
+        ScaleOnTap(
           onTap: onRescheduleTap,
           child: Container(
-            height: 40,
-            padding: const EdgeInsets.symmetric(horizontal: 20),
+            height: 38,
+            padding: const EdgeInsets.symmetric(horizontal: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: const Color(0xffE2E8F0),
+                color: AppColors.border,
               ),
             ),
             child: const Center(
               child: Text(
                 "Reschedule",
                 style: TextStyle(
-                  color: Color(0xff334155),
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w600,
+                  fontSize: 13,
                 ),
               ),
             ),

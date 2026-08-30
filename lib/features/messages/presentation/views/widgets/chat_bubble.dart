@@ -1,4 +1,6 @@
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ChatBubble extends StatelessWidget {
   final String text;
@@ -18,10 +20,9 @@ class ChatBubble extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bubbleColor = isMe ? const Color(0xff0B9B7B) : Colors.white;
-    final textColor = isMe ? Colors.white : const Color(0xff1E293B);
+    final textColor = isMe ? Colors.white : AppColors.textPrimary;
     final timeColor =
-        isMe ? Colors.white.withValues(alpha: 0.75) : const Color(0xff94A3B8);
+        isMe ? Colors.white.withValues(alpha: 0.75) : AppColors.textMuted;
 
     return Align(
       alignment: isMe ? Alignment.centerRight : Alignment.centerLeft,
@@ -30,23 +31,34 @@ class ChatBubble extends StatelessWidget {
         onLongPress: onLongPress,
         child: Container(
           margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.78,
           ),
           decoration: BoxDecoration(
-            color: bubbleColor,
+            gradient: isMe
+                ? const LinearGradient(
+                    colors: [
+                      AppColors.primaryGradientStart,
+                      AppColors.primaryGradientEnd,
+                    ],
+                  )
+                : null,
+            color: isMe ? null : Colors.white,
+            border: isMe ? null : Border.all(color: AppColors.border),
             borderRadius: BorderRadius.only(
               topLeft: const Radius.circular(18),
               topRight: const Radius.circular(18),
-              bottomLeft: Radius.circular(isMe ? 18 : 2),
-              bottomRight: Radius.circular(isMe ? 2 : 18),
+              bottomLeft: Radius.circular(isMe ? 18 : 4),
+              bottomRight: Radius.circular(isMe ? 4 : 18),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.04),
-                blurRadius: 6,
-                offset: const Offset(0, 2),
+                color: isMe
+                    ? AppColors.primary.withValues(alpha: 0.15)
+                    : AppColors.shadowColor.withValues(alpha: 0.04),
+                blurRadius: 10,
+                offset: const Offset(0, 3),
               ),
             ],
           ),
@@ -58,12 +70,12 @@ class ChatBubble extends StatelessWidget {
                 text,
                 style: TextStyle(
                   color: textColor,
-                  fontSize: 15,
+                  fontSize: 14.5,
                   fontWeight: FontWeight.w400,
-                  height: 1.35,
+                  height: 1.4,
                 ),
               ),
-              const SizedBox(height: 4),
+              const Gap(4),
               Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.end,
@@ -73,25 +85,25 @@ class ChatBubble extends StatelessWidget {
                       'edited',
                       style: TextStyle(
                         color: timeColor,
-                        fontSize: 11,
+                        fontSize: 10.5,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
-                    const SizedBox(width: 4),
+                    const Gap(4),
                   ],
                   Text(
                     time,
                     style: TextStyle(
                       color: timeColor,
-                      fontSize: 11,
+                      fontSize: 10.5,
                     ),
                   ),
                   if (isMe) ...[
-                    const SizedBox(width: 4),
+                    const Gap(4),
                     Icon(
                       Icons.done_all_rounded,
                       size: 14,
-                      color: Colors.white.withValues(alpha: 0.85),
+                      color: Colors.white.withValues(alpha: 0.9),
                     ),
                   ],
                 ],

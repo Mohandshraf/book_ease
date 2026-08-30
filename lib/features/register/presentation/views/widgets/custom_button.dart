@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
@@ -5,36 +7,54 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    required this.color,
+    this.color,
+    this.gradient,
+    this.height = 56,
   });
 
   final String text;
   final VoidCallback onPressed;
-  final Color color;
+  final Color? color;
+  final Gradient? gradient;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 58,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: color,
-          elevation: 0,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(18),
-          ),
+    return ScaleOnTap(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        height: height,
+        decoration: BoxDecoration(
+          color: gradient == null ? (color ?? AppColors.primary) : null,
+          gradient: gradient ??
+              const LinearGradient(
+                colors: [
+                  AppColors.primaryGradientStart,
+                  AppColors.primary,
+                ],
+              ),
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: (color ?? AppColors.primary).withValues(alpha: 0.25),
+              blurRadius: 16,
+              offset: const Offset(0, 8),
+            ),
+          ],
         ),
-        child: Text(
-          text,
-          style: const TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.w700,
-            fontSize: 18,
+        child: Center(
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.w700,
+              fontSize: 17,
+              letterSpacing: -0.2,
+            ),
           ),
         ),
       ),
     );
   }
-}
+}

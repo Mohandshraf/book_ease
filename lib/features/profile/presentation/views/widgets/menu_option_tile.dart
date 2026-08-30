@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class MenuOptionTile extends StatelessWidget {
@@ -25,9 +27,10 @@ class MenuOptionTile extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
+            color: AppColors.shadowColor.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -35,8 +38,7 @@ class MenuOptionTile extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+        child: ScaleOnTap(
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -66,9 +68,9 @@ class MenuOptionTile extends StatelessWidget {
                       Text(
                         title,
                         style: const TextStyle(
-                          color: Color(0xff0B1F44),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                          color: AppColors.textPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                       if (subtitle != null) ...[
@@ -76,7 +78,7 @@ class MenuOptionTile extends StatelessWidget {
                         Text(
                           subtitle!,
                           style: const TextStyle(
-                            color: Color(0xff94A3B8),
+                            color: AppColors.textSecondary,
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                           ),
@@ -88,8 +90,8 @@ class MenuOptionTile extends StatelessWidget {
                 // Trailing Chevron
                 const Icon(
                   Icons.chevron_right_rounded,
-                  color: Color(0xffCBD5E1),
-                  size: 24,
+                  color: AppColors.textLight,
+                  size: 22,
                 ),
               ],
             ),

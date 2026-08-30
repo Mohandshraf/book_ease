@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class CategoryItem extends StatelessWidget {
@@ -5,6 +7,7 @@ class CategoryItem extends StatelessWidget {
   final IconData icon;
   final Color color;
   final Color iconColor;
+  final VoidCallback? onTap;
 
   const CategoryItem({
     super.key,
@@ -12,31 +15,42 @@ class CategoryItem extends StatelessWidget {
     required this.icon,
     required this.color,
     required this.iconColor,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 72,
-          height: 72,
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(24),
+    return ScaleOnTap(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Container(
+            width: 68,
+            height: 68,
+            decoration: BoxDecoration(
+              color: color,
+              borderRadius: BorderRadius.circular(22),
+              boxShadow: [
+                BoxShadow(
+                  color: iconColor.withValues(alpha: .12),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Icon(icon, color: iconColor, size: 28),
           ),
-          child: Icon(icon, color: iconColor, size: 32),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            color: Color(0xff0B1F44),
-            fontSize: 14,
+          const SizedBox(height: 8),
+          Text(
+            title,
+            style: const TextStyle(
+              fontWeight: FontWeight.w600,
+              color: AppColors.textPrimary,
+              fontSize: 13,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 }

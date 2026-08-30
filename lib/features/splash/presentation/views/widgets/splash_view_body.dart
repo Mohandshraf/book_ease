@@ -1,7 +1,6 @@
+import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
-import 'package:book_ease/features/on_boarding/presentation/views/on_boarding_view.dart';
-import 'package:book_ease/features/role_selection/presentation/views/choose_role_view.dart';
-import 'package:book_ease/features/root/presentation/views/root_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -84,10 +83,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
     if (FirebaseAuth.instance.currentUser == null) {
       await minimumSplashTimer;
       if (!mounted) return;
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnBoardingView()),
-      );
+      Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
       return;
     }
 
@@ -102,22 +98,15 @@ class _SplashViewBodyState extends State<SplashViewBody>
     final state = userCubit.state;
     if (state is UserDataLoaded) {
       final role = state.userData['role'];
-      if (role != null && (role == 'customer' || role == 'provider')) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const RootView()),
-        );
+      if (role == 'provider') {
+        Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
+      } else if (role == 'customer') {
+        Navigator.pushReplacementNamed(context, AppRoutes.customerRoot);
       } else {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const ChooseRoleView()),
-        );
+        Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
       }
     } else {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const OnBoardingView()),
-      );
+      Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
     }
   }
 
@@ -136,18 +125,33 @@ class _SplashViewBodyState extends State<SplashViewBody>
         return Container(
           width: double.infinity,
           height: double.infinity,
-          color: const Color(0xff0F9B82),
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                AppColors.primaryGradientStart,
+                AppColors.primary,
+                AppColors.primaryGradientEnd,
+              ],
+            ),
+          ),
           child: Stack(
             children: [
               const Positioned(
                 top: -118,
                 right: -92,
-                child: _SoftCircle(size: 310, opacity: .12),
+                child: _SoftCircle(size: 310, opacity: .08),
               ),
               const Positioned(
                 top: 104,
                 left: -100,
-                child: _SoftCircle(size: 220, opacity: .10),
+                child: _SoftCircle(size: 220, opacity: .06),
+              ),
+              const Positioned(
+                bottom: -80,
+                left: 60,
+                child: _SoftCircle(size: 260, opacity: .05),
               ),
               Center(
                 child: Transform.translate(
@@ -159,7 +163,7 @@ class _SplashViewBodyState extends State<SplashViewBody>
                         opacity: _logoFade.value,
                         child: Transform.scale(
                           scale: _logoScale.value,
-                          child: const _BookBaseLogo(),
+                          child: const _BookEaseLogo(),
                         ),
                       ),
                       const SizedBox(height: 34),
@@ -170,22 +174,22 @@ class _SplashViewBodyState extends State<SplashViewBody>
                           child: const Column(
                             children: [
                               Text(
-                                'BookBase',
+                                'BookEase',
                                 style: TextStyle(
                                   color: Colors.white,
-                                  fontSize: 45,
+                                  fontSize: 44,
                                   fontWeight: FontWeight.w900,
-                                  letterSpacing: -.5,
+                                  letterSpacing: -1.0,
                                 ),
                               ),
                               SizedBox(height: 10),
                               Text(
                                 'BOOK SMARTER · LIVE BETTER',
                                 style: TextStyle(
-                                  color: Color(0xffBEE7DF),
-                                  fontSize: 17,
-                                  fontWeight: FontWeight.w800,
-                                  letterSpacing: .4,
+                                  color: AppColors.accentLight,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                  letterSpacing: 1.2,
                                 ),
                               ),
                             ],
@@ -209,8 +213,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
   }
 }
 
-class _BookBaseLogo extends StatelessWidget {
-  const _BookBaseLogo();
+class _BookEaseLogo extends StatelessWidget {
+  const _BookEaseLogo();
 
   @override
   Widget build(BuildContext context) {
@@ -218,32 +222,39 @@ class _BookBaseLogo extends StatelessWidget {
       width: 140,
       height: 140,
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: .18),
+        color: Colors.white.withValues(alpha: .14),
         borderRadius: BorderRadius.circular(38),
-        border: Border.all(color: Colors.white.withValues(alpha: .22)),
+        border: Border.all(color: Colors.white.withValues(alpha: .22), width: 1.5),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: .10),
-            blurRadius: 34,
+            color: Colors.black.withValues(alpha: .20),
+            blurRadius: 36,
             offset: const Offset(0, 18),
           ),
         ],
       ),
       child: Center(
         child: Container(
-          width: 62,
-          height: 54,
+          width: 66,
+          height: 58,
           decoration: BoxDecoration(
-            color: const Color(0xffEAF8F5),
-            borderRadius: BorderRadius.circular(11),
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(14),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.primaryDark.withValues(alpha: 0.15),
+                blurRadius: 12,
+                offset: const Offset(0, 4),
+              ),
+            ],
           ),
           child: Stack(
             children: [
               Positioned(
-                top: 13,
+                top: 14,
                 left: 0,
                 right: 0,
-                child: Container(height: 2, color: const Color(0xffB8DCD5)),
+                child: Container(height: 2, color: AppColors.border),
               ),
               const Positioned(top: -3, left: 14, child: _BinderDot()),
               const Positioned(top: -3, right: 14, child: _BinderDot()),
@@ -252,15 +263,15 @@ class _BookBaseLogo extends StatelessWidget {
                 top: 24,
                 child: _LogoDot(active: true),
               ),
-              const Positioned(left: 27, top: 24, child: _LogoDot()),
-              const Positioned(left: 40, top: 24, child: _LogoDot()),
+              const Positioned(left: 28, top: 24, child: _LogoDot()),
+              const Positioned(left: 42, top: 24, child: _LogoDot()),
               const Positioned(left: 14, top: 38, child: _LogoDot()),
               const Positioned(
-                left: 27,
+                left: 28,
                 top: 38,
                 child: _LogoDot(active: true),
               ),
-              const Positioned(left: 40, top: 38, child: _LogoDot()),
+              const Positioned(left: 42, top: 38, child: _LogoDot()),
             ],
           ),
         ),
@@ -286,14 +297,14 @@ class _LoadingDots extends StatelessWidget {
 
             double value = ((controller.value - delay + 1) % 1);
 
-            final translateY = -12 * (1 - (value * 2 - 1).abs());
+            final translateY = -10 * (1 - (value * 2 - 1).abs());
 
             return Transform.translate(
               offset: Offset(0, translateY),
               child: Container(
-                width: 10,
-                height: 10,
-                margin: const EdgeInsets.symmetric(horizontal: 6),
+                width: 9,
+                height: 9,
+                margin: const EdgeInsets.symmetric(horizontal: 5),
                 decoration: BoxDecoration(
                   color: Colors.white.withValues(alpha: .9),
                   shape: BoxShape.circle,
@@ -314,9 +325,9 @@ class _BinderDot extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 6,
-      height: 14,
+      height: 12,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.primary,
         borderRadius: BorderRadius.circular(99),
       ),
     );
@@ -331,10 +342,10 @@ class _LogoDot extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 10,
-      height: 10,
+      width: 9,
+      height: 9,
       decoration: BoxDecoration(
-        color: active ? const Color(0xff0F9B82) : const Color(0xffA9D9D0),
+        color: active ? AppColors.primary : AppColors.accentLight,
         shape: BoxShape.circle,
       ),
     );
@@ -359,3 +370,4 @@ class _SoftCircle extends StatelessWidget {
     );
   }
 }
+

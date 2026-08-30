@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/edit_profile_avatar_picker.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/edit_profile_form_card.dart';
@@ -72,7 +74,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Failed to pick image: $e"),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: AppColors.error,
           ),
         );
       }
@@ -90,11 +92,13 @@ class _EditProfileViewState extends State<EditProfileView> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           "Enter Image URL",
           style: TextStyle(
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -102,9 +106,9 @@ class _EditProfileViewState extends State<EditProfileView> {
           controller: urlController,
           decoration: InputDecoration(
             hintText: "https://example.com/avatar.jpg",
-            hintStyle: const TextStyle(color: Color(0xff94A3B8)),
+            hintStyle: const TextStyle(color: AppColors.textLight),
             filled: true,
-            fillColor: const Color(0xffF1F5F9),
+            fillColor: AppColors.surfaceMuted,
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
               borderSide: BorderSide.none,
@@ -115,15 +119,10 @@ class _EditProfileViewState extends State<EditProfileView> {
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text("Cancel",
-                style: TextStyle(color: Color(0xff64748B))),
+                style: TextStyle(color: AppColors.textSecondary)),
           ),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xff0B9B7B),
-              shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10)),
-            ),
-            onPressed: () {
+          ScaleOnTap(
+            onTap: () {
               final url = urlController.text.trim();
               if (url.isNotEmpty) {
                 setState(() {
@@ -132,7 +131,14 @@ class _EditProfileViewState extends State<EditProfileView> {
               }
               Navigator.pop(dialogContext);
             },
-            child: const Text("Apply", style: TextStyle(color: Colors.white)),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Text("Apply", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            ),
           ),
         ],
       ),
@@ -157,14 +163,14 @@ class _EditProfileViewState extends State<EditProfileView> {
                 height: 4,
                 margin: const EdgeInsets.only(bottom: 16),
                 decoration: BoxDecoration(
-                  color: const Color(0xffCBD5E1),
+                  color: AppColors.border,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
               const Text(
                 "Profile Photo",
                 style: TextStyle(
-                  color: Color(0xff0B1F44),
+                  color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -174,18 +180,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xffEAFDF6),
+                    color: AppColors.accentLilacLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.photo_library_outlined,
-                    color: Color(0xff0B9B7B),
+                    color: AppColors.primary,
                   ),
                 ),
                 title: const Text(
                   "Choose from Gallery",
                   style: TextStyle(
-                    color: Color(0xff0B1F44),
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -198,18 +204,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xffEAFDF6),
+                    color: AppColors.accentLilacLight,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.camera_alt_outlined,
-                    color: Color(0xff0B9B7B),
+                    color: AppColors.primary,
                   ),
                 ),
                 title: const Text(
                   "Take a Photo",
                   style: TextStyle(
-                    color: Color(0xff0B1F44),
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -222,18 +228,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                 leading: Container(
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: const Color(0xffF1F5F9),
+                    color: AppColors.surfaceMuted,
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(
                     Icons.link_rounded,
-                    color: Color(0xff64748B),
+                    color: AppColors.textSecondary,
                   ),
                 ),
                 title: const Text(
                   "Enter Image URL",
                   style: TextStyle(
-                    color: Color(0xff0B1F44),
+                    color: AppColors.textPrimary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -247,18 +253,18 @@ class _EditProfileViewState extends State<EditProfileView> {
                   leading: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
-                      color: const Color(0xffFEE2E2),
+                      color: AppColors.cancelledLight,
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: const Icon(
                       Icons.delete_outline_rounded,
-                      color: Colors.redAccent,
+                      color: AppColors.cancelled,
                     ),
                   ),
                   title: const Text(
                     "Remove Photo",
                     style: TextStyle(
-                      color: Colors.redAccent,
+                      color: AppColors.cancelled,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -301,7 +307,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text("Profile updated successfully!"),
-            backgroundColor: Color(0xff0B9B7B),
+            backgroundColor: AppColors.success,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -317,7 +323,7 @@ class _EditProfileViewState extends State<EditProfileView> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Error updating profile: $e"),
-            backgroundColor: Colors.redAccent,
+            backgroundColor: AppColors.error,
             behavior: SnackBarBehavior.floating,
           ),
         );
@@ -328,31 +334,31 @@ class _EditProfileViewState extends State<EditProfileView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 16),
-          child: GestureDetector(
+        leading: Center(
+          child: ScaleOnTap(
             onTap: () => Navigator.maybePop(context),
             child: Container(
-              margin: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.04),
+                    color: AppColors.shadowColor.withValues(alpha: 0.04),
                     blurRadius: 10,
                     offset: const Offset(0, 4),
                   ),
                 ],
               ),
               child: const Icon(
-                Icons.arrow_back_rounded,
-                color: Color(0xff0B1F44),
-                size: 20,
+                Icons.arrow_back_ios_new_rounded,
+                color: AppColors.textPrimary,
+                size: 16,
               ),
             ),
           ),
@@ -360,8 +366,8 @@ class _EditProfileViewState extends State<EditProfileView> {
         title: const Text(
           "Edit Profile",
           style: TextStyle(
-            color: Color(0xff0B1F44),
-            fontSize: 20,
+            color: AppColors.textPrimary,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -391,32 +397,44 @@ class _EditProfileViewState extends State<EditProfileView> {
               SizedBox(
                 width: double.infinity,
                 height: 54,
-                child: ElevatedButton(
-                  onPressed: _isLoading ? null : _saveProfile,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0B9B7B),
-                    shape: RoundedRectangleBorder(
+                child: ScaleOnTap(
+                  onTap: _isLoading ? null : _saveProfile,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [AppColors.primaryGradientStart, AppColors.primaryGradientEnd],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
                       borderRadius: BorderRadius.circular(16),
-                    ),
-                    elevation: 0,
-                  ),
-                  child: _isLoading
-                      ? const SizedBox(
-                          height: 24,
-                          width: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          ),
-                        )
-                      : const Text(
-                          "Save Changes",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: 0.3),
+                          blurRadius: 12,
+                          offset: const Offset(0, 4),
                         ),
+                      ],
+                    ),
+                    child: Center(
+                      child: _isLoading
+                          ? const SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2.5,
+                              ),
+                            )
+                          : const Text(
+                              "Save Changes",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                    ),
+                  ),
                 ),
               ),
             ],

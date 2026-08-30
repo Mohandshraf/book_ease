@@ -1,4 +1,4 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -22,12 +22,13 @@ class BookingSummaryPriceCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppColors.shadowColor.withValues(alpha: .04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -37,9 +38,9 @@ class BookingSummaryPriceCard extends StatelessWidget {
           const Text(
             "Price Summary",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
             ),
           ),
           const Gap(16),
@@ -59,7 +60,7 @@ class BookingSummaryPriceCard extends StatelessWidget {
             isDiscount: true,
           ),
           const Gap(16),
-          const Divider(color: Color(0xffE2E8F0), thickness: 1),
+          const Divider(color: AppColors.border, thickness: 1),
           const Gap(16),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -67,17 +68,17 @@ class BookingSummaryPriceCard extends StatelessWidget {
               const Text(
                 "Total",
                 style: TextStyle(
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff0B1F44),
+                  color: AppColors.textPrimary,
                 ),
               ),
               Text(
                 "\$${totalPrice.toStringAsFixed(2)}",
                 style: const TextStyle(
-                  fontSize: 24,
+                  fontSize: 22,
                   fontWeight: FontWeight.bold,
-                  color: AppColors.ksecondColor,
+                  color: AppColors.primary,
                 ),
               ),
             ],
@@ -98,16 +99,16 @@ class BookingSummaryPriceCard extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            color: Color(0xff64748B),
-            fontSize: 15,
+            color: AppColors.textSecondary,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
           ),
         ),
         Text(
           value,
           style: TextStyle(
-            color: isDiscount ? AppColors.ksecondColor : const Color(0xff0B1F44),
-            fontSize: 15,
+            color: isDiscount ? AppColors.success : AppColors.textPrimary,
+            fontSize: 14,
             fontWeight: isDiscount ? FontWeight.bold : FontWeight.w600,
           ),
         ),

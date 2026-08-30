@@ -1,4 +1,7 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ChatHeader extends StatelessWidget {
   final String doctorName;
@@ -24,38 +27,39 @@ class ChatHeader extends StatelessWidget {
         Expanded(
           child: Row(
             children: [
-              GestureDetector(
+              ScaleOnTap(
                 onTap: onBackTap ?? () => Navigator.maybePop(context),
                 child: Container(
-                  height: 48,
-                  width: 48,
+                  height: 42,
+                  width: 42,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.border),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
-                        blurRadius: 10,
-                        offset: const Offset(0, 4),
+                        color: AppColors.shadowColor.withValues(alpha: 0.03),
+                        blurRadius: 8,
+                        offset: const Offset(0, 2),
                       ),
                     ],
                   ),
                   child: const Icon(
                     Icons.arrow_back_rounded,
-                    color: Color(0xff0B1F44),
-                    size: 22,
+                    color: AppColors.textPrimary,
+                    size: 20,
                   ),
                 ),
               ),
-              const SizedBox(width: 14),
+              const Gap(12),
               Expanded(
                 child: Text(
                   doctorName,
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: const TextStyle(
-                    color: Color(0xff0B1F44),
-                    fontSize: 20,
+                    color: AppColors.textPrimary,
+                    fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -65,49 +69,51 @@ class ChatHeader extends StatelessWidget {
         ),
         Row(
           children: [
-            GestureDetector(
+            ScaleOnTap(
               onTap: onCallTap,
               child: Container(
-                height: 48,
-                width: 48,
+                height: 42,
+                width: 42,
                 decoration: BoxDecoration(
                   color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(color: AppColors.border),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.05),
-                      blurRadius: 10,
-                      offset: const Offset(0, 4),
+                      color: AppColors.shadowColor.withValues(alpha: 0.03),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 child: const Icon(
                   Icons.phone_outlined,
-                  color: Color(0xff0B1F44),
-                  size: 22,
+                  color: AppColors.textPrimary,
+                  size: 20,
                 ),
               ),
             ),
-            const SizedBox(width: 8),
+            const Gap(8),
             Container(
-              height: 48,
-              width: 48,
+              height: 42,
+              width: 42,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(16),
+                borderRadius: BorderRadius.circular(14),
+                border: Border.all(color: AppColors.border),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 10,
-                    offset: const Offset(0, 4),
+                    color: AppColors.shadowColor.withValues(alpha: 0.03),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: PopupMenuButton<String>(
                 icon: const Icon(
                   Icons.more_vert_rounded,
-                  color: Color(0xff0B1F44),
-                  size: 22,
+                  color: AppColors.textPrimary,
+                  size: 20,
                 ),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(16),
@@ -125,12 +131,12 @@ class ChatHeader extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.cleaning_services_rounded,
-                            color: Color(0xff64748B), size: 20),
-                        SizedBox(width: 10),
+                            color: AppColors.textSecondary, size: 18),
+                        Gap(10),
                         Text(
                           "Clear chat",
                           style: TextStyle(
-                            color: Color(0xff0B1F44),
+                            color: AppColors.textPrimary,
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -142,12 +148,12 @@ class ChatHeader extends StatelessWidget {
                     child: Row(
                       children: [
                         Icon(Icons.delete_outline_rounded,
-                            color: Colors.redAccent, size: 20),
-                        SizedBox(width: 10),
+                            color: AppColors.error, size: 18),
+                        Gap(10),
                         Text(
                           "Delete chat",
                           style: TextStyle(
-                            color: Colors.redAccent,
+                            color: AppColors.error,
                             fontWeight: FontWeight.w500,
                           ),
                         ),

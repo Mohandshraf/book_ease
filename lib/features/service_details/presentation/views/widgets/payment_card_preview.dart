@@ -1,3 +1,4 @@
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -16,28 +17,28 @@ class PaymentCardPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 210,
+      height: 200,
       width: double.infinity,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         gradient: const LinearGradient(
           colors: [
-            Color(0xff0B9B7B),
-            Color(0xff0284c7),
+            AppColors.primaryDark,
+            AppColors.primary,
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xff0B9B7B).withAlpha(40),
+            color: AppColors.primary.withValues(alpha: .28),
             blurRadius: 20,
-            offset: const Offset(0, 10),
+            offset: const Offset(0, 8),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(22),
         child: Stack(
           children: [
             // Decorative background shapes
@@ -49,26 +50,26 @@ class PaymentCardPreview extends StatelessWidget {
                 height: 180,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withAlpha(12),
+                  color: Colors.white.withValues(alpha: .08),
                 ),
               ),
             ),
             Positioned(
-              right: 40,
-              top: -50,
+              left: -20,
+              top: -30,
               child: Container(
-                width: 140,
-                height: 140,
+                width: 130,
+                height: 130,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white.withAlpha(8),
+                  color: AppColors.accentLilac.withValues(alpha: .15),
                 ),
               ),
             ),
 
             // Card Content
             Padding(
-              padding: const EdgeInsets.all(24),
+              padding: const EdgeInsets.all(22),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -79,38 +80,38 @@ class PaymentCardPreview extends StatelessWidget {
                     children: [
                       // Yellow Card Chip
                       Container(
-                        width: 46,
-                        height: 34,
+                        width: 44,
+                        height: 32,
                         decoration: BoxDecoration(
-                          color: const Color(0xffF59E0B),
-                          borderRadius: BorderRadius.circular(8),
+                          color: const Color(0xffE5A93C),
+                          borderRadius: BorderRadius.circular(7),
                         ),
                       ),
                       // Mastercard style Brand Circles
                       SizedBox(
-                        width: 48,
-                        height: 32,
+                        width: 44,
+                        height: 28,
                         child: Stack(
                           children: [
                             Positioned(
                               left: 0,
                               child: Container(
-                                width: 32,
-                                height: 32,
+                                width: 28,
+                                height: 28,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: const Color(0xffEF4444).withAlpha(220),
+                                  color: const Color(0xffEF4444).withValues(alpha: .9),
                                 ),
                               ),
                             ),
                             Positioned(
                               right: 0,
                               child: Container(
-                                width: 32,
-                                height: 32,
+                                width: 28,
+                                height: 28,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: const Color(0xffF59E0B).withAlpha(200),
+                                  color: const Color(0xffF59E0B).withValues(alpha: .85),
                                 ),
                               ),
                             ),
@@ -127,20 +128,20 @@ class PaymentCardPreview extends StatelessWidget {
                       Text(
                         "CARD NUMBER",
                         style: TextStyle(
-                          color: Colors.white.withAlpha(150),
-                          fontSize: 10,
+                          color: Colors.white.withValues(alpha: .6),
+                          fontSize: 9,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1,
+                          letterSpacing: 1.2,
                         ),
                       ),
-                      const Gap(6),
+                      const Gap(4),
                       Text(
                         cardNumber,
                         style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 22,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          letterSpacing: 1.5,
+                          letterSpacing: 2,
                         ),
                       ),
                     ],
@@ -156,18 +157,18 @@ class PaymentCardPreview extends StatelessWidget {
                           Text(
                             "CARD HOLDER",
                             style: TextStyle(
-                              color: Colors.white.withAlpha(150),
-                              fontSize: 10,
+                              color: Colors.white.withValues(alpha: .6),
+                              fontSize: 9,
                               fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
+                              letterSpacing: 1.2,
                             ),
                           ),
-                          const Gap(4),
+                          const Gap(3),
                           Text(
                             cardHolder,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -179,18 +180,18 @@ class PaymentCardPreview extends StatelessWidget {
                           Text(
                             "EXPIRES",
                             style: TextStyle(
-                              color: Colors.white.withAlpha(150),
-                              fontSize: 10,
+                              color: Colors.white.withValues(alpha: .6),
+                              fontSize: 9,
                               fontWeight: FontWeight.bold,
-                              letterSpacing: 1,
+                              letterSpacing: 1.2,
                             ),
                           ),
-                          const Gap(4),
+                          const Gap(3),
                           Text(
                             expiryDate,
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 15,
+                              fontSize: 14,
                               fontWeight: FontWeight.bold,
                             ),
                           ),

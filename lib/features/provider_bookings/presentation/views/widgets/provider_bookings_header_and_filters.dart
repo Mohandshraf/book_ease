@@ -1,8 +1,10 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
 import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class ProviderBookingsHeaderAndFilters extends StatelessWidget {
   final TextEditingController searchController;
@@ -24,7 +26,7 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 12),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 16, bottom: 14),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -51,11 +53,11 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
                         style: TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 26,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.5,
+                          fontWeight: FontWeight.w800,
+                          letterSpacing: -0.6,
                         ),
                       ),
-                      SizedBox(height: 2),
+                      Gap(2),
                       Text(
                         "Manage client appointments & requests",
                         style: TextStyle(
@@ -72,23 +74,23 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
                         vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: const Color(0xFFFEF3C7),
+                        color: AppColors.pendingLight,
                         borderRadius: BorderRadius.circular(20),
-                        border: Border.all(color: const Color(0xFFFDE68A)),
+                        border: Border.all(color: AppColors.pending.withValues(alpha: 0.3)),
                       ),
                       child: Row(
                         children: [
                           const Icon(
                             Icons.pending_actions_rounded,
                             size: 14,
-                            color: Color(0xFFD97706),
+                            color: AppColors.pending,
                           ),
-                          const SizedBox(width: 4),
+                          const Gap(4),
                           Text(
                             "$pending Pending",
                             style: const TextStyle(
-                              color: Color(0xFFD97706),
-                              fontWeight: FontWeight.bold,
+                              color: AppColors.pending,
+                              fontWeight: FontWeight.w800,
                               fontSize: 12,
                             ),
                           ),
@@ -98,18 +100,19 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
                   else
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 5,
+                        horizontal: 12,
+                        vertical: 6,
                       ),
                       decoration: BoxDecoration(
-                        color: AppColors.background,
+                        color: AppColors.surfaceMuted,
                         borderRadius: BorderRadius.circular(16),
+                        border: Border.all(color: AppColors.border),
                       ),
                       child: Text(
                         "$total Total",
                         style: const TextStyle(
                           color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w600,
+                          fontWeight: FontWeight.w700,
                           fontSize: 12,
                         ),
                       ),
@@ -118,7 +121,7 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
               );
             },
           ),
-          const SizedBox(height: 16),
+          const Gap(16),
 
           // 2. Search Input
           TextField(
@@ -142,27 +145,27 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
                     )
                   : null,
               contentPadding: const EdgeInsets.symmetric(
-                vertical: 12,
+                vertical: 14,
                 horizontal: 16,
               ),
               filled: true,
               fillColor: AppColors.inputFill,
               border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: AppColors.borderLight),
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: AppColors.borderLight),
+                borderRadius: BorderRadius.circular(16),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(14),
+                borderRadius: BorderRadius.circular(16),
                 borderSide:
                     const BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),
-          const SizedBox(height: 14),
+          const Gap(14),
 
           // 3. Horizontal Filter Chips
           BlocBuilder<ProviderBookingsCubit, ProviderBookingsState>(
@@ -178,31 +181,32 @@ class ProviderBookingsHeaderAndFilters extends StatelessWidget {
                     final isSelected = activeFilter == f['value'];
                     return Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: ChoiceChip(
-                        label: Text(f['label']!),
-                        selected: isSelected,
-                        selectedColor: AppColors.primary,
-                        backgroundColor: AppColors.background,
-                        labelStyle: TextStyle(
-                          color: isSelected ? Colors.white : AppColors.textPrimary,
-                          fontWeight:
-                              isSelected ? FontWeight.bold : FontWeight.w600,
-                          fontSize: 13,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                          side: BorderSide(
-                            color:
-                                isSelected ? AppColors.primary : AppColors.border,
+                      child: ScaleOnTap(
+                        onTap: () {
+                          context
+                              .read<ProviderBookingsCubit>()
+                              .filterByStatus(f['value']!);
+                        },
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 200),
+                          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                          decoration: BoxDecoration(
+                            color: isSelected ? AppColors.primary : AppColors.surfaceMuted,
+                            borderRadius: BorderRadius.circular(20),
+                            border: Border.all(
+                              color: isSelected ? AppColors.primary : AppColors.border,
+                              width: 1,
+                            ),
+                          ),
+                          child: Text(
+                            f['label']!,
+                            style: TextStyle(
+                              color: isSelected ? Colors.white : AppColors.textPrimary,
+                              fontWeight: isSelected ? FontWeight.w800 : FontWeight.w600,
+                              fontSize: 13,
+                            ),
                           ),
                         ),
-                        onSelected: (selected) {
-                          if (selected) {
-                            context
-                                .read<ProviderBookingsCubit>()
-                                .filterByStatus(f['value']!);
-                          }
-                        },
                       ),
                     );
                   }).toList(),

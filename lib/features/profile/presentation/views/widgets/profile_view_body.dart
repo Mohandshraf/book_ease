@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
@@ -38,32 +40,34 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text(
           "Log out",
           style: TextStyle(
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: const Text(
           "Are you sure you want to log out of your account?",
-          style: TextStyle(color: Color(0xff64748B)),
+          style: TextStyle(color: AppColors.textSecondary, height: 1.4),
         ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text(
               "Cancel",
               style: TextStyle(
-                color: Color(0xff64748B),
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
+          ScaleOnTap(
+            onTap: () async {
               debugPrint('CUSTOMER LOGOUT: Confirm clicked');
               final navigator = Navigator.of(context, rootNavigator: true);
               final userCubit = context.read<UserCubit>();
@@ -100,18 +104,26 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                 (route) => false,
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffFF3B30),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.cancelled,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.cancelled.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-              elevation: 0,
-            ),
-            child: const Text(
-              "Log out",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              child: const Text(
+                "Log out",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -134,12 +146,12 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
               const Text(
                 "Profile",
                 style: TextStyle(
-                  color: Color(0xff0B1F44),
+                  color: AppColors.textPrimary,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              GestureDetector(
+              ScaleOnTap(
                 onTap: () {
                   Navigator.push(
                     context,
@@ -149,14 +161,15 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                   );
                 },
                 child: Container(
-                  height: 48,
-                  width: 48,
+                  height: 44,
+                  width: 44,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.border),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
+                        color: AppColors.shadowColor.withValues(alpha: 0.04),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
@@ -164,8 +177,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                   ),
                   child: const Icon(
                     Icons.settings_outlined,
-                    color: Color(0xff0B1F44),
-                    size: 22,
+                    color: AppColors.textPrimary,
+                    size: 20,
                   ),
                 ),
               ),
@@ -222,17 +235,17 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           MenuOptionTile(
             icon: Icons.calendar_month_outlined,
             title: "My bookings",
-            iconColor: const Color(0xff0B9B7B),
-            iconBackgroundColor: const Color(0xffEAFDF6),
+            iconColor: AppColors.primary,
+            iconBackgroundColor: AppColors.accentLilacLight,
             onTap: () {
-              // Action or navigation
+              Navigator.pushNamed(context, AppRoutes.booking);
             },
           ),
           MenuOptionTile(
             icon: Icons.favorite_outline_rounded,
             title: "Saved providers",
-            iconColor: const Color(0xff0B9B7B),
-            iconBackgroundColor: const Color(0xffEAFDF6),
+            iconColor: const Color(0xffEC4899),
+            iconBackgroundColor: const Color(0xffFDF2F8),
             onTap: () {
               // Action
             },
@@ -240,8 +253,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           MenuOptionTile(
             icon: Icons.chat_bubble_outline_rounded,
             title: "Messages",
-            iconColor: const Color(0xff0B9B7B),
-            iconBackgroundColor: const Color(0xffEAFDF6),
+            iconColor: const Color(0xff06B6D4),
+            iconBackgroundColor: const Color(0xffECFEFF),
             onTap: () {
               Navigator.push(
                 context,
@@ -254,8 +267,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           MenuOptionTile(
             icon: Icons.notifications_none_rounded,
             title: "Notifications",
-            iconColor: const Color(0xff0B9B7B),
-            iconBackgroundColor: const Color(0xffEAFDF6),
+            iconColor: const Color(0xffF59E0B),
+            iconBackgroundColor: const Color(0xffFEF3C7),
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.notifications);
             },

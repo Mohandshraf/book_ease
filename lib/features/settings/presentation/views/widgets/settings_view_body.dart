@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
@@ -18,32 +20,34 @@ class SettingsViewBody extends StatelessWidget {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        backgroundColor: Colors.white,
+        surfaceTintColor: Colors.transparent,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
         title: const Text(
           "Log out",
           style: TextStyle(
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
         content: const Text(
           "Are you sure you want to log out of your account?",
-          style: TextStyle(color: Color(0xff64748B)),
+          style: TextStyle(color: AppColors.textSecondary, height: 1.4),
         ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text(
               "Cancel",
               style: TextStyle(
-                color: Color(0xff64748B),
+                color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
             ),
           ),
-          ElevatedButton(
-            onPressed: () async {
+          ScaleOnTap(
+            onTap: () async {
               debugPrint('LOGOUT DIALOG: Confirm clicked');
               final navigator = Navigator.of(context, rootNavigator: true);
               final userCubit = context.read<UserCubit>();
@@ -80,18 +84,26 @@ class SettingsViewBody extends StatelessWidget {
                 (route) => false,
               );
             },
-            style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xffFF3B30),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
+              decoration: BoxDecoration(
+                color: AppColors.cancelled,
+                borderRadius: BorderRadius.circular(14),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.cancelled.withValues(alpha: 0.25),
+                    blurRadius: 8,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
               ),
-              elevation: 0,
-            ),
-            child: const Text(
-              "Log out",
-              style: TextStyle(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
+              child: const Text(
+                "Log out",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
               ),
             ),
           ),
@@ -102,9 +114,6 @@ class SettingsViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const Color iconColor = Color(0xff64748B);
-    const Color iconBgColor = Color(0xffF1F5F9);
-
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
       child: Column(
@@ -113,26 +122,27 @@ class SettingsViewBody extends StatelessWidget {
           // Header Row
           Row(
             children: [
-              GestureDetector(
+              ScaleOnTap(
                 onTap: () => Navigator.maybePop(context),
                 child: Container(
-                  height: 48,
-                  width: 48,
+                  height: 44,
+                  width: 44,
                   decoration: BoxDecoration(
                     color: Colors.white,
-                    borderRadius: BorderRadius.circular(16),
+                    borderRadius: BorderRadius.circular(14),
+                    border: Border.all(color: AppColors.border),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.04),
+                        color: AppColors.shadowColor.withValues(alpha: 0.04),
                         blurRadius: 10,
                         offset: const Offset(0, 4),
                       ),
                     ],
                   ),
                   child: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: Color(0xff0B1F44),
-                    size: 22,
+                    Icons.arrow_back_ios_new_rounded,
+                    color: AppColors.textPrimary,
+                    size: 16,
                   ),
                 ),
               ),
@@ -140,7 +150,7 @@ class SettingsViewBody extends StatelessWidget {
               const Text(
                 "Settings",
                 style: TextStyle(
-                  color: Color(0xff0B1F44),
+                  color: AppColors.textPrimary,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
                 ),
@@ -151,74 +161,62 @@ class SettingsViewBody extends StatelessWidget {
 
           // Settings List
           MenuOptionTile(
-            icon: Icons.remove_red_eye_outlined,
+            icon: Icons.palette_outlined,
             title: "Appearance",
             subtitle: "System default",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: AppColors.primary,
+            iconBackgroundColor: AppColors.accentLilacLight,
+            onTap: () {},
           ),
           MenuOptionTile(
-            icon: Icons.chat_bubble_outline_rounded,
+            icon: Icons.language_rounded,
             title: "Language",
             subtitle: "English (US)",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: const Color(0xff06B6D4),
+            iconBackgroundColor: const Color(0xffECFEFF),
+            onTap: () {},
           ),
           MenuOptionTile(
             icon: Icons.notifications_none_rounded,
             title: "Notifications",
             subtitle: "Manage alerts",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
+            iconColor: const Color(0xffF59E0B),
+            iconBackgroundColor: const Color(0xffFEF3C7),
             onTap: () {
-              // Action
+              Navigator.pushNamed(context, AppRoutes.notifications);
             },
           ),
           MenuOptionTile(
             icon: Icons.shield_outlined,
             title: "Privacy",
             subtitle: "Data and permissions",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: const Color(0xff10B981),
+            iconBackgroundColor: const Color(0xffECFDF5),
+            onTap: () {},
           ),
           MenuOptionTile(
             icon: Icons.lock_outline_rounded,
             title: "Security",
             subtitle: "Password and sign in",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: const Color(0xff6366F1),
+            iconBackgroundColor: const Color(0xffEEF2FF),
+            onTap: () {},
           ),
           MenuOptionTile(
-            icon: Icons.phone_outlined,
-            title: "Help",
+            icon: Icons.help_outline_rounded,
+            title: "Help & Support",
             subtitle: "Support center",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: const Color(0xffEC4899),
+            iconBackgroundColor: const Color(0xffFDF2F8),
+            onTap: () {},
           ),
           MenuOptionTile(
-            icon: Icons.more_horiz_rounded,
+            icon: Icons.info_outline_rounded,
             title: "About",
             subtitle: "Version 2.4.1",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              // Action
-            },
+            iconColor: AppColors.textSecondary,
+            iconBackgroundColor: AppColors.surfaceMuted,
+            onTap: () {},
           ),
 
           // Log out Button

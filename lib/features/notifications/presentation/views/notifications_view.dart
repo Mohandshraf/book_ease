@@ -1,4 +1,5 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_state.dart';
@@ -25,19 +26,33 @@ class _NotificationsViewContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 20, color: Color(0xff0B1F44)),
-          onPressed: () => Navigator.of(context).pop(),
+        leading: Center(
+          child: ScaleOnTap(
+            onTap: () => Navigator.of(context).pop(),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: AppColors.surfaceMuted,
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: AppColors.border),
+              ),
+              child: const Icon(
+                Icons.arrow_back_ios_new_rounded,
+                size: 16,
+                color: AppColors.textPrimary,
+              ),
+            ),
+          ),
         ),
         title: const Text(
           "Notifications",
           style: TextStyle(
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
             fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
@@ -47,16 +62,27 @@ class _NotificationsViewContent extends StatelessWidget {
           BlocBuilder<NotificationCubit, NotificationState>(
             builder: (context, state) {
               if (state is NotificationLoaded && state.unreadCount > 0) {
-                return TextButton(
-                  onPressed: () {
+                return ScaleOnTap(
+                  onTap: () {
                     context.read<NotificationCubit>().markAllAsRead();
                   },
-                  child: const Text(
-                    "Mark all read",
-                    style: TextStyle(
-                      color: AppColors.ksecondColor,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w600,
+                  child: Container(
+                    margin: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentLilacLight,
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: AppColors.accentLilac.withValues(alpha: 0.2)),
+                    ),
+                    child: const Center(
+                      child: Text(
+                        "Mark all read",
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
                     ),
                   ),
                 );
@@ -71,7 +97,7 @@ class _NotificationsViewContent extends StatelessWidget {
         builder: (context, state) {
           if (state is NotificationLoading) {
             return const Center(
-              child: CircularProgressIndicator(color: AppColors.ksecondColor),
+              child: CircularProgressIndicator(color: AppColors.primary),
             );
           }
 
@@ -82,26 +108,47 @@ class _NotificationsViewContent extends StatelessWidget {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    const Icon(Icons.error_outline_rounded, size: 48, color: Colors.redAccent),
-                    const Gap(12),
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: AppColors.cancelledLight,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(Icons.error_outline_rounded, size: 36, color: AppColors.cancelled),
+                    ),
+                    const Gap(16),
                     Text(
                       state.errorMessage,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(color: Color(0xff64748B), fontSize: 14),
+                      style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                     ),
-                    const Gap(16),
-                    ElevatedButton(
-                      onPressed: () {
+                    const Gap(20),
+                    ScaleOnTap(
+                      onTap: () {
                         context.read<NotificationCubit>().subscribeToNotifications();
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.ksecondColor,
-                        foregroundColor: Colors.white,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(14),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.25),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: const Text(
+                          "Retry",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 14,
+                          ),
                         ),
                       ),
-                      child: const Text("Retry"),
                     ),
                   ],
                 ),
@@ -116,26 +163,26 @@ class _NotificationsViewContent extends StatelessWidget {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Container(
-                      width: 80,
-                      height: 80,
+                      width: 84,
+                      height: 84,
                       decoration: BoxDecoration(
-                        color: const Color(0xffEAFDF6),
+                        color: AppColors.accentLilacLight,
                         shape: BoxShape.circle,
-                        border: Border.all(color: const Color(0xffD1F2E8), width: 2),
+                        border: Border.all(color: AppColors.accentLilac.withValues(alpha: 0.2), width: 2),
                       ),
                       child: const Icon(
                         Icons.notifications_none_rounded,
-                        size: 40,
-                        color: AppColors.ksecondColor,
+                        size: 42,
+                        color: AppColors.primary,
                       ),
                     ),
-                    const Gap(16),
+                    const Gap(18),
                     const Text(
                       "No Notifications Yet",
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff0B1F44),
+                        color: AppColors.textPrimary,
                       ),
                     ),
                     const Gap(8),
@@ -144,7 +191,7 @@ class _NotificationsViewContent extends StatelessWidget {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontSize: 14,
-                        color: Color(0xff64748B),
+                        color: AppColors.textSecondary,
                       ),
                     ),
                   ],

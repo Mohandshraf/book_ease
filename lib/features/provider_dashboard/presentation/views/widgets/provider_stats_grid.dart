@@ -1,6 +1,8 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_state.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class ProviderStatsGrid extends StatelessWidget {
   final ProviderDashboardStats stats;
@@ -18,23 +20,23 @@ class ProviderStatsGrid extends StatelessWidget {
                 title: "Today's Appts",
                 value: "${stats.todayAppointments}",
                 icon: Icons.calendar_today_rounded,
-                color: const Color(0xFF3B82F6),
-                bgColor: const Color(0xFFEFF6FF),
+                color: AppColors.accentSky,
+                bgColor: AppColors.accentSkyLight,
               ),
             ),
-            const SizedBox(width: 14),
+            const Gap(14),
             Expanded(
               child: _StatCard(
                 title: 'Pending Requests',
                 value: "${stats.pendingRequests}",
                 icon: Icons.pending_actions_rounded,
-                color: const Color(0xFFF59E0B),
-                bgColor: const Color(0xFFFEF3C7),
+                color: AppColors.pending,
+                bgColor: AppColors.pendingLight,
               ),
             ),
           ],
         ),
-        const SizedBox(height: 14),
+        const Gap(14),
         Row(
           children: [
             Expanded(
@@ -46,14 +48,14 @@ class ProviderStatsGrid extends StatelessWidget {
                 bgColor: AppColors.primaryLight,
               ),
             ),
-            const SizedBox(width: 14),
+            const Gap(14),
             Expanded(
               child: _StatCard(
                 title: 'Earnings',
                 value: "\$${stats.totalEarnings.toStringAsFixed(0)}",
                 icon: Icons.attach_money_rounded,
-                color: const Color(0xFF10B981),
-                bgColor: const Color(0xFFECFDF5),
+                color: AppColors.success,
+                bgColor: AppColors.successLight,
               ),
             ),
           ],
@@ -80,50 +82,53 @@ class _StatCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppColors.borderLight),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withValues(alpha: 0.02),
-            blurRadius: 8,
-            offset: const Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: bgColor,
-              borderRadius: BorderRadius.circular(10),
+    return ScaleOnTap(
+      child: Container(
+        padding: const EdgeInsets.all(18),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(color: AppColors.border, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadowColor.withValues(alpha: 0.03),
+              blurRadius: 14,
+              offset: const Offset(0, 4),
             ),
-            child: Icon(icon, color: color, size: 20),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            value,
-            style: const TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textPrimary,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: bgColor,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(icon, color: color, size: 22),
             ),
-          ),
-          const SizedBox(height: 2),
-          Text(
-            title,
-            style: const TextStyle(
-              fontSize: 12,
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
+            const Gap(14),
+            Text(
+              value,
+              style: const TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+                color: AppColors.textPrimary,
+                letterSpacing: -0.5,
+              ),
             ),
-          ),
-        ],
+            const Gap(4),
+            Text(
+              title,
+              style: const TextStyle(
+                fontSize: 13,
+                color: AppColors.textSecondary,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

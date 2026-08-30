@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/payment_view.dart';
 import 'package:book_ease/features/service_details/presentation/views/widgets/booking_summary_appointment_card.dart';
@@ -54,37 +56,44 @@ class BookingSummaryView extends StatelessWidget {
     final double totalPrice = model.price + bookingFee - memberDiscount;
 
     return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
-        backgroundColor: const Color(0xffF8FAFC),
+        backgroundColor: AppColors.background,
         elevation: 0,
         automaticallyImplyLeading: false,
-        toolbarHeight: 80,
+        toolbarHeight: 70,
         title: Row(
           children: [
-            GestureDetector(
+            ScaleOnTap(
               onTap: () => Navigator.pop(context),
               child: Container(
-                width: 44,
-                height: 44,
+                width: 40,
+                height: 40,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
-                  border: Border.all(color: const Color(0xffE2E8F0)),
+                  border: Border.all(color: AppColors.border),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.shadowColor.withValues(alpha: .03),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
                 child: const Icon(
                   Icons.arrow_back_rounded,
-                  color: Color(0xff0B1F44),
-                  size: 22,
+                  color: AppColors.textPrimary,
+                  size: 20,
                 ),
               ),
             ),
-            const Gap(16),
+            const Gap(14),
             const Text(
               "Booking Summary",
               style: TextStyle(
-                color: Color(0xff0B1F44),
-                fontSize: 24,
+                color: AppColors.textPrimary,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -98,20 +107,20 @@ class BookingSummaryView extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               BookingSummaryClinicCard(model: model),
-              const Gap(20),
+              const Gap(16),
               BookingSummaryAppointmentCard(
                 formattedDate: formattedDate,
                 selectedTime: selectedTime,
                 providerName: model.providerName,
               ),
-              const Gap(20),
+              const Gap(16),
               BookingSummaryPriceCard(
                 consultationFee: model.price,
                 bookingFee: bookingFee,
                 memberDiscount: memberDiscount,
                 totalPrice: totalPrice,
               ),
-              const Gap(20),
+              const Gap(16),
               const BookingSummaryNotesCard(),
               const Gap(120),
             ],
@@ -121,15 +130,15 @@ class BookingSummaryView extends StatelessWidget {
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(
           color: Colors.white,
-          border: Border(top: BorderSide(color: Color(0xffF1F5F9), width: 1)),
+          border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         ),
         padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
         child: SafeArea(
           child: SizedBox(
             width: double.infinity,
-            height: 56,
-            child: ElevatedButton(
-              onPressed: onProceedToPaymentPressed ??
+            height: 52,
+            child: ScaleOnTap(
+              onTap: onProceedToPaymentPressed ??
                   () {
                     Navigator.push(
                       context,
@@ -143,19 +152,31 @@ class BookingSummaryView extends StatelessWidget {
                       ),
                     );
                   },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: const Color(0xff0B9B7B),
-                elevation: 0,
-                shape: RoundedRectangleBorder(
+              child: Container(
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppColors.primaryGradientStart,
+                      AppColors.primaryGradientEnd,
+                    ],
+                  ),
                   borderRadius: BorderRadius.circular(16),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: .3),
+                      blurRadius: 14,
+                      offset: const Offset(0, 5),
+                    ),
+                  ],
                 ),
-              ),
-              child: const Text(
-                "Proceed to Payment",
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.white,
+                alignment: Alignment.center,
+                child: const Text(
+                  "Proceed to Payment",
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ),

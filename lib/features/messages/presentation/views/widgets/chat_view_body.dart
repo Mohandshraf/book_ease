@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/data/models/message_model.dart';
@@ -8,6 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class ChatViewBody extends StatefulWidget {
   final String otherUserId;
@@ -122,7 +125,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                   height: 4,
                   margin: const EdgeInsets.only(bottom: 12),
                   decoration: BoxDecoration(
-                    color: const Color(0xffCBD5E1),
+                    color: AppColors.border,
                     borderRadius: BorderRadius.circular(2),
                   ),
                 ),
@@ -133,29 +136,29 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
-                      color: const Color(0xffF8FAFC),
+                      color: AppColors.background,
                       borderRadius: BorderRadius.circular(12),
-                      border: Border.all(color: const Color(0xffE2E8F0)),
+                      border: Border.all(color: AppColors.border),
                     ),
                     child: Text(
                       msg.messageText,
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
-                        color: Color(0xff475569),
+                        color: AppColors.textSecondary,
                         fontSize: 14,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 6),
+                const Gap(6),
                 ListTile(
                   leading: const Icon(Icons.copy_rounded,
-                      color: Color(0xff0B1F44)),
+                      color: AppColors.textPrimary),
                   title: const Text(
                     "Copy text",
                     style: TextStyle(
-                      color: Color(0xff0B1F44),
+                      color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
@@ -174,11 +177,11 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 if (isMe && msg.id != null) ...[
                   ListTile(
                     leading: const Icon(Icons.edit_rounded,
-                        color: Color(0xff0B9B7B)),
+                        color: AppColors.primary),
                     title: const Text(
                       "Edit message",
                       style: TextStyle(
-                        color: Color(0xff0B1F44),
+                        color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -198,11 +201,11 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 if (msg.id != null) ...[
                   ListTile(
                     leading: const Icon(Icons.delete_outline_rounded,
-                        color: Colors.redAccent),
+                        color: AppColors.error),
                     title: const Text(
                       "Delete message",
                       style: TextStyle(
-                        color: Colors.redAccent,
+                        color: AppColors.error,
                         fontWeight: FontWeight.w600,
                       ),
                     ),
@@ -228,20 +231,20 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           "Delete Message",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff0B1F44)),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
         content: const Text(
           "Are you sure you want to delete this message?",
-          style: TextStyle(color: Color(0xff64748B)),
+          style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xff64748B))),
+            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: AppColors.error,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
@@ -265,20 +268,20 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           "Clear Chat Messages",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff0B1F44)),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
         content: const Text(
           "Are you sure you want to clear all messages in this chat?",
-          style: TextStyle(color: Color(0xff64748B)),
+          style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xff64748B))),
+            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: AppColors.error,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
@@ -299,20 +302,20 @@ class _ChatViewBodyState extends State<ChatViewBody> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: const Text(
           "Delete Chat",
-          style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xff0B1F44)),
+          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
         content: const Text(
           "Are you sure you want to delete this chat conversation?",
-          style: TextStyle(color: Color(0xff64748B)),
+          style: TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: Color(0xff64748B))),
+            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: AppColors.error,
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
             ),
             onPressed: () {
@@ -343,14 +346,14 @@ class _ChatViewBodyState extends State<ChatViewBody> {
               onDeleteConversationTap: _showDeleteConversationDialog,
             ),
           ),
-          const SizedBox(height: 10),
+          const Gap(6),
 
           // 2. Action Buttons Row (Appointment details, Reschedule)
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 20),
             child: ChatActionBar(),
           ),
-          const SizedBox(height: 10),
+          const Gap(10),
 
           // 3. Messages List Area
           Expanded(
@@ -364,7 +367,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 if (state is ChatLoading && state.messages.isEmpty) {
                   return const Center(
                     child: CircularProgressIndicator(
-                      color: Color(0xff0B9B7B),
+                      color: AppColors.primary,
                     ),
                   );
                 }
@@ -378,17 +381,24 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          const Icon(
-                            Icons.chat_bubble_outline_rounded,
-                            color: Color(0xff94A3B8),
-                            size: 40,
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            decoration: BoxDecoration(
+                              color: AppColors.accentLilacLight,
+                              shape: BoxShape.circle,
+                            ),
+                            child: const Icon(
+                              Icons.chat_bubble_outline_rounded,
+                              color: AppColors.primary,
+                              size: 32,
+                            ),
                           ),
-                          const SizedBox(height: 12),
+                          const Gap(12),
                           Text(
                             "Start conversation with ${widget.doctorName}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
-                              color: Color(0xff64748B),
+                              color: AppColors.textSecondary,
                               fontSize: 14,
                             ),
                           ),
@@ -425,9 +435,12 @@ class _ChatViewBodyState extends State<ChatViewBody> {
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
+              border: const Border(
+                top: BorderSide(color: AppColors.border, width: 1),
+              ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.03),
+                  color: AppColors.shadowColor.withValues(alpha: 0.03),
                   blurRadius: 10,
                   offset: const Offset(0, -4),
                 ),
@@ -440,15 +453,15 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                   Container(
                     padding: const EdgeInsets.symmetric(
                         horizontal: 20, vertical: 8),
-                    color: const Color(0xffE2F9F0),
+                    color: AppColors.accentLilacLight,
                     child: Row(
                       children: [
                         const Icon(
                           Icons.edit_rounded,
-                          color: Color(0xff0B9B7B),
+                          color: AppColors.primary,
                           size: 18,
                         ),
-                        const SizedBox(width: 8),
+                        const Gap(8),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -456,7 +469,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                               const Text(
                                 "Editing message",
                                 style: TextStyle(
-                                  color: Color(0xff0B9B7B),
+                                  color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
                                 ),
@@ -466,7 +479,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: const TextStyle(
-                                  color: Color(0xff334155),
+                                  color: AppColors.textPrimary,
                                   fontSize: 13,
                                 ),
                               ),
@@ -475,7 +488,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                         ),
                         IconButton(
                           icon: const Icon(Icons.close_rounded,
-                              size: 18, color: Color(0xff64748B)),
+                              size: 18, color: AppColors.textSecondary),
                           onPressed: _cancelEditing,
                         ),
                       ],
@@ -490,10 +503,11 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                       children: [
                         Expanded(
                           child: Container(
-                            height: 48,
+                            height: 46,
                             decoration: BoxDecoration(
-                              color: const Color(0xffF1F5F9),
+                              color: AppColors.background,
                               borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: AppColors.border),
                             ),
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 16),
@@ -506,30 +520,42 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                                     ? "Edit message..."
                                     : "Type a message...",
                                 hintStyle: const TextStyle(
-                                  color: Color(0xff94A3B8),
-                                  fontSize: 15,
+                                  color: AppColors.textMuted,
+                                  fontSize: 14,
                                 ),
                                 border: InputBorder.none,
                               ),
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
-                        GestureDetector(
+                        const Gap(10),
+                        ScaleOnTap(
                           onTap: _sendMessage,
                           child: Container(
-                            height: 48,
-                            width: 48,
-                            decoration: const BoxDecoration(
-                              color: Color(0xff0B9B7B),
+                            height: 46,
+                            width: 46,
+                            decoration: BoxDecoration(
+                              gradient: const LinearGradient(
+                                colors: [
+                                  AppColors.primaryGradientStart,
+                                  AppColors.primaryGradientEnd,
+                                ],
+                              ),
                               shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: .3),
+                                  blurRadius: 8,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
                             ),
                             child: Icon(
                               _editingMessage != null
                                   ? Icons.check_rounded
                                   : Icons.send_rounded,
                               color: Colors.white,
-                              size: 20,
+                              size: 18,
                             ),
                           ),
                         ),

@@ -1,9 +1,12 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/data/models/chat_conversation_model.dart';
 import 'package:book_ease/features/messages/presentation/views/chat_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 
 class MessagesView extends StatefulWidget {
   const MessagesView({super.key});
@@ -73,24 +76,24 @@ class _MessagesViewState extends State<MessagesView> {
           "Delete Chat",
           style: TextStyle(
             fontWeight: FontWeight.bold,
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
           ),
         ),
         content: Text(
           "Are you sure you want to delete the chat with ${chat.otherUserName}?",
-          style: const TextStyle(color: Color(0xff64748B)),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
             child: const Text(
               "Cancel",
-              style: TextStyle(color: Color(0xff64748B)),
+              style: TextStyle(color: AppColors.textSecondary),
             ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.redAccent,
+              backgroundColor: AppColors.error,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -109,7 +112,7 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xffF8FAFC),
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: Colors.white,
@@ -121,26 +124,28 @@ class _MessagesViewState extends State<MessagesView> {
             const Text(
               "Messages",
               style: TextStyle(
-                color: Color(0xff0B1F44),
-                fontSize: 28,
+                color: AppColors.textPrimary,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            const Gap(14),
             Container(
-              height: 48,
+              height: 46,
               decoration: BoxDecoration(
-                color: const Color(0xffF1F5F9),
+                color: AppColors.background,
                 borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: AppColors.border),
               ),
               child: TextField(
                 controller: _searchController,
                 decoration: const InputDecoration(
                   hintText: "Search messages...",
-                  hintStyle: TextStyle(color: Color(0xff94A3B8), fontSize: 15),
+                  hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 14),
                   prefixIcon: Icon(
                     Icons.search_rounded,
-                    color: Color(0xff64748B),
+                    color: AppColors.textMuted,
+                    size: 20,
                   ),
                   border: InputBorder.none,
                   contentPadding: EdgeInsets.symmetric(vertical: 12),
@@ -154,7 +159,7 @@ class _MessagesViewState extends State<MessagesView> {
         builder: (context, state) {
           if (state is ChatLoading && state.conversations.isEmpty) {
             return const Center(
-              child: CircularProgressIndicator(color: Color(0xff0B9B7B)),
+              child: CircularProgressIndicator(color: AppColors.primary),
             );
           }
 
@@ -183,29 +188,29 @@ class _MessagesViewState extends State<MessagesView> {
                   Container(
                     height: 80,
                     width: 80,
-                    decoration: const BoxDecoration(
-                      color: Color(0xffE2F9F0),
+                    decoration: BoxDecoration(
+                      color: AppColors.accentLilacLight,
                       shape: BoxShape.circle,
                     ),
                     child: const Icon(
                       Icons.chat_bubble_outline_rounded,
-                      color: Color(0xff0B9B7B),
+                      color: AppColors.primary,
                       size: 36,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const Gap(16),
                   const Text(
                     "No messages yet",
                     style: TextStyle(
-                      color: Color(0xff0B1F44),
+                      color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  const Gap(8),
                   const Text(
                     "Chat messages from providers will appear here",
-                    style: TextStyle(color: Color(0xff64748B), fontSize: 14),
+                    style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
                   ),
                 ],
               ),
@@ -213,10 +218,10 @@ class _MessagesViewState extends State<MessagesView> {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 20),
+            padding: const EdgeInsets.symmetric(vertical: 16),
             itemCount: chats.length,
             separatorBuilder: (context, index) =>
-                const Divider(color: Color(0xffF1F5F9), height: 1, indent: 80),
+                const Divider(color: AppColors.border, height: 1, indent: 84),
             itemBuilder: (context, index) {
               final chat = chats[index];
               final timeStr = _formatConversationTime(chat.lastMessageTime);
@@ -225,7 +230,7 @@ class _MessagesViewState extends State<MessagesView> {
                 key: Key(chat.otherUserId),
                 direction: DismissDirection.endToStart,
                 background: Container(
-                  color: Colors.redAccent,
+                  color: AppColors.error,
                   alignment: Alignment.centerRight,
                   padding: const EdgeInsets.only(right: 20),
                   child: const Row(
@@ -236,7 +241,7 @@ class _MessagesViewState extends State<MessagesView> {
                         color: Colors.white,
                         size: 24,
                       ),
-                      SizedBox(width: 8),
+                      Gap(8),
                       Text(
                         "Delete",
                         style: TextStyle(
@@ -251,7 +256,7 @@ class _MessagesViewState extends State<MessagesView> {
                   _showDeleteConversationDialog(chat);
                   return false;
                 },
-                child: InkWell(
+                child: ScaleOnTap(
                   onTap: () {
                     Navigator.push(
                       context,
@@ -265,31 +270,33 @@ class _MessagesViewState extends State<MessagesView> {
                       ),
                     );
                   },
-                  onLongPress: () => _showDeleteConversationDialog(chat),
-                  child: Padding(
+                  child: Container(
+                    color: chat.unread
+                        ? AppColors.primary.withValues(alpha: .03)
+                        : Colors.transparent,
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                      horizontal: 20,
+                      vertical: 12,
                     ),
                     child: Row(
                       children: [
                         Stack(
                           children: [
                             CircleAvatar(
-                              radius: 28,
+                              radius: 26,
                               backgroundImage:
                                   chat.otherUserImage != null &&
                                       chat.otherUserImage!.isNotEmpty
                                   ? NetworkImage(chat.otherUserImage!)
                                   : null,
-                              backgroundColor: const Color(0xffE2E8F0),
+                              backgroundColor: AppColors.cardBackground,
                               child:
                                   (chat.otherUserImage == null ||
                                       chat.otherUserImage!.isEmpty)
                                   ? const Icon(
                                       Icons.person_rounded,
-                                      color: Color(0xff64748B),
-                                      size: 28,
+                                      color: AppColors.primary,
+                                      size: 26,
                                     )
                                   : null,
                             ),
@@ -301,7 +308,7 @@ class _MessagesViewState extends State<MessagesView> {
                                   height: 14,
                                   width: 14,
                                   decoration: BoxDecoration(
-                                    color: const Color(0xff0B9B7B),
+                                    color: AppColors.primary,
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: Colors.white,
@@ -312,7 +319,7 @@ class _MessagesViewState extends State<MessagesView> {
                               ),
                           ],
                         ),
-                        const SizedBox(width: 16),
+                        const Gap(14),
                         Expanded(
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -324,8 +331,8 @@ class _MessagesViewState extends State<MessagesView> {
                                   Text(
                                     chat.otherUserName,
                                     style: TextStyle(
-                                      color: const Color(0xff0B1F44),
-                                      fontSize: 16,
+                                      color: AppColors.textPrimary,
+                                      fontSize: 15,
                                       fontWeight: chat.unread
                                           ? FontWeight.bold
                                           : FontWeight.w600,
@@ -335,9 +342,9 @@ class _MessagesViewState extends State<MessagesView> {
                                     timeStr,
                                     style: TextStyle(
                                       color: chat.unread
-                                          ? const Color(0xff0B9B7B)
-                                          : const Color(0xff94A3B8),
-                                      fontSize: 13,
+                                          ? AppColors.primary
+                                          : AppColors.textMuted,
+                                      fontSize: 12,
                                       fontWeight: chat.unread
                                           ? FontWeight.bold
                                           : FontWeight.normal,
@@ -347,28 +354,28 @@ class _MessagesViewState extends State<MessagesView> {
                               ),
                               if (chat.otherUserSpecialty != null &&
                                   chat.otherUserSpecialty!.isNotEmpty) ...[
-                                const SizedBox(height: 4),
+                                const Gap(2),
                                 Text(
                                   chat.otherUserSpecialty!,
                                   style: const TextStyle(
-                                    color: Color(0xff64748B),
-                                    fontSize: 13,
+                                    color: AppColors.textSecondary,
+                                    fontSize: 12,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ],
-                              const SizedBox(height: 6),
+                              const Gap(4),
                               Text(
                                 chat.lastMessage,
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   color: chat.unread
-                                      ? const Color(0xff334155)
-                                      : const Color(0xff64748B),
-                                  fontSize: 14,
+                                      ? AppColors.textPrimary
+                                      : AppColors.textSecondary,
+                                  fontSize: 13,
                                   fontWeight: chat.unread
-                                      ? FontWeight.w500
+                                      ? FontWeight.w600
                                       : FontWeight.normal,
                                 ),
                               ),

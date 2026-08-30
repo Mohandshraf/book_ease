@@ -1,3 +1,4 @@
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -13,19 +14,20 @@ class BookingSummaryClinicCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppColors.shadowColor.withValues(alpha: .04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Row(
         children: [
           ClipRRect(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(14),
             child: Image.network(
               model.imageUrl,
               width: 70,
@@ -34,8 +36,8 @@ class BookingSummaryClinicCard extends StatelessWidget {
               errorBuilder: (context, error, stackTrace) => Container(
                 width: 70,
                 height: 70,
-                color: Colors.grey.shade200,
-                child: const Icon(Icons.image_not_supported_rounded),
+                color: AppColors.cardBackground,
+                child: const Icon(Icons.medical_services_outlined, color: AppColors.primary),
               ),
             ),
           ),
@@ -47,34 +49,34 @@ class BookingSummaryClinicCard extends StatelessWidget {
                 Text(
                   model.title,
                   style: const TextStyle(
-                    fontSize: 18,
+                    fontSize: 17,
                     fontWeight: FontWeight.bold,
-                    color: Color(0xff0B1F44),
+                    color: AppColors.textPrimary,
                   ),
                 ),
                 const Gap(4),
                 Text(
                   model.providerName,
                   style: const TextStyle(
-                    fontSize: 14,
-                    color: Color(0xff64748B),
+                    fontSize: 13,
+                    color: AppColors.textSecondary,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
                 const Gap(6),
                 Row(
                   children: const [
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
-                    Icon(Icons.star_rounded, color: Colors.amber, size: 16),
+                    Icon(Icons.star_rounded, color: AppColors.rating, size: 16),
+                    Icon(Icons.star_rounded, color: AppColors.rating, size: 16),
+                    Icon(Icons.star_rounded, color: AppColors.rating, size: 16),
+                    Icon(Icons.star_rounded, color: AppColors.rating, size: 16),
+                    Icon(Icons.star_rounded, color: AppColors.rating, size: 16),
                     Gap(4),
                     Text(
                       "(284)",
                       style: TextStyle(
                         fontSize: 12,
-                        color: Color(0xff94A3B8),
+                        color: AppColors.textMuted,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

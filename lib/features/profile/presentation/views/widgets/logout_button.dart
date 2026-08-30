@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class LogoutButton extends StatelessWidget {
@@ -13,11 +15,12 @@ class LogoutButton extends StatelessWidget {
     return Container(
       margin: const EdgeInsets.only(top: 12, bottom: 20),
       decoration: BoxDecoration(
-        color: const Color(0xffFFF2F2),
+        color: AppColors.cancelledLight.withValues(alpha: 0.6),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.cancelled.withValues(alpha: 0.15)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.01),
+            color: AppColors.cancelled.withValues(alpha: 0.04),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -25,8 +28,7 @@ class LogoutButton extends StatelessWidget {
       ),
       child: Material(
         color: Colors.transparent,
-        child: InkWell(
-          borderRadius: BorderRadius.circular(20),
+        child: ScaleOnTap(
           onTap: onTap,
           child: Padding(
             padding: const EdgeInsets.all(16),
@@ -34,16 +36,16 @@ class LogoutButton extends StatelessWidget {
               children: [
                 // White circle with red arrow
                 Container(
-                  height: 48,
-                  width: 48,
+                  height: 44,
+                  width: 44,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
                   child: const Icon(
-                    Icons.arrow_back_rounded,
-                    color: Color(0xffFF3B30),
-                    size: 22,
+                    Icons.logout_rounded,
+                    color: AppColors.cancelled,
+                    size: 20,
                   ),
                 ),
                 const SizedBox(width: 16),
@@ -51,8 +53,8 @@ class LogoutButton extends StatelessWidget {
                 const Text(
                   "Log out",
                   style: TextStyle(
-                    color: Color(0xffFF3B30),
-                    fontSize: 16,
+                    color: AppColors.cancelled,
+                    fontSize: 15,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

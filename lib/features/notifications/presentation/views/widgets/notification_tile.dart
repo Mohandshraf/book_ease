@@ -1,4 +1,5 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/notifications/data/models/notification_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -33,30 +34,30 @@ class NotificationTile extends StatelessWidget {
   Color _getIconColor() {
     switch (notification.type) {
       case 'booking_created':
-        return const Color(0xff0B9B7B);
+        return AppColors.primary;
       case 'booking_confirmed':
-        return const Color(0xff10B981);
+        return AppColors.success;
       case 'booking_cancelled':
-        return const Color(0xffEF4444);
+        return AppColors.cancelled;
       case 'booking_completed':
-        return const Color(0xff3B82F6);
+        return AppColors.completed;
       default:
-        return const Color(0xff64748B);
+        return AppColors.textSecondary;
     }
   }
 
   Color _getIconBgColor() {
     switch (notification.type) {
       case 'booking_created':
-        return const Color(0xffEAFDF6);
+        return AppColors.accentLilacLight;
       case 'booking_confirmed':
-        return const Color(0xffECFDF5);
+        return AppColors.successLight;
       case 'booking_cancelled':
-        return const Color(0xffFEF2F2);
+        return AppColors.cancelledLight;
       case 'booking_completed':
-        return const Color(0xffEFF6FF);
+        return AppColors.completedLight;
       default:
-        return const Color(0xffF1F5F9);
+        return AppColors.surfaceMuted;
     }
   }
 
@@ -91,26 +92,27 @@ class NotificationTile extends StatelessWidget {
         alignment: Alignment.centerRight,
         padding: const EdgeInsets.only(right: 20),
         decoration: BoxDecoration(
-          color: Colors.red.shade400,
+          color: AppColors.error,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: const Icon(Icons.delete_outline, color: Colors.white, size: 24),
+        child: const Icon(Icons.delete_outline_rounded, color: Colors.white, size: 24),
       ),
-      child: InkWell(
+      child: ScaleOnTap(
         onTap: onTap,
-        borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: isUnread ? const Color(0xffF6FBF9) : Colors.white,
+            color: isUnread ? AppColors.accentLilacLight.withValues(alpha: 0.5) : Colors.white,
             borderRadius: BorderRadius.circular(16),
             border: Border.all(
-              color: isUnread ? const Color(0xffD1F2E8) : const Color(0xffF1F5F9),
+              color: isUnread ? AppColors.accentLilac.withValues(alpha: 0.3) : AppColors.border,
               width: 1,
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.02),
+                color: isUnread
+                    ? AppColors.primary.withValues(alpha: 0.04)
+                    : AppColors.shadowColor.withValues(alpha: 0.03),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
@@ -146,7 +148,7 @@ class NotificationTile extends StatelessWidget {
                             style: TextStyle(
                               fontSize: 15,
                               fontWeight: isUnread ? FontWeight.bold : FontWeight.w600,
-                              color: const Color(0xff0B1F44),
+                              color: AppColors.textPrimary,
                             ),
                           ),
                         ),
@@ -156,7 +158,7 @@ class NotificationTile extends StatelessWidget {
                             height: 8,
                             margin: const EdgeInsets.only(left: 8),
                             decoration: const BoxDecoration(
-                              color: AppColors.ksecondColor,
+                              color: AppColors.primary,
                               shape: BoxShape.circle,
                             ),
                           ),
@@ -167,7 +169,7 @@ class NotificationTile extends StatelessWidget {
                       notification.body,
                       style: const TextStyle(
                         fontSize: 13,
-                        color: Color(0xff64748B),
+                        color: AppColors.textSecondary,
                         height: 1.4,
                       ),
                     ),
@@ -177,7 +179,7 @@ class NotificationTile extends StatelessWidget {
                       style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.w500,
-                        color: Color(0xff94A3B8),
+                        color: AppColors.textLight,
                       ),
                     ),
                   ],

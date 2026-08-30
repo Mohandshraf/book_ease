@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -32,11 +34,10 @@ class OnBoardingPage extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 24),
           child: Column(
             children: [
-              const Gap(20),
+              const Gap(16),
 
-              SizedBox(
-                height: 500,
-                width: double.infinity,
+              Expanded(
+                flex: 6,
                 child: Center(
                   child: AnimatedSwitcher(
                     duration: const Duration(milliseconds: 500),
@@ -45,7 +46,7 @@ class OnBoardingPage extends StatelessWidget {
                         opacity: animation,
                         child: ScaleTransition(
                           scale: Tween<double>(
-                            begin: 0.95,
+                            begin: 0.94,
                             end: 1,
                           ).animate(animation),
                           child: child,
@@ -56,14 +57,12 @@ class OnBoardingPage extends StatelessWidget {
                       image,
                       key: ValueKey(image),
                       fit: BoxFit.contain,
-                      height: 800,
-                      width: 800,
                     ),
                   ),
                 ),
               ),
 
-              const Spacer(),
+              const Gap(16),
 
               Align(
                 alignment: Alignment.centerLeft,
@@ -74,7 +73,7 @@ class OnBoardingPage extends StatelessWidget {
                       opacity: animation,
                       child: SlideTransition(
                         position: Tween<Offset>(
-                          begin: const Offset(0.15, 0),
+                          begin: const Offset(0.12, 0),
                           end: Offset.zero,
                         ).animate(animation),
                         child: child,
@@ -85,15 +84,17 @@ class OnBoardingPage extends StatelessWidget {
                     title,
                     key: ValueKey(title),
                     style: const TextStyle(
-                      fontSize: 34,
+                      color: AppColors.textPrimary,
+                      fontSize: 30,
                       fontWeight: FontWeight.w800,
-                      height: 1.2,
+                      letterSpacing: -0.6,
+                      height: 1.25,
                     ),
                   ),
                 ),
               ),
 
-              const Gap(20),
+              const Gap(14),
 
               Align(
                 alignment: Alignment.centerLeft,
@@ -104,7 +105,7 @@ class OnBoardingPage extends StatelessWidget {
                       opacity: animation,
                       child: SlideTransition(
                         position: Tween<Offset>(
-                          begin: const Offset(0.15, 0),
+                          begin: const Offset(0.12, 0),
                           end: Offset.zero,
                         ).animate(animation),
                         child: child,
@@ -114,16 +115,17 @@ class OnBoardingPage extends StatelessWidget {
                   child: Text(
                     description,
                     key: ValueKey(description),
-                    style: TextStyle(
-                      fontSize: 18,
-                      height: 1.6,
-                      color: Colors.grey.shade600,
+                    style: const TextStyle(
+                      fontSize: 16,
+                      height: 1.55,
+                      color: AppColors.textSecondary,
+                      fontWeight: FontWeight.w400,
                     ),
                   ),
                 ),
               ),
 
-              const Gap(30),
+              const Gap(24),
 
               Row(
                 children: List.generate(
@@ -131,44 +133,60 @@ class OnBoardingPage extends StatelessWidget {
                   (index) => AnimatedContainer(
                     duration: const Duration(milliseconds: 300),
                     margin: const EdgeInsets.only(right: 8),
-                    height: 8,
-                    width: currentIndex == index ? 28 : 8,
+                    height: 7,
+                    width: currentIndex == index ? 28 : 7,
                     decoration: BoxDecoration(
                       color: currentIndex == index
-                          ? bottonColor
-                          : Colors.grey.shade300,
+                          ? AppColors.primary
+                          : AppColors.border,
                       borderRadius: BorderRadius.circular(20),
                     ),
                   ),
                 ),
               ),
 
-              const Gap(28),
+              const Gap(24),
 
-              SizedBox(
-                width: double.infinity,
-                height: 62,
-                child: ElevatedButton(
-                  onPressed: onPressed,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: bottonColor,
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(22),
-                    ),
+              ScaleOnTap(
+                onTap: onPressed,
+                child: Container(
+                  width: double.infinity,
+                  height: 58,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: AppColors.primary.withValues(alpha: 0.25),
+                        blurRadius: 18,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    buttonText,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                    ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        buttonText,
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.white,
+                          letterSpacing: -0.2,
+                        ),
+                      ),
+                      const SizedBox(width: 8),
+                      const Icon(
+                        Icons.arrow_forward_rounded,
+                        color: Colors.white,
+                        size: 20,
+                      ),
+                    ],
                   ),
                 ),
               ),
 
-              const Gap(30),
+              const Gap(24),
             ],
           ),
         ),
@@ -176,3 +194,4 @@ class OnBoardingPage extends StatelessWidget {
     );
   }
 }
+

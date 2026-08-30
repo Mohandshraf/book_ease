@@ -1,3 +1,4 @@
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/admin/data/dashboard_state_model.dart';
 import 'package:book_ease/features/admin/data/quick_actions_model.dart';
 import 'package:book_ease/features/admin/data/recent_booking_model.dart';
@@ -13,16 +14,18 @@ class AdminViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
       child: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             GridView.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                childAspectRatio: 1,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
+                childAspectRatio: 1.05,
+                crossAxisSpacing: 14,
+                mainAxisSpacing: 14,
               ),
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
@@ -31,30 +34,23 @@ class AdminViewBody extends StatelessWidget {
               },
               itemCount: dashboardStates.length,
             ),
-            Gap(20),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                "Quick Actions",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
+            const Gap(24),
+            const Text(
+              "Quick Actions",
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
               ),
             ),
-            Gap(10),
+            const Gap(12),
             SizedBox(
-              height: 150,
-              child: GridView.builder(
+              height: 120,
+              child: ListView.separated(
                 itemCount: quickActions.length,
                 scrollDirection: Axis.horizontal,
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  childAspectRatio: 1.3,
-                  mainAxisSpacing: 16,
-                  crossAxisCount: 1,
-                ),
-                shrinkWrap: true,
+                physics: const BouncingScrollPhysics(),
+                separatorBuilder: (context, index) => const Gap(12),
                 itemBuilder: (context, index) {
                   return QuickActionsWidget(
                     quickActionModel: quickActions[index],
@@ -62,8 +58,9 @@ class AdminViewBody extends StatelessWidget {
                 },
               ),
             ),
-            const Gap(20),
+            const Gap(24),
             RecentBookingsSection(bookings: recentBookings),
+            const Gap(24),
           ],
         ),
       ),

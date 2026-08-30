@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/widgets/user_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -25,12 +27,12 @@ class EditProfileAvatarPicker extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(
-                    color: const Color(0xff0B9B7B),
+                    color: AppColors.primary,
                     width: 3,
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xff0B9B7B).withValues(alpha: 0.15),
+                      color: AppColors.primary.withValues(alpha: 0.15),
                       blurRadius: 16,
                       offset: const Offset(0, 6),
                     ),
@@ -45,18 +47,18 @@ class EditProfileAvatarPicker extends StatelessWidget {
               Positioned(
                 bottom: 0,
                 right: 0,
-                child: GestureDetector(
+                child: ScaleOnTap(
                   onTap: onChangePhotoPressed,
                   child: Container(
                     height: 38,
                     width: 38,
                     decoration: BoxDecoration(
-                      color: const Color(0xff0B9B7B),
+                      color: AppColors.primary,
                       shape: BoxShape.circle,
                       border: Border.all(color: Colors.white, width: 3),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0.1),
+                          color: AppColors.shadowColor.withValues(alpha: 0.15),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
                         ),
@@ -74,19 +76,28 @@ class EditProfileAvatarPicker extends StatelessWidget {
           ),
         ),
         const Gap(8),
-        TextButton.icon(
-          onPressed: onChangePhotoPressed,
-          icon: const Icon(
-            Icons.edit_outlined,
-            size: 16,
-            color: Color(0xff0B9B7B),
-          ),
-          label: const Text(
-            "Change Profile Photo",
-            style: TextStyle(
-              color: Color(0xff0B9B7B),
-              fontWeight: FontWeight.bold,
-              fontSize: 14,
+        ScaleOnTap(
+          onTap: onChangePhotoPressed,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: const [
+                Icon(
+                  Icons.edit_outlined,
+                  size: 16,
+                  color: AppColors.primary,
+                ),
+                Gap(6),
+                Text(
+                  "Change Profile Photo",
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
             ),
           ),
         ),

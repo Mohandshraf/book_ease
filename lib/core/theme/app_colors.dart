@@ -1,40 +1,81 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  // Brand Colors
-  static const Color primary = Color(0xFF0B9B7B);
-  static const Color primaryDark = Color(0xFF0A846A);
-  static const Color primaryLight = Color(0xFFEAFDF6);
-  static const Color primaryPale = Color(0xFFDDFBF0);
+  // Brand Colors - Vibrant Royal Blue (Matching Medica UI Kit)
+  static const Color primary = Color(0xFF2563EB);
+  static const Color primaryDark = Color(0xFF1E40AF);
+  static const Color primaryLight = Color(0xFFEFF6FF);
+  static const Color primaryPale = Color(0xFFF8FAFC);
+  
+  // Gradients
+  static const Color primaryGradientStart = Color(0xFF1E40AF);
+  static const Color primaryGradientEnd = Color(0xFF3B82F6);
+
+  // Accent & Lavender Highlights
+  static const Color accent = Color(0xFF3B71FE);
+  static const Color accentLight = Color(0xFFEEF4FF);
+  static const Color accentPeach = Color(0xFFFF7B54);
+  static const Color accentPeachLight = Color(0xFFFFF0EC);
+  static const Color accentAmber = Color(0xFFF59E0B);
+  static const Color accentAmberLight = Color(0xFFFEF3C7);
+  static const Color accentTeal = Color(0xFF10B981);
+  static const Color accentTealLight = Color(0xFFE6FAF8);
+  static const Color accentLilac = Color(0xFF8B5CF6);
+  static const Color accentLilacLight = Color(0xFFF5F3FF);
+  static const Color accentSky = Color(0xFF0EA5E9);
+  static const Color accentSkyLight = Color(0xFFE0F2FE);
+  static const Color accentRose = Color(0xFFF43F5E);
+  static const Color accentRoseLight = Color(0xFFFFE4E6);
+  static const Color accentCyan = Color(0xFF06B6D4);
+  static const Color accentCyanLight = Color(0xFFECFEFF);
   
   // Legacy Aliases for backwards compatibility
   static const Color kprimaryColor = Colors.white;
-  static const Color ksecondColor = Color(0xFF0B9B7B);
+  static const Color ksecondColor = Color(0xFF3B71FE);
 
   // Neutral & Surface Colors
-  static const Color background = Color(0xFFF8FAFC);
+  static const Color background = Color(0xFFF4F7FC);
   static const Color surface = Colors.white;
+  static const Color surfaceMuted = Color(0xFFF1F5F9);
   static const Color cardBackground = Colors.white;
+  static const Color shadowColor = Color(0xFF0F172A);
   
   // Text Colors
-  static const Color textPrimary = Color(0xFF0B1F44);
+  static const Color textPrimary = Color(0xFF0F172A);
   static const Color textSecondary = Color(0xFF64748B);
+  static const Color textLight = Color(0xFF94A3B8);
   static const Color textMuted = Color(0xFF94A3B8);
-  static const Color textSubtle = Color(0xFFAEB8CC);
+  static const Color textSubtle = Color(0xFFCBD5E1);
 
   // Border & Divider Colors
   static const Color border = Color(0xFFE2E8F0);
   static const Color borderLight = Color(0xFFF1F5F9);
-  static const Color inputFill = Color(0xFFF7FAFC);
+  static const Color cardBorder = Color(0xFFE2E8F0);
+  static const Color inputFill = Color(0xFFF8FAFC);
 
   // State & Feedback Colors
-  static const Color success = Color(0xFF34D399);
+  static const Color success = Color(0xFF10B981);
+  static const Color successLight = Color(0xFFD1FAE5);
+  static const Color completed = Color(0xFF10B981);
+  static const Color completedLight = Color(0xFFD1FAE5);
+  static const Color confirmed = Color(0xFF10B981);
+  static const Color confirmedLight = Color(0xFFD1FAE5);
   static const Color error = Color(0xFFEF4444);
+  static const Color errorLight = Color(0xFFFEE2E2);
+  static const Color cancelled = Color(0xFFEF4444);
+  static const Color cancelledLight = Color(0xFFFEE2E2);
   static const Color warning = Color(0xFFF59E0B);
-  static const Color star = Colors.amber;
+  static const Color warningLight = Color(0xFFFEF3C7);
+  static const Color pending = Color(0xFFF59E0B);
+  static const Color pendingLight = Color(0xFFFEF3C7);
+  static const Color info = Color(0xFF3B82F6);
+  static const Color infoLight = Color(0xFFEFF6FF);
+  static const Color star = Color(0xFFFFB800);
+  static const Color rating = Color(0xFFFFB800);
 
   // Dark Panel & Admin Colors
-  static const Color darkSurface = Color(0xFF1C2740);
-  static const Color darkCard = Color(0xFF2B354D);
-  static const Color darkTextMuted = Color(0xFF6E7C99);
+  static const Color darkSurface = Color(0xFF191B3E);
+  static const Color darkCard = Color(0xFF252857);
+  static const Color darkTextMuted = Color(0xFF7F83AB);
 }
+

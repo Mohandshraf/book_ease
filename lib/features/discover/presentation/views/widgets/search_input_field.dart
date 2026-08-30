@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class SearchInputField extends StatelessWidget {
@@ -17,10 +19,11 @@ class SearchInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
+      height: 52,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(28),
+        borderRadius: BorderRadius.circular(26),
+        border: Border.all(color: AppColors.border, width: 1),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -34,10 +37,10 @@ class SearchInputField extends StatelessWidget {
         children: [
           const Icon(
             Icons.search_rounded,
-            color: Color(0xff94A3B8),
-            size: 24,
+            color: AppColors.textMuted,
+            size: 22,
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10),
           Expanded(
             child: TextField(
               controller: controller,
@@ -45,26 +48,27 @@ class SearchInputField extends StatelessWidget {
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: const TextStyle(
-                  color: Color(0xff94A3B8),
-                  fontSize: 15,
+                  color: AppColors.textMuted,
+                  fontSize: 14,
                 ),
                 border: InputBorder.none,
+                isDense: true,
               ),
             ),
           ),
           const SizedBox(width: 8),
           Container(
-            height: 24,
+            height: 20,
             width: 1,
-            color: const Color(0xffE2E8F0),
+            color: AppColors.border,
           ),
-          const SizedBox(width: 12),
-          GestureDetector(
+          const SizedBox(width: 10),
+          ScaleOnTap(
             onTap: onFilterTap,
             child: const Icon(
-              Icons.filter_list_rounded,
-              color: Color(0xff0B9B7B),
-              size: 24,
+              Icons.tune_rounded,
+              color: AppColors.primary,
+              size: 22,
             ),
           ),
         ],

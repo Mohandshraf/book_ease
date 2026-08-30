@@ -1,4 +1,4 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -22,12 +22,13 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppColors.shadowColor.withValues(alpha: .04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -37,30 +38,30 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
           const Text(
             "Appointment Details",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
             ),
           ),
-          const Gap(20),
+          const Gap(18),
           _buildDetailsRow(
             icon: Icons.calendar_today_outlined,
             label: "Date",
             value: formattedDate,
           ),
-          const Gap(16),
+          const Gap(14),
           _buildDetailsRow(
             icon: Icons.access_time_rounded,
             label: "Time",
             value: selectedTime,
           ),
-          const Gap(16),
+          const Gap(14),
           _buildDetailsRow(
             icon: Icons.location_on_outlined,
             label: "Location",
             value: location,
           ),
-          const Gap(16),
+          const Gap(14),
           _buildDetailsRow(
             icon: Icons.person_outline_rounded,
             label: "Doctor",
@@ -79,13 +80,13 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
     return Row(
       children: [
         Container(
-          width: 40,
-          height: 40,
-          decoration: const BoxDecoration(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Color(0xffDDFBF0),
+            color: AppColors.accentLilacLight,
           ),
-          child: Icon(icon, color: AppColors.ksecondColor, size: 20),
+          child: Icon(icon, color: AppColors.primary, size: 18),
         ),
         const Gap(12),
         Expanded(
@@ -95,7 +96,7 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
               Text(
                 label,
                 style: const TextStyle(
-                  color: Color(0xff94A3B8),
+                  color: AppColors.textMuted,
                   fontSize: 12,
                   fontWeight: FontWeight.w500,
                 ),
@@ -104,9 +105,9 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
               Text(
                 value,
                 style: const TextStyle(
-                  color: Color(0xff0B1F44),
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
+                  color: AppColors.textPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
                 ),
               ),
             ],

@@ -1,3 +1,4 @@
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileFormCard extends StatelessWidget {
@@ -21,9 +22,10 @@ class EditProfileFormCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.03),
+            color: AppColors.shadowColor.withValues(alpha: 0.03),
             blurRadius: 10,
             offset: const Offset(0, 4),
           ),
@@ -36,7 +38,7 @@ class EditProfileFormCard extends StatelessWidget {
           const Text(
             "Full Name",
             style: TextStyle(
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -53,26 +55,27 @@ class EditProfileFormCard extends StatelessWidget {
             onChanged: onNameChanged,
             decoration: InputDecoration(
               hintText: "Your full name",
+              hintStyle: const TextStyle(color: AppColors.textLight),
               prefixIcon: const Icon(
                 Icons.person_outline_rounded,
-                color: Color(0xff64748B),
+                color: AppColors.textSecondary,
               ),
               filled: true,
-              fillColor: const Color(0xffF8FAFC),
+              fillColor: AppColors.surfaceMuted,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide:
-                    const BorderSide(color: Color(0xff0B9B7B), width: 1.5),
+                    const BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),
@@ -83,7 +86,7 @@ class EditProfileFormCard extends StatelessWidget {
           const Text(
             "Email Address",
             style: TextStyle(
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -94,22 +97,31 @@ class EditProfileFormCard extends StatelessWidget {
             readOnly: true,
             decoration: InputDecoration(
               hintText: "Your email address",
+              hintStyle: const TextStyle(color: AppColors.textLight),
               prefixIcon: const Icon(
                 Icons.email_outlined,
-                color: Color(0xff94A3B8),
+                color: AppColors.textLight,
               ),
               suffixIcon: const Icon(
                 Icons.lock_outline_rounded,
-                color: Color(0xff94A3B8),
+                color: AppColors.textLight,
                 size: 18,
               ),
               filled: true,
-              fillColor: const Color(0xffF1F5F9),
+              fillColor: AppColors.surfaceMuted,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: BorderSide.none,
+                borderSide: const BorderSide(color: AppColors.border),
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: AppColors.border),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(14),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
             ),
           ),
@@ -117,7 +129,7 @@ class EditProfileFormCard extends StatelessWidget {
           const Text(
             "Email cannot be changed directly for security",
             style: TextStyle(
-              color: Color(0xff94A3B8),
+              color: AppColors.textLight,
               fontSize: 12,
             ),
           ),
@@ -128,7 +140,7 @@ class EditProfileFormCard extends StatelessWidget {
           const Text(
             "Phone Number",
             style: TextStyle(
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.bold,
             ),
@@ -139,26 +151,27 @@ class EditProfileFormCard extends StatelessWidget {
             keyboardType: TextInputType.phone,
             decoration: InputDecoration(
               hintText: "+1 (555) 000-0000",
+              hintStyle: const TextStyle(color: AppColors.textLight),
               prefixIcon: const Icon(
                 Icons.phone_outlined,
-                color: Color(0xff64748B),
+                color: AppColors.textSecondary,
               ),
               filled: true,
-              fillColor: const Color(0xffF8FAFC),
+              fillColor: AppColors.surfaceMuted,
               contentPadding:
                   const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
-                borderSide: const BorderSide(color: Color(0xffE2E8F0)),
+                borderSide: const BorderSide(color: AppColors.border),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(14),
                 borderSide:
-                    const BorderSide(color: Color(0xff0B9B7B), width: 1.5),
+                    const BorderSide(color: AppColors.primary, width: 1.5),
               ),
             ),
           ),

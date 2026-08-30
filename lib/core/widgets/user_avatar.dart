@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class UserAvatar extends StatelessWidget {
@@ -17,7 +18,7 @@ class UserAvatar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = backgroundColor ?? const Color(0xffE2E8F0);
+    final bg = backgroundColor ?? AppColors.primaryLight;
 
     if (imageUrl != null && imageUrl!.isNotEmpty) {
       final img = imageUrl!.trim();
@@ -59,14 +60,14 @@ class UserAvatar extends StatelessWidget {
           ? Text(
               initial,
               style: TextStyle(
-                color: const Color(0xff0B9B7B),
+                color: AppColors.primary,
                 fontSize: radius * 0.8,
                 fontWeight: FontWeight.bold,
               ),
             )
           : Icon(
               Icons.person_rounded,
-              color: const Color(0xff64748B),
+              color: AppColors.accent,
               size: radius * 0.9,
             ),
     );

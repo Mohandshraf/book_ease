@@ -1,4 +1,5 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_state.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
@@ -140,7 +141,7 @@ class _PaymentViewState extends State<PaymentView> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errorMessage),
-              backgroundColor: Colors.red,
+              backgroundColor: AppColors.error,
             ),
           );
         }
@@ -148,37 +149,44 @@ class _PaymentViewState extends State<PaymentView> {
       builder: (context, state) {
         final isLoading = state is BookingLoading;
         return Scaffold(
-          backgroundColor: const Color(0xffF8FAFC),
+          backgroundColor: AppColors.background,
           appBar: AppBar(
-            backgroundColor: const Color(0xffF8FAFC),
+            backgroundColor: AppColors.background,
             elevation: 0,
             automaticallyImplyLeading: false,
-            toolbarHeight: 80,
+            toolbarHeight: 70,
             title: Row(
               children: [
-                GestureDetector(
+                ScaleOnTap(
                   onTap: () => Navigator.pop(context),
                   child: Container(
-                    width: 44,
-                    height: 44,
+                    width: 40,
+                    height: 40,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       color: Colors.white,
-                      border: Border.all(color: const Color(0xffE2E8F0)),
+                      border: Border.all(color: AppColors.border),
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.shadowColor.withValues(alpha: .03),
+                          blurRadius: 8,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
                     child: const Icon(
                       Icons.arrow_back_rounded,
-                      color: Color(0xff0B1F44),
-                      size: 22,
+                      color: AppColors.textPrimary,
+                      size: 20,
                     ),
                   ),
                 ),
-                const Gap(16),
+                const Gap(14),
                 const Text(
                   "Payment",
                   style: TextStyle(
-                    color: Color(0xff0B1F44),
-                    fontSize: 24,
+                    color: AppColors.textPrimary,
+                    fontSize: 20,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -197,7 +205,7 @@ class _PaymentViewState extends State<PaymentView> {
                     cardHolder: cardHolder,
                     expiryDate: expiryDate,
                   ),
-                  const Gap(24),
+                  const Gap(20),
                   PaymentMethodSelector(
                     selectedIndex: selectedMethodIndex,
                     onMethodSelected: (index) {
@@ -206,7 +214,7 @@ class _PaymentViewState extends State<PaymentView> {
                       });
                     },
                   ),
-                  const Gap(24),
+                  const Gap(20),
                   if (selectedMethodIndex == 0) ...[
                     PaymentCardForm(
                       numberController: numberController,
@@ -219,14 +227,14 @@ class _PaymentViewState extends State<PaymentView> {
                       title: "PayPal Connection",
                       description:
                           "You will be redirected to PayPal website to authorize payment on the next step safely.",
-                      icon: Icons.paypal_outlined,
+                      icon: Icons.account_balance_wallet_outlined,
                     ),
                   ] else ...[
                     _buildAlternateMethodCard(
                       title: "Apple Pay Integration",
                       description:
                           "Double-click your power button or verify with Face ID to pay with your default Apple wallet card.",
-                      icon: Icons.apple_outlined,
+                      icon: Icons.apple_rounded,
                     ),
                   ],
                   const Gap(120),
@@ -239,7 +247,7 @@ class _PaymentViewState extends State<PaymentView> {
               color: Colors.white,
               border: Border(
                 top: BorderSide(
-                  color: Color(0xffF1F5F9),
+                  color: AppColors.border,
                   width: 1,
                 ),
               ),
@@ -248,9 +256,9 @@ class _PaymentViewState extends State<PaymentView> {
             child: SafeArea(
               child: SizedBox(
                 width: double.infinity,
-                height: 56,
-                child: ElevatedButton(
-                  onPressed: isLoading
+                height: 52,
+                child: ScaleOnTap(
+                  onTap: isLoading
                       ? null
                       : (widget.onPayPressed ??
                           () {
@@ -286,41 +294,53 @@ class _PaymentViewState extends State<PaymentView> {
                                 .read<BookingCubit>()
                                 .createBooking(booking);
                           }),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xff0B9B7B),
-                    elevation: 0,
-                    shape: RoundedRectangleBorder(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [
+                          AppColors.primaryGradientStart,
+                          AppColors.primaryGradientEnd,
+                        ],
+                      ),
                       borderRadius: BorderRadius.circular(16),
-                    ),
-                  ),
-                  child: isLoading
-                      ? const SizedBox(
-                          width: 24,
-                          height: 24,
-                          child: CircularProgressIndicator(
-                            color: Colors.white,
-                            strokeWidth: 2.5,
-                          ),
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Pay \$${widget.totalPrice.toStringAsFixed(2)}",
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
-                            ),
-                            const Gap(6),
-                            const Icon(
-                              Icons.arrow_forward_rounded,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ],
+                      boxShadow: [
+                        BoxShadow(
+                          color: AppColors.primary.withValues(alpha: .3),
+                          blurRadius: 14,
+                          offset: const Offset(0, 5),
                         ),
+                      ],
+                    ),
+                    alignment: Alignment.center,
+                    child: isLoading
+                        ? const SizedBox(
+                            width: 22,
+                            height: 22,
+                            child: CircularProgressIndicator(
+                              color: Colors.white,
+                              strokeWidth: 2.5,
+                            ),
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Pay \$${widget.totalPrice.toStringAsFixed(2)}",
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              const Gap(8),
+                              const Icon(
+                                Icons.arrow_forward_rounded,
+                                color: Colors.white,
+                                size: 18,
+                              ),
+                            ],
+                          ),
+                  ),
                 ),
               ),
             ),
@@ -340,25 +360,34 @@ class _PaymentViewState extends State<PaymentView> {
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppColors.shadowColor.withValues(alpha: .04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
       child: Column(
         children: [
-          Icon(icon, size: 64, color: AppColors.ksecondColor),
+          Container(
+            width: 72,
+            height: 72,
+            decoration: BoxDecoration(
+              color: AppColors.accentLilacLight,
+              shape: BoxShape.circle,
+            ),
+            child: Icon(icon, size: 36, color: AppColors.primary),
+          ),
           const Gap(16),
           Text(
             title,
             style: const TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
             ),
           ),
           const Gap(8),
@@ -366,8 +395,8 @@ class _PaymentViewState extends State<PaymentView> {
             description,
             textAlign: TextAlign.center,
             style: const TextStyle(
-              fontSize: 14,
-              color: Color(0xff64748B),
+              fontSize: 13,
+              color: AppColors.textSecondary,
               height: 1.5,
             ),
           ),

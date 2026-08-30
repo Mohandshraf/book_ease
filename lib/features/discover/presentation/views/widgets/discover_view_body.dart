@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:book_ease/core/di/service_locator.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/discover/presentation/views/widgets/category_pills_list.dart';
 import 'package:book_ease/features/discover/presentation/views/widgets/discover_header.dart';
 import 'package:book_ease/features/discover/presentation/views/widgets/discover_provider_card.dart';
@@ -137,12 +138,12 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
 
     return SafeArea(
       child: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const DiscoverHeader(title: "Search"),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             SearchInputField(
               hintText: "Providers, services, specialties",
               controller: searchController,
@@ -152,7 +153,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                 });
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             CategoryPillsList(
               categories: categories,
               selectedCategory: selectedCategory,
@@ -162,7 +163,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                 });
               },
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 18),
             PopularSearchesCard(
               popularSearches: popularSearches,
               onSearchTap: (term) {
@@ -172,17 +173,17 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                 });
               },
             ),
-            const SizedBox(height: 28),
+            const SizedBox(height: 24),
             Text(
               "${filteredProviders.length} PROVIDERS FOUND",
               style: const TextStyle(
-                color: Color(0xff94A3B8),
+                color: AppColors.accent,
                 fontSize: 12,
                 fontWeight: FontWeight.bold,
-                letterSpacing: 1.2,
+                letterSpacing: 1.1,
               ),
             ),
-            const SizedBox(height: 16),
+            const SizedBox(height: 14),
             if (filteredProviders.isEmpty)
               const Padding(
                 padding: EdgeInsets.symmetric(vertical: 40),
@@ -191,15 +192,15 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                     children: [
                       Icon(
                         Icons.search_off_rounded,
-                        size: 48,
-                        color: Color(0xff94A3B8),
+                        size: 44,
+                        color: AppColors.accent,
                       ),
                       SizedBox(height: 12),
                       Text(
                         "No providers found",
                         style: TextStyle(
-                          color: Color(0xff64748B),
-                          fontSize: 16,
+                          color: AppColors.textSecondary,
+                          fontSize: 15,
                           fontWeight: FontWeight.w500,
                         ),
                       ),
@@ -213,7 +214,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: filteredProviders.length,
                 separatorBuilder: (context, index) =>
-                    const SizedBox(height: 14),
+                    const SizedBox(height: 12),
                 itemBuilder: (context, index) {
                   final p = filteredProviders[index];
                   final ServiceDetailsModel model = p["model"];

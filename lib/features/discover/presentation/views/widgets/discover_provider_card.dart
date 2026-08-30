@@ -1,3 +1,5 @@
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class DiscoverProviderCard extends StatelessWidget {
@@ -22,13 +24,14 @@ class DiscoverProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return ScaleOnTap(
       onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
+          border: Border.all(color: AppColors.border, width: 1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.03),
@@ -40,12 +43,29 @@ class DiscoverProviderCard extends StatelessWidget {
         child: Row(
           children: [
             // Doctor Profile Image
-            CircleAvatar(
-              radius: 36,
-              backgroundImage: NetworkImage(image),
-              backgroundColor: const Color(0xffE2E8F0),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(18),
+              child: Image.network(
+                image,
+                width: 68,
+                height: 68,
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) => Container(
+                  width: 68,
+                  height: 68,
+                  decoration: BoxDecoration(
+                    color: AppColors.primaryLight,
+                    borderRadius: BorderRadius.circular(18),
+                  ),
+                  child: const Icon(
+                    Icons.person_rounded,
+                    color: AppColors.primary,
+                    size: 32,
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(width: 16),
+            const SizedBox(width: 14),
             // Doctor Metadata
             Expanded(
               child: Column(
@@ -54,7 +74,7 @@ class DiscoverProviderCard extends StatelessWidget {
                   Text(
                     name,
                     style: const TextStyle(
-                      color: Color(0xff0B1F44),
+                      color: AppColors.textPrimary,
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                     ),
@@ -63,7 +83,7 @@ class DiscoverProviderCard extends StatelessWidget {
                   Text(
                     subtitle,
                     style: const TextStyle(
-                      color: Color(0xff64748B),
+                      color: AppColors.textSecondary,
                       fontSize: 13,
                       fontWeight: FontWeight.w500,
                     ),
@@ -73,23 +93,23 @@ class DiscoverProviderCard extends StatelessWidget {
                     children: [
                       const Icon(
                         Icons.star_rounded,
-                        color: Color(0xffF59E0B),
-                        size: 18,
+                        color: AppColors.warning,
+                        size: 17,
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 3),
                       Text(
                         rating,
                         style: const TextStyle(
-                          color: Color(0xff0B1F44),
+                          color: AppColors.textPrimary,
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(width: 4),
+                      const SizedBox(width: 3),
                       Text(
                         "($reviews)",
                         style: const TextStyle(
-                          color: Color(0xff94A3B8),
+                          color: AppColors.textMuted,
                           fontSize: 12,
                         ),
                       ),
@@ -104,7 +124,7 @@ class DiscoverProviderCard extends StatelessWidget {
               child: Text(
                 price,
                 style: const TextStyle(
-                  color: Color(0xff0B9B7B),
+                  color: AppColors.primary,
                   fontSize: 14,
                   fontWeight: FontWeight.bold,
                 ),

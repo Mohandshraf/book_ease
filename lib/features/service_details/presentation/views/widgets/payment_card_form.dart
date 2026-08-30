@@ -1,4 +1,4 @@
-import 'package:book_ease/core/app_colors.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -22,12 +22,13 @@ class PaymentCardForm extends StatelessWidget {
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(24),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withAlpha(10),
-            blurRadius: 18,
-            offset: const Offset(0, 8),
+            color: AppColors.shadowColor.withValues(alpha: .04),
+            blurRadius: 16,
+            offset: const Offset(0, 4),
           ),
         ],
       ),
@@ -37,12 +38,12 @@ class PaymentCardForm extends StatelessWidget {
           const Text(
             "Card Details",
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 17,
               fontWeight: FontWeight.bold,
-              color: Color(0xff0B1F44),
+              color: AppColors.textPrimary,
             ),
           ),
-          const Gap(20),
+          const Gap(18),
 
           // Card Number Field
           const Text(
@@ -50,7 +51,7 @@ class PaymentCardForm extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: Color(0xff94A3B8),
+              color: AppColors.textMuted,
               letterSpacing: 1,
             ),
           ),
@@ -67,7 +68,7 @@ class PaymentCardForm extends StatelessWidget {
             style: TextStyle(
               fontSize: 11,
               fontWeight: FontWeight.bold,
-              color: Color(0xff94A3B8),
+              color: AppColors.textMuted,
               letterSpacing: 1,
             ),
           ),
@@ -90,7 +91,7 @@ class PaymentCardForm extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff94A3B8),
+                        color: AppColors.textMuted,
                         letterSpacing: 1,
                       ),
                     ),
@@ -102,7 +103,7 @@ class PaymentCardForm extends StatelessWidget {
                   ],
                 ),
               ),
-              const Gap(16),
+              const Gap(14),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -112,7 +113,7 @@ class PaymentCardForm extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff94A3B8),
+                        color: AppColors.textMuted,
                         letterSpacing: 1,
                       ),
                     ),
@@ -140,39 +141,39 @@ class PaymentCardForm extends StatelessWidget {
       decoration: InputDecoration(
         prefixIcon: Icon(
           icon,
-          color: const Color(0xff94A3B8),
-          size: 20,
+          color: AppColors.textMuted,
+          size: 18,
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 14, horizontal: 16),
         filled: true,
-        fillColor: const Color(0xffF8FAFC),
+        fillColor: AppColors.background,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(
-            color: Color(0xffE2E8F0),
+            color: AppColors.border,
             width: 1,
           ),
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(
-            color: Color(0xffE2E8F0),
+            color: AppColors.border,
             width: 1,
           ),
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(14),
           borderSide: const BorderSide(
-            color: AppColors.ksecondColor,
-            width: 1,
+            color: AppColors.primary,
+            width: 1.5,
           ),
         ),
       ),
       style: const TextStyle(
-        color: Color(0xff0B1F44),
-        fontSize: 16,
-        fontWeight: FontWeight.bold,
+        color: AppColors.textPrimary,
+        fontSize: 15,
+        fontWeight: FontWeight.w600,
       ),
     );
   }

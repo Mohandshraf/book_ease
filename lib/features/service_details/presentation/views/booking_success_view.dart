@@ -1,5 +1,6 @@
-import 'package:book_ease/core/app_colors.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -27,7 +28,6 @@ class BookingSuccessView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Default confirmation code if not provided
     final String displayCode = confirmationCode ?? "BKE-2026-7315";
 
     return Scaffold(
@@ -51,27 +51,27 @@ class BookingSuccessView extends StatelessWidget {
                       Positioned(
                         top: 10,
                         left: 20,
-                        child: _buildConfettiDot(color: Colors.amber, size: 10),
+                        child: _buildConfettiDot(color: AppColors.warning, size: 10),
                       ),
                       Positioned(
                         top: 20,
                         right: 15,
-                        child: _buildConfettiDot(color: Colors.pink, size: 8),
+                        child: _buildConfettiDot(color: AppColors.accentLilac, size: 8),
                       ),
                       Positioned(
                         bottom: 15,
                         left: 25,
-                        child: _buildConfettiDot(color: Colors.blueAccent, size: 7),
+                        child: _buildConfettiDot(color: AppColors.info, size: 7),
                       ),
                       Positioned(
                         bottom: 25,
                         right: 20,
-                        child: _buildConfettiDot(color: Colors.purple, size: 12),
+                        child: _buildConfettiDot(color: AppColors.primary, size: 12),
                       ),
                       Positioned(
                         bottom: 5,
                         right: 65,
-                        child: _buildConfettiDot(color: Colors.orange, size: 9),
+                        child: _buildConfettiDot(color: AppColors.warning, size: 9),
                       ),
 
                       // Outer circular glow
@@ -80,7 +80,7 @@ class BookingSuccessView extends StatelessWidget {
                         height: 110,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          color: const Color(0xffDDFBF0).withAlpha(150),
+                          color: AppColors.successLight.withValues(alpha: .5),
                         ),
                       ),
                       // Inner check circle
@@ -89,7 +89,7 @@ class BookingSuccessView extends StatelessWidget {
                         height: 76,
                         decoration: const BoxDecoration(
                           shape: BoxShape.circle,
-                          color: Color(0xff0B9B7B),
+                          color: AppColors.success,
                         ),
                         child: const Icon(
                           Icons.check_rounded,
@@ -109,20 +109,20 @@ class BookingSuccessView extends StatelessWidget {
                 "Booking Confirmed!",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 28,
+                  fontSize: 26,
                   fontWeight: FontWeight.bold,
-                  color: Color(0xff0B1F44),
+                  color: AppColors.textPrimary,
                 ),
               ),
-              const Gap(12),
+              const Gap(10),
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "Your appointment has been successfully booked. A confirmation has been sent to your email.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 15,
-                    color: Color(0xff64748B),
+                    fontSize: 14,
+                    color: AppColors.textSecondary,
                     height: 1.5,
                   ),
                 ),
@@ -133,45 +133,45 @@ class BookingSuccessView extends StatelessWidget {
               // Confirmation Details Card
               Container(
                 width: double.infinity,
-                padding: const EdgeInsets.all(24),
+                padding: const EdgeInsets.all(22),
                 decoration: BoxDecoration(
-                  color: const Color(0xffF8FAFC),
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: const Color(0xffE2E8F0), width: 1),
+                  color: AppColors.background,
+                  borderRadius: BorderRadius.circular(20),
+                  border: Border.all(color: AppColors.border, width: 1),
                 ),
                 child: Column(
                   children: [
                     const Text(
                       "CONFIRMATION CODE",
                       style: TextStyle(
-                        fontSize: 12,
+                        fontSize: 11,
                         fontWeight: FontWeight.bold,
-                        color: Color(0xff94A3B8),
+                        color: AppColors.textMuted,
                         letterSpacing: 1.2,
                       ),
                     ),
-                    const Gap(8),
+                    const Gap(6),
                     Text(
                       displayCode,
                       style: const TextStyle(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.bold,
-                        color: AppColors.ksecondColor,
+                        color: AppColors.primary,
                       ),
                     ),
-                    const Gap(24),
-                    const Divider(color: Color(0xffE2E8F0), thickness: 1, height: 1),
-                    const Gap(20),
+                    const Gap(18),
+                    const Divider(color: AppColors.border, thickness: 1, height: 1),
+                    const Gap(16),
 
                     // Detail items
                     _buildSummaryDetailRow(label: "Provider", value: providerName),
-                    const Gap(16),
+                    const Gap(14),
                     _buildSummaryDetailRow(label: "Doctor", value: doctorName),
-                    const Gap(16),
+                    const Gap(14),
                     _buildSummaryDetailRow(label: "Date", value: dateText),
-                    const Gap(16),
+                    const Gap(14),
                     _buildSummaryDetailRow(label: "Time", value: timeText),
-                    const Gap(16),
+                    const Gap(14),
                     _buildSummaryDetailRow(
                       label: "Paid",
                       value: "\$${amountPaid.toStringAsFixed(2)}",
@@ -187,30 +187,41 @@ class BookingSuccessView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
-                    child: ElevatedButton(
-                      onPressed: onViewBookingsPressed ??
+                    height: 52,
+                    child: ScaleOnTap(
+                      onTap: onViewBookingsPressed ??
                           () {
-                            // Pop to root home view
                             Navigator.pushNamedAndRemoveUntil(
                               context,
                               AppRoutes.root,
                               (route) => false,
                             );
                           },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xff0B9B7B),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [
+                              AppColors.primaryGradientStart,
+                              AppColors.primaryGradientEnd,
+                            ],
+                          ),
                           borderRadius: BorderRadius.circular(16),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: .3),
+                              blurRadius: 14,
+                              offset: const Offset(0, 5),
+                            ),
+                          ],
                         ),
-                      ),
-                      child: const Text(
-                        "View My Bookings",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "View My Bookings",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -218,9 +229,9 @@ class BookingSuccessView extends StatelessWidget {
                   const Gap(12),
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
-                    child: OutlinedButton(
-                      onPressed: onBackHomePressed ??
+                    height: 52,
+                    child: ScaleOnTap(
+                      onTap: onBackHomePressed ??
                           () {
                             Navigator.pushNamedAndRemoveUntil(
                               context,
@@ -228,18 +239,20 @@ class BookingSuccessView extends StatelessWidget {
                               (route) => false,
                             );
                           },
-                      style: OutlinedButton.styleFrom(
-                        side: const BorderSide(color: Color(0xffE2E8F0), width: 1.5),
-                        shape: RoundedRectangleBorder(
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
                           borderRadius: BorderRadius.circular(16),
+                          border: Border.all(color: AppColors.border, width: 1.5),
                         ),
-                      ),
-                      child: const Text(
-                        "Back to Home",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xff0B1F44),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          "Back to Home",
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.textPrimary,
+                          ),
                         ),
                       ),
                     ),
@@ -260,7 +273,7 @@ class BookingSuccessView extends StatelessWidget {
       height: size,
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        color: color.withAlpha(200),
+        color: color.withValues(alpha: .8),
       ),
     );
   }
@@ -272,17 +285,17 @@ class BookingSuccessView extends StatelessWidget {
         Text(
           label,
           style: const TextStyle(
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
-            color: Color(0xff94A3B8),
+            color: AppColors.textMuted,
           ),
         ),
         Text(
           value,
           style: const TextStyle(
-            fontSize: 15,
+            fontSize: 14,
             fontWeight: FontWeight.bold,
-            color: Color(0xff0B1F44),
+            color: AppColors.textPrimary,
           ),
         ),
       ],

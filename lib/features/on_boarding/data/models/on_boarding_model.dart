@@ -8,7 +8,7 @@ class OnBoardingModel {
   final Color backgroundColor;
   final Color bottonColor;
 
-  OnBoardingModel({
+  const OnBoardingModel({
     required this.image,
     required this.title,
     required this.description,

@@ -1,6 +1,5 @@
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/widgets/service_details_date_time_picker.dart';
-import 'package:book_ease/features/service_details/presentation/views/widgets/service_details_header_image.dart';
 import 'package:book_ease/features/service_details/presentation/views/widgets/service_details_info_section.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -24,28 +23,20 @@ class ServiceDetailsViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
+      padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          ServiceDetailsHeaderImage(model: model),
-          Padding(
-            padding: const EdgeInsets.all(20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                ServiceDetailsInfoSection(model: model),
-                const Gap(24),
-                ServiceDetailsDateTimePicker(
-                  model: model,
-                  selectedDate: selectedDate,
-                  selectedTime: selectedTime,
-                  onDateSelected: onDateSelected,
-                  onTimeSelected: onTimeSelected,
-                ),
-                const Gap(10),
-              ],
-            ),
+          ServiceDetailsInfoSection(model: model),
+          const Gap(24),
+          ServiceDetailsDateTimePicker(
+            model: model,
+            selectedDate: selectedDate,
+            selectedTime: selectedTime,
+            onDateSelected: onDateSelected,
+            onTimeSelected: onTimeSelected,
           ),
+          const Gap(10),
         ],
       ),
     );
