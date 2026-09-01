@@ -275,7 +275,7 @@ class ProviderProfileViewBody extends StatelessWidget {
             onTap: () => _showLogoutDialog(context),
           ),
 
-          const Gap(20),
+          const Gap(100),
         ],
       ),
     );

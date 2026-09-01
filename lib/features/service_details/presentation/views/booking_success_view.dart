@@ -187,7 +187,7 @@ class BookingSuccessView extends StatelessWidget {
                 children: [
                   SizedBox(
                     width: double.infinity,
-                    height: 52,
+                    height: 56,
                     child: ScaleOnTap(
                       onTap: onViewBookingsPressed ??
                           () {
@@ -199,18 +199,13 @@ class BookingSuccessView extends StatelessWidget {
                           },
                       child: Container(
                         decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [
-                              AppColors.primaryGradientStart,
-                              AppColors.primaryGradientEnd,
-                            ],
-                          ),
-                          borderRadius: BorderRadius.circular(16),
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(28),
                           boxShadow: [
                             BoxShadow(
                               color: AppColors.primary.withValues(alpha: .3),
-                              blurRadius: 14,
-                              offset: const Offset(0, 5),
+                              blurRadius: 16,
+                              offset: const Offset(0, 6),
                             ),
                           ],
                         ),
@@ -219,8 +214,9 @@ class BookingSuccessView extends StatelessWidget {
                           "View My Bookings",
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w800,
                             color: Colors.white,
+                            letterSpacing: 0.2,
                           ),
                         ),
                       ),
@@ -229,7 +225,7 @@ class BookingSuccessView extends StatelessWidget {
                   const Gap(12),
                   SizedBox(
                     width: double.infinity,
-                    height: 52,
+                    height: 56,
                     child: ScaleOnTap(
                       onTap: onBackHomePressed ??
                           () {
@@ -242,7 +238,7 @@ class BookingSuccessView extends StatelessWidget {
                       child: Container(
                         decoration: BoxDecoration(
                           color: Colors.white,
-                          borderRadius: BorderRadius.circular(16),
+                          borderRadius: BorderRadius.circular(28),
                           border: Border.all(color: AppColors.border, width: 1.5),
                         ),
                         alignment: Alignment.center,
@@ -250,8 +246,9 @@ class BookingSuccessView extends StatelessWidget {
                           "Back to Home",
                           style: TextStyle(
                             fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontWeight: FontWeight.w800,
                             color: AppColors.textPrimary,
+                            letterSpacing: 0.2,
                           ),
                         ),
                       ),

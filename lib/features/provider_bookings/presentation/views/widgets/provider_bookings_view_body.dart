@@ -116,7 +116,7 @@ class _ProviderBookingsViewBodyState extends State<ProviderBookingsViewBody> {
                         left: 20,
                         right: 20,
                         top: 14,
-                        bottom: 80,
+                        bottom: 100,
                       ),
                       itemCount: bookings.length,
                       itemBuilder: (context, index) {

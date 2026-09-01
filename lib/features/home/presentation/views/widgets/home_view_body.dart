@@ -374,43 +374,36 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ],
                 ),
 
-                const Gap(22),
+                const Gap(20),
 
                 // 2. Large Bold Typography Headline
                 const Text(
-                  "How are your feeling\ntoday?",
+                  "Find Your Best\nHealthcare Provider 🩺",
                   style: TextStyle(
-                    fontSize: 28,
+                    fontSize: 26,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
-                    height: 1.2,
-                    letterSpacing: -0.6,
+                    height: 1.25,
+                    letterSpacing: -0.5,
                   ),
                 ),
 
-                const Gap(20),
+                const Gap(18),
 
-                // 3. Search Pill Bar
+                // 3. Search Pill Bar with Filter Tune Button
                 Container(
-                  height: 54,
+                  height: 56,
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surfaceContainerLow,
                     borderRadius: BorderRadius.circular(28),
                     border: Border.all(color: AppColors.border, width: 1),
-                    boxShadow: [
-                      BoxShadow(
-                        color: const Color(0xFF0F172A).withValues(alpha: .03),
-                        blurRadius: 14,
-                        offset: const Offset(0, 4),
-                      ),
-                    ],
                   ),
-                  padding: const EdgeInsets.symmetric(horizontal: 18),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
                   child: Row(
                     children: [
                       const Icon(
                         Icons.search_rounded,
-                        color: AppColors.textMuted,
+                        color: AppColors.primary,
                         size: 22,
                       ),
                       const Gap(12),
@@ -418,37 +411,67 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         child: TextField(
                           controller: _searchController,
                           onChanged: (_) => setState(() {}),
+                          style: const TextStyle(
+                            color: AppColors.textPrimary,
+                            fontSize: 15,
+                            fontWeight: FontWeight.w500,
+                          ),
                           decoration: const InputDecoration(
-                            hintText: "Search a doctor, medicins, etc...",
+                            hintText: "Search doctors, clinics, specialties...",
                             hintStyle: TextStyle(
                               color: AppColors.textMuted,
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
                             ),
                             border: InputBorder.none,
+                            enabledBorder: InputBorder.none,
+                            focusedBorder: InputBorder.none,
+                            filled: false,
+                            contentPadding: EdgeInsets.zero,
                             isDense: true,
                           ),
                         ),
                       ),
-                      const Icon(
-                        Icons.mic_none_rounded,
-                        color: AppColors.textMuted,
-                        size: 22,
+                      ScaleOnTap(
+                        onTap: () {
+                          Navigator.pushNamed(context, AppRoutes.discover);
+                        },
+                        child: Container(
+                          width: 38,
+                          height: 38,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                            border: Border.all(color: AppColors.border),
+                            boxShadow: [
+                              BoxShadow(
+                                color: AppColors.shadowColor.withValues(alpha: 0.05),
+                                blurRadius: 6,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: const Icon(
+                            Icons.tune_rounded,
+                            color: AppColors.primary,
+                            size: 18,
+                          ),
+                        ),
                       ),
                     ],
                   ),
                 ),
 
-                const Gap(26),
+                const Gap(24),
 
                 // 4. Upcoming Appointments Section Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Upcoming Appointments",
+                      "Upcoming Appointment",
                       style: TextStyle(
-                        fontSize: 19,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
                         letterSpacing: -0.3,
@@ -462,7 +485,43 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         "View All",
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const Gap(12),
+
+                // Upcoming Appointment Card (Gradient Blue)
+                _buildUpcomingAppointmentCard(context),
+
+                const Gap(26),
+
+                // 5. Medical Specialties / Categories Section
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      "Specialties",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.textPrimary,
+                        letterSpacing: -0.3,
+                      ),
+                    ),
+                    ScaleOnTap(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRoutes.discover);
+                      },
+                      child: const Text(
+                        "See All",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w700,
                           color: AppColors.primary,
                         ),
                       ),
@@ -472,19 +531,19 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
                 const Gap(14),
 
-                // Upcoming Appointment Card (Solid Vibrant Blue)
-                _buildUpcomingAppointmentCard(context),
+                // Circular Category Icons Row
+                _buildCircularCategoriesRow(),
 
-                const Gap(28),
+                const Gap(26),
 
-                // 5. Popular Doctors Section Header
+                // 6. Top Specialists / Featured Doctors Section Header
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text(
-                      "Popular Doctors",
+                      "Top Specialists",
                       style: TextStyle(
-                        fontSize: 19,
+                        fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
                         letterSpacing: -0.3,
@@ -492,13 +551,13 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     ),
                     ScaleOnTap(
                       onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.booking);
+                        Navigator.pushNamed(context, AppRoutes.discover);
                       },
                       child: const Text(
-                        "View All",
+                        "See All",
                         style: TextStyle(
                           fontSize: 14,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                           color: AppColors.primary,
                         ),
                       ),
@@ -506,15 +565,15 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ],
                 ),
 
-                const Gap(16),
+                const Gap(14),
 
                 // Horizontal Category Filter Pills
                 SizedBox(
-                  height: 42,
+                  height: 38,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
                     itemCount: _categories.length,
-                    separatorBuilder: (context, index) => const Gap(10),
+                    separatorBuilder: (context, index) => const Gap(8),
                     itemBuilder: (context, index) {
                       final cat = _categories[index];
                       final isSelected = _selectedCategory == cat;
@@ -527,14 +586,14 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           padding: const EdgeInsets.symmetric(
-                            horizontal: 20,
-                            vertical: 10,
+                            horizontal: 18,
+                            vertical: 8,
                           ),
                           decoration: BoxDecoration(
                             color: isSelected
                                 ? AppColors.primary
                                 : Colors.white,
-                            borderRadius: BorderRadius.circular(22),
+                            borderRadius: BorderRadius.circular(20),
                             border: Border.all(
                               color: isSelected
                                   ? AppColors.primary
@@ -546,8 +605,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                                     BoxShadow(
                                       color: AppColors.primary
                                           .withValues(alpha: .25),
-                                      blurRadius: 10,
-                                      offset: const Offset(0, 4),
+                                      blurRadius: 8,
+                                      offset: const Offset(0, 3),
                                     ),
                                   ]
                                 : [],
@@ -572,7 +631,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ),
                 ),
 
-                const Gap(18),
+                const Gap(16),
 
                 // Popular Doctors List Cards
                 if (filteredDoctors.isNotEmpty)
@@ -630,6 +689,116 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     );
   }
 
+  Widget _buildCircularCategoriesRow() {
+    final List<Map<String, dynamic>> specialtyItems = [
+      {
+        "name": "Cardiology",
+        "icon": Icons.favorite_rounded,
+        "bg": const Color(0xFFEFF4FF),
+        "color": AppColors.primary,
+      },
+      {
+        "name": "Dentist",
+        "icon": Icons.medical_services_rounded,
+        "bg": const Color(0xFFE6FAF8),
+        "color": AppColors.secondary,
+      },
+      {
+        "name": "General",
+        "icon": Icons.local_hospital_rounded,
+        "bg": const Color(0xFFFFF0EC),
+        "color": AppColors.accentPeach,
+      },
+      {
+        "name": "Neurology",
+        "icon": Icons.psychology_rounded,
+        "bg": const Color(0xFFF5F3FF),
+        "color": AppColors.accentLilac,
+      },
+      {
+        "name": "Pediatrics",
+        "icon": Icons.child_care_rounded,
+        "bg": const Color(0xFFE0F2FE),
+        "color": AppColors.accentSky,
+      },
+      {
+        "name": "Dermatology",
+        "icon": Icons.healing_rounded,
+        "bg": const Color(0xFFFFE4E6),
+        "color": AppColors.accentRose,
+      },
+    ];
+
+    return SizedBox(
+      height: 96,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: specialtyItems.length,
+        separatorBuilder: (context, index) => const Gap(14),
+        itemBuilder: (context, index) {
+          final item = specialtyItems[index];
+          final isSelected = _selectedCategory == item["name"];
+
+          return ScaleOnTap(
+            onTap: () {
+              setState(() {
+                _selectedCategory =
+                    _selectedCategory == item["name"] ? "All" : item["name"];
+              });
+            },
+            child: Column(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 60,
+                  height: 60,
+                  decoration: BoxDecoration(
+                    color: isSelected ? AppColors.primary : item["bg"] as Color,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: isSelected
+                          ? AppColors.primary
+                          : (item["bg"] as Color).withValues(alpha: 0.8),
+                      width: 1.5,
+                    ),
+                    boxShadow: isSelected
+                        ? [
+                            BoxShadow(
+                              color: AppColors.primary.withValues(alpha: 0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ]
+                        : [],
+                  ),
+                  child: Center(
+                    child: Icon(
+                      item["icon"] as IconData,
+                      color: isSelected ? Colors.white : item["color"] as Color,
+                      size: 26,
+                    ),
+                  ),
+                ),
+                const Gap(6),
+                Text(
+                  item["name"] as String,
+                  style: TextStyle(
+                    fontSize: 12,
+                    fontWeight:
+                        isSelected ? FontWeight.bold : FontWeight.w600,
+                    color: isSelected
+                        ? AppColors.primary
+                        : AppColors.textPrimary,
+                  ),
+                ),
+              ],
+            ),
+          );
+        },
+      ),
+    );
+  }
+
   Widget _buildUpcomingAppointmentCard(BuildContext context) {
     const months = [
       "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -639,257 +808,41 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
     ];
 
-    if (_nextBooking != null) {
-      final bDate = _nextBooking!.bookingDate;
-      final dateStr =
-          "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}";
-      final timeStr = _nextBooking!.bookingTime;
-      final doctorName = (_nextBooking!.providerName != null &&
-              _nextBooking!.providerName!.isNotEmpty)
-          ? _nextBooking!.providerName!
-          : (_nextBooking!.serviceTitle ?? "Dr. Jenny Wilson");
-      final specialty = _nextBooking!.serviceTitle ?? "General Practitioner";
+    final bool hasBooking = _nextBooking != null;
+    final bDate = hasBooking ? _nextBooking!.bookingDate : DateTime.now();
+    final dateStr = hasBooking
+        ? "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}"
+        : "Today • 14:00";
+    final timeStr = hasBooking ? _nextBooking!.bookingTime : "02:00 PM - 02:45 PM";
+    final doctorName = hasBooking
+        ? ((_nextBooking!.providerName != null &&
+                _nextBooking!.providerName!.isNotEmpty)
+            ? _nextBooking!.providerName!
+            : (_nextBooking!.serviceTitle ?? "Dr. Jenny Watson"))
+        : "Dr. Jenny Watson";
+    final specialty = hasBooking
+        ? (_nextBooking!.serviceTitle ?? "Cardiologist Specialist")
+        : "Cardiologist Specialist";
+    final doctorPhoto = hasBooking
+        ? (_nextBooking!.providerImage ??
+            "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200")
+        : "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200";
 
-      return Container(
-        padding: const EdgeInsets.all(20),
-        decoration: BoxDecoration(
-          color: AppColors.primary,
-          borderRadius: BorderRadius.circular(24),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: .28),
-              blurRadius: 20,
-              offset: const Offset(0, 8),
-            ),
-          ],
-        ),
-        child: Column(
-          children: [
-            // Top Row: Doctor Avatar + Name/Specialty + Video Call Button
-            Row(
-              children: [
-                Container(
-                  width: 50,
-                  height: 50,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: Colors.white, width: 2),
-                    image: const DecorationImage(
-                      image: NetworkImage(
-                        "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200",
-                      ),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                const Gap(14),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        doctorName,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                      const Gap(3),
-                      Text(
-                        specialty,
-                        style: TextStyle(
-                          color: Colors.white.withValues(alpha: .85),
-                          fontSize: 13,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                // Video Call Circle Button
-                Container(
-                  width: 42,
-                  height: 42,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Center(
-                    child: Icon(
-                      Icons.videocam_rounded,
-                      color: AppColors.primary,
-                      size: 22,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-
-            const Gap(16),
-
-            // Middle Row: Date & Time Translucent Bar
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-              decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: .18),
-                borderRadius: BorderRadius.circular(16),
-              ),
-              child: Row(
-                children: [
-                  // Date
-                  Expanded(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.calendar_today_rounded,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                        const Gap(10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Date",
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: .75),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              dateStr,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Container(
-                    width: 1,
-                    height: 28,
-                    color: Colors.white.withValues(alpha: .25),
-                  ),
-                  const Gap(14),
-                  // Time
-                  Expanded(
-                    child: Row(
-                      children: [
-                        const Icon(
-                          Icons.access_time_rounded,
-                          color: Colors.white,
-                          size: 16,
-                        ),
-                        const Gap(10),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "Time",
-                              style: TextStyle(
-                                color: Colors.white.withValues(alpha: .75),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              timeStr,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 13,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const Gap(16),
-
-            // Bottom Action Pill Buttons
-            Row(
-              children: [
-                Expanded(
-                  child: ScaleOnTap(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.booking);
-                    },
-                    child: Container(
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(22),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "Re-Schedule",
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const Gap(12),
-                Expanded(
-                  child: ScaleOnTap(
-                    onTap: () {
-                      Navigator.pushNamed(context, AppRoutes.booking);
-                    },
-                    child: Container(
-                      height: 44,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: .2),
-                        borderRadius: BorderRadius.circular(22),
-                        border: Border.all(
-                          color: Colors.white.withValues(alpha: .3),
-                          width: 1,
-                        ),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          "View Details",
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 13,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    }
-
-    // Default placeholder if no upcoming booking (matching the exact mockup style)
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: AppColors.primary,
+        gradient: const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppColors.primary,
+            AppColors.primaryContainer,
+          ],
+        ),
         borderRadius: BorderRadius.circular(24),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withValues(alpha: .28),
+            color: AppColors.primary.withValues(alpha: .30),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -897,30 +850,29 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       ),
       child: Column(
         children: [
+          // Top Row: Doctor Avatar + Name/Specialty + Action Buttons
           Row(
             children: [
               Container(
-                width: 50,
-                height: 50,
+                width: 52,
+                height: 52,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
-                  image: const DecorationImage(
-                    image: NetworkImage(
-                      "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200",
-                    ),
+                  image: DecorationImage(
+                    image: NetworkImage(doctorPhoto),
                     fit: BoxFit.cover,
                   ),
                 ),
               ),
-              const Gap(14),
+              const Gap(12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      "Dr. Jenny Wilson",
-                      style: TextStyle(
+                    Text(
+                      doctorName,
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
@@ -928,111 +880,121 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       ),
                     ),
                     const Gap(3),
-                    Text(
-                      "General Practitioner",
-                      style: TextStyle(
-                        color: Colors.white.withValues(alpha: .85),
-                        fontSize: 13,
-                        fontWeight: FontWeight.w500,
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        specialty,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 11,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
-              Container(
-                width: 42,
-                height: 42,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  shape: BoxShape.circle,
-                ),
-                child: const Center(
-                  child: Icon(
-                    Icons.videocam_rounded,
-                    color: AppColors.primary,
-                    size: 22,
+              // Video and Chat Action Buttons
+              Row(
+                children: [
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.2),
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.chat_bubble_outline_rounded,
+                        color: Colors.white,
+                        size: 18,
+                      ),
+                    ),
                   ),
-                ),
+                  const Gap(8),
+                  Container(
+                    width: 38,
+                    height: 38,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: const Center(
+                      child: Icon(
+                        Icons.videocam_rounded,
+                        color: AppColors.primary,
+                        size: 20,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
+
           const Gap(16),
+
+          // Middle Row: Date & Time Translucent Container
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
             decoration: BoxDecoration(
               color: Colors.white.withValues(alpha: .18),
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(14),
             ),
             child: Row(
               children: [
+                // Date
                 Expanded(
                   child: Row(
                     children: [
                       const Icon(
                         Icons.calendar_today_rounded,
                         color: Colors.white,
-                        size: 16,
+                        size: 15,
                       ),
-                      const Gap(10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Date",
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: .75),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const Text(
-                            "18 Nov, Monday",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      const Gap(8),
+                      Text(
+                        dateStr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Container(
                   width: 1,
-                  height: 28,
-                  color: Colors.white.withValues(alpha: .25),
+                  height: 20,
+                  color: Colors.white.withValues(alpha: .3),
                 ),
-                const Gap(14),
+                const Gap(10),
+                // Time
                 Expanded(
                   child: Row(
                     children: [
                       const Icon(
                         Icons.access_time_rounded,
                         color: Colors.white,
-                        size: 16,
+                        size: 15,
                       ),
-                      const Gap(10),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Time",
-                            style: TextStyle(
-                              color: Colors.white.withValues(alpha: .75),
-                              fontSize: 11,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          const Text(
-                            "8:00pm - 8:30pm",
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 13,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
+                      const Gap(8),
+                      Text(
+                        timeStr,
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ],
                   ),
@@ -1040,26 +1002,22 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               ],
             ),
           ),
-          const Gap(16),
+
+          const Gap(14),
+
+          // Bottom Action Pill Buttons
           Row(
             children: [
               Expanded(
                 child: ScaleOnTap(
                   onTap: () {
-                    final defaultDoc = _mockToDetails(_mockDoctors.first);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ServiceDetailsView(model: defaultDoc),
-                      ),
-                    );
+                    Navigator.pushNamed(context, AppRoutes.booking);
                   },
                   child: Container(
-                    height: 44,
+                    height: 42,
                     decoration: BoxDecoration(
                       color: Colors.white,
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(21),
                     ),
                     child: const Center(
                       child: Text(
@@ -1074,32 +1032,36 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   ),
                 ),
               ),
-              const Gap(12),
+              const Gap(10),
               Expanded(
                 child: ScaleOnTap(
                   onTap: () {
-                    final defaultDoc = _mockToDetails(_mockDoctors.first);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            ServiceDetailsView(model: defaultDoc),
-                      ),
-                    );
+                    if (hasBooking) {
+                      Navigator.pushNamed(context, AppRoutes.booking);
+                    } else {
+                      final defaultDoc = _mockToDetails(_mockDoctors.first);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ServiceDetailsView(model: defaultDoc),
+                        ),
+                      );
+                    }
                   },
                   child: Container(
-                    height: 44,
+                    height: 42,
                     decoration: BoxDecoration(
                       color: Colors.white.withValues(alpha: .2),
-                      borderRadius: BorderRadius.circular(22),
+                      borderRadius: BorderRadius.circular(21),
                       border: Border.all(
-                        color: Colors.white.withValues(alpha: .3),
+                        color: Colors.white.withValues(alpha: .35),
                         width: 1,
                       ),
                     ),
                     child: const Center(
                       child: Text(
-                        "View Profile",
+                        "Details",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 13,
@@ -1120,6 +1082,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   Widget _buildDoctorCard(BuildContext context, ServiceDetailsModel doc) {
     final docId = doc.serviceId ?? doc.providerName;
     final isBookmarked = _bookmarkedDoctors.contains(docId);
+    final specialtyName = doc.specialties.isNotEmpty
+        ? doc.specialties.first
+        : "Cardiologist";
 
     return ScaleOnTap(
       onTap: () {
@@ -1134,11 +1099,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         padding: const EdgeInsets.all(14),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(20),
+          borderRadius: BorderRadius.circular(22),
           border: Border.all(color: AppColors.border, width: 1),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF0F172A).withValues(alpha: .03),
+              color: AppColors.shadowColor.withValues(alpha: .03),
               blurRadius: 14,
               offset: const Offset(0, 4),
             ),
@@ -1148,15 +1113,15 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           children: [
             // Doctor Photo
             ClipRRect(
-              borderRadius: BorderRadius.circular(16),
+              borderRadius: BorderRadius.circular(18),
               child: Image.network(
                 doc.imageUrl,
-                width: 72,
-                height: 72,
+                width: 80,
+                height: 80,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  width: 72,
-                  height: 72,
+                  width: 80,
+                  height: 80,
                   color: AppColors.primaryLight,
                   child: const Icon(
                     Icons.person_rounded,
@@ -1172,80 +1137,136 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Specialty Tag + Rating & Bookmark Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          specialtyName,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            color: AppColors.star,
+                            size: 16,
+                          ),
+                          const Gap(2),
+                          Text(
+                            doc.rating.toStringAsFixed(1),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: AppColors.textPrimary,
+                            ),
+                          ),
+                          const Gap(6),
+                          GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                if (isBookmarked) {
+                                  _bookmarkedDoctors.remove(docId);
+                                } else {
+                                  _bookmarkedDoctors.add(docId);
+                                }
+                              });
+                            },
+                            child: Icon(
+                              isBookmarked
+                                  ? Icons.bookmark_rounded
+                                  : Icons.bookmark_border_rounded,
+                              color: isBookmarked
+                                  ? AppColors.primary
+                                  : AppColors.textMuted,
+                              size: 18,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Gap(6),
                   Text(
                     doc.providerName,
                     style: const TextStyle(
-                      fontSize: 16,
+                      fontSize: 15,
                       fontWeight: FontWeight.w800,
                       color: AppColors.textPrimary,
                       letterSpacing: -0.2,
                     ),
                   ),
                   const Gap(4),
-                  Text(
-                    doc.specialties.isNotEmpty
-                        ? doc.specialties.first
-                        : "Specialist Doctor",
-                    style: const TextStyle(
-                      fontSize: 13,
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const Gap(6),
                   Row(
                     children: [
                       const Icon(
-                        Icons.star_rounded,
-                        color: AppColors.accentAmber,
-                        size: 17,
+                        Icons.location_on_outlined,
+                        color: AppColors.textMuted,
+                        size: 13,
                       ),
-                      const Gap(4),
+                      const Gap(2),
+                      Expanded(
+                        child: Text(
+                          doc.location,
+                          style: const TextStyle(
+                            fontSize: 12,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const Gap(8),
+                  // Price + Book Now Pill Button
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
-                        "${doc.rating.toStringAsFixed(1)}  |  ${doc.reviewsCount} Reviews",
+                        "\$${doc.price.toStringAsFixed(0)} / visit",
                         style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.textSecondary,
-                          fontWeight: FontWeight.w600,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                          color: AppColors.primary,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Text(
+                          "Book Now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ],
-              ),
-            ),
-            // Bookmark Icon Button
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (isBookmarked) {
-                    _bookmarkedDoctors.remove(docId);
-                  } else {
-                    _bookmarkedDoctors.add(docId);
-                  }
-                });
-              },
-              child: Container(
-                width: 38,
-                height: 38,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: isBookmarked
-                      ? AppColors.primaryLight
-                      : const Color(0xFFF8FAFC),
-                  border: Border.all(
-                    color: isBookmarked
-                        ? AppColors.primary.withValues(alpha: .3)
-                        : AppColors.border,
-                  ),
-                ),
-                child: Icon(
-                  isBookmarked
-                      ? Icons.bookmark_rounded
-                      : Icons.bookmark_border_rounded,
-                  color: isBookmarked ? AppColors.primary : AppColors.textMuted,
-                  size: 20,
-                ),
               ),
             ),
           ],

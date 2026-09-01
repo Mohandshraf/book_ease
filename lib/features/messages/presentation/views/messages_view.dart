@@ -218,7 +218,7 @@ class _MessagesViewState extends State<MessagesView> {
           }
 
           return ListView.separated(
-            padding: const EdgeInsets.symmetric(vertical: 16),
+            padding: const EdgeInsets.fromLTRB(0, 8, 0, 100),
             itemCount: chats.length,
             separatorBuilder: (context, index) =>
                 const Divider(color: AppColors.border, height: 1, indent: 84),

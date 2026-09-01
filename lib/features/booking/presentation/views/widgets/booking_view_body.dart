@@ -334,6 +334,7 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                   );
                 },
               ),
+              const SizedBox(height: 100),
             ],
           ),
         ),

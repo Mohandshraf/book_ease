@@ -151,14 +151,14 @@ class OnBoardingPage extends StatelessWidget {
                 onTap: onPressed,
                 child: Container(
                   width: double.infinity,
-                  height: 58,
+                  height: 56,
                   decoration: BoxDecoration(
                     color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(20),
+                    borderRadius: BorderRadius.circular(28),
                     boxShadow: [
                       BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.25),
-                        blurRadius: 18,
+                        color: AppColors.primary.withValues(alpha: 0.35),
+                        blurRadius: 20,
                         offset: const Offset(0, 8),
                       ),
                     ],
@@ -169,8 +169,8 @@ class OnBoardingPage extends StatelessWidget {
                       Text(
                         buttonText,
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w800,
                           color: Colors.white,
                           letterSpacing: -0.2,
                         ),

@@ -296,18 +296,13 @@ class _PaymentViewState extends State<PaymentView> {
                           }),
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [
-                          AppColors.primaryGradientStart,
-                          AppColors.primaryGradientEnd,
-                        ],
-                      ),
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.primary.withValues(alpha: .3),
-                          blurRadius: 14,
-                          offset: const Offset(0, 5),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
@@ -328,8 +323,9 @@ class _PaymentViewState extends State<PaymentView> {
                                 "Pay \$${widget.totalPrice.toStringAsFixed(2)}",
                                 style: const TextStyle(
                                   fontSize: 16,
-                                  fontWeight: FontWeight.bold,
+                                  fontWeight: FontWeight.w800,
                                   color: Colors.white,
+                                  letterSpacing: 0.2,
                                 ),
                               ),
                               const Gap(8),

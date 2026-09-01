@@ -94,7 +94,7 @@ class _ProviderDashboardViewBodyState extends State<ProviderDashboardViewBody> {
                 bookings: stats.upcomingBookings,
                 onTabChangeRequested: widget.onTabChangeRequested,
               ),
-              const SizedBox(height: 30),
+              const SizedBox(height: 100),
             ],
           ),
         );

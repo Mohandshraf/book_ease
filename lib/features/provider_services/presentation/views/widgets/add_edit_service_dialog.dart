@@ -332,12 +332,14 @@ class _AddEditServiceDialogState extends State<AddEditServiceDialog> {
                 // Submit Button
                 SizedBox(
                   width: double.infinity,
+                  height: 52,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
-                      padding: const EdgeInsets.symmetric(vertical: 14),
+                      elevation: 3,
+                      shadowColor: AppColors.primary.withValues(alpha: 0.35),
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
+                        borderRadius: BorderRadius.circular(26),
                       ),
                     ),
                     onPressed: _submit,
@@ -346,7 +348,8 @@ class _AddEditServiceDialogState extends State<AddEditServiceDialog> {
                       style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 15,
+                        fontSize: 16,
+                        letterSpacing: -0.2,
                       ),
                     ),
                   ),

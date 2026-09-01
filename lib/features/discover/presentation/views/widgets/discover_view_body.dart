@@ -237,7 +237,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
                   );
                 },
               ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 100),
           ],
         ),
       ),

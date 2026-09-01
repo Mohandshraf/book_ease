@@ -48,21 +48,25 @@ class ProviderServicesEmptyState extends StatelessWidget {
             ElevatedButton.icon(
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
+                elevation: 3,
+                shadowColor: AppColors.primary.withValues(alpha: 0.35),
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 24,
-                  vertical: 12,
+                  horizontal: 28,
+                  vertical: 14,
                 ),
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(26),
                 ),
               ),
-              icon: const Icon(Icons.add, color: Colors.white),
+              icon: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
               onPressed: onAddFirstService,
               label: const Text(
                 'Add Your First Service',
                 style: TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
+                  fontSize: 15,
+                  letterSpacing: -0.2,
                 ),
               ),
             ),

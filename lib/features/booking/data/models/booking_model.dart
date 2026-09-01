@@ -7,6 +7,7 @@ class BookingModel {
   final String? customerEmail;
   final String providerId;
   final String? providerName;
+  final String? providerImage;
   final String serviceId;
   final String? serviceTitle;
   final double? price;
@@ -23,6 +24,7 @@ class BookingModel {
     this.customerEmail,
     required this.providerId,
     this.providerName,
+    this.providerImage,
     required this.serviceId,
     this.serviceTitle,
     this.price,
@@ -48,6 +50,7 @@ class BookingModel {
       customerEmail: json['customerEmail'],
       providerId: json['providerId'] ?? '',
       providerName: json['providerName'],
+      providerImage: json['providerImage'],
       serviceId: json['serviceId'] ?? '',
       serviceTitle: json['serviceTitle'],
       price: (json['price'] as num?)?.toDouble(),
@@ -66,6 +69,7 @@ class BookingModel {
       if (customerEmail != null) "customerEmail": customerEmail,
       "providerId": providerId,
       if (providerName != null) "providerName": providerName,
+      if (providerImage != null) "providerImage": providerImage,
       "serviceId": serviceId,
       if (serviceTitle != null) "serviceTitle": serviceTitle,
       if (price != null) "price": price,
@@ -84,6 +88,7 @@ class BookingModel {
     String? customerEmail,
     String? providerId,
     String? providerName,
+    String? providerImage,
     String? serviceId,
     String? serviceTitle,
     double? price,
@@ -100,6 +105,7 @@ class BookingModel {
       customerEmail: customerEmail ?? this.customerEmail,
       providerId: providerId ?? this.providerId,
       providerName: providerName ?? this.providerName,
+      providerImage: providerImage ?? this.providerImage,
       serviceId: serviceId ?? this.serviceId,
       serviceTitle: serviceTitle ?? this.serviceTitle,
       price: price ?? this.price,

@@ -1,6 +1,7 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 
 class DiscoverProviderCard extends StatelessWidget {
   final String name;
@@ -24,6 +25,11 @@ class DiscoverProviderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Extract specialty if subtitle contains category
+    final parts = subtitle.split('•');
+    final specialty = parts.isNotEmpty ? parts.first.trim() : "Specialist";
+    final location = parts.length > 1 ? parts.sublist(1).join('•').trim() : "1.2 km • Clinic";
+
     return ScaleOnTap(
       onTap: onTap,
       child: Container(
@@ -34,8 +40,8 @@ class DiscoverProviderCard extends StatelessWidget {
           border: Border.all(color: AppColors.border, width: 1),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.03),
-              blurRadius: 10,
+              color: AppColors.shadowColor.withValues(alpha: 0.03),
+              blurRadius: 14,
               offset: const Offset(0, 4),
             ),
           ],
@@ -47,12 +53,12 @@ class DiscoverProviderCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(18),
               child: Image.network(
                 image,
-                width: 68,
-                height: 68,
+                width: 80,
+                height: 80,
                 fit: BoxFit.cover,
                 errorBuilder: (context, error, stackTrace) => Container(
-                  width: 68,
-                  height: 68,
+                  width: 80,
+                  height: 80,
                   decoration: BoxDecoration(
                     color: AppColors.primaryLight,
                     borderRadius: BorderRadius.circular(18),
@@ -60,74 +66,134 @@ class DiscoverProviderCard extends StatelessWidget {
                   child: const Icon(
                     Icons.person_rounded,
                     color: AppColors.primary,
-                    size: 32,
+                    size: 36,
                   ),
                 ),
               ),
             ),
-            const SizedBox(width: 14),
+            const Gap(14),
             // Doctor Metadata
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Specialty Tag + Rating Row
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 2,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.surfaceContainerLow,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          specialty,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            fontWeight: FontWeight.w700,
+                            color: AppColors.primary,
+                          ),
+                        ),
+                      ),
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.star_rounded,
+                            color: AppColors.star,
+                            size: 16,
+                          ),
+                          const Gap(2),
+                          Text(
+                            rating,
+                            style: const TextStyle(
+                              color: AppColors.textPrimary,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Gap(2),
+                          Text(
+                            "($reviews)",
+                            style: const TextStyle(
+                              color: AppColors.textMuted,
+                              fontSize: 11,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const Gap(6),
                   Text(
                     name,
                     style: const TextStyle(
                       color: AppColors.textPrimary,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.2,
                     ),
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    subtitle,
-                    style: const TextStyle(
-                      color: AppColors.textSecondary,
-                      fontSize: 13,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  const SizedBox(height: 6),
+                  const Gap(4),
                   Row(
                     children: [
                       const Icon(
-                        Icons.star_rounded,
-                        color: AppColors.warning,
-                        size: 17,
+                        Icons.location_on_outlined,
+                        color: AppColors.textMuted,
+                        size: 13,
                       ),
-                      const SizedBox(width: 3),
-                      Text(
-                        rating,
-                        style: const TextStyle(
-                          color: AppColors.textPrimary,
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
+                      const Gap(2),
+                      Expanded(
+                        child: Text(
+                          location,
+                          style: const TextStyle(
+                            color: AppColors.textSecondary,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ),
-                      const SizedBox(width: 3),
+                    ],
+                  ),
+                  const Gap(8),
+                  // Price and Book Now
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
                       Text(
-                        "($reviews)",
+                        price,
                         style: const TextStyle(
-                          color: AppColors.textMuted,
-                          fontSize: 12,
+                          color: AppColors.primary,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: const Text(
+                          "Book Now",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 11,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ],
-              ),
-            ),
-            // Starting Price
-            Align(
-              alignment: Alignment.bottomRight,
-              child: Text(
-                price,
-                style: const TextStyle(
-                  color: AppColors.primary,
-                  fontSize: 14,
-                  fontWeight: FontWeight.bold,
-                ),
               ),
             ),
           ],

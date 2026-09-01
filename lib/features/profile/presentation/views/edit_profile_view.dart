@@ -396,22 +396,18 @@ class _EditProfileViewState extends State<EditProfileView> {
               const Gap(32),
               SizedBox(
                 width: double.infinity,
-                height: 54,
+                height: 56,
                 child: ScaleOnTap(
                   onTap: _isLoading ? null : _saveProfile,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: const LinearGradient(
-                        colors: [AppColors.primaryGradientStart, AppColors.primaryGradientEnd],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                      borderRadius: BorderRadius.circular(16),
+                      color: AppColors.primary,
+                      borderRadius: BorderRadius.circular(28),
                       boxShadow: [
                         BoxShadow(
                           color: AppColors.primary.withValues(alpha: 0.3),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
+                          blurRadius: 16,
+                          offset: const Offset(0, 6),
                         ),
                       ],
                     ),
@@ -430,7 +426,8 @@ class _EditProfileViewState extends State<EditProfileView> {
                               style: TextStyle(
                                 color: Colors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: 0.2,
                               ),
                             ),
                     ),

@@ -278,6 +278,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           LogoutButton(
             onTap: () => _showLogoutDialog(context),
           ),
+          const Gap(100),
         ],
       ),
     );

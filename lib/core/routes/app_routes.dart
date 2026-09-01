@@ -1,3 +1,4 @@
+import 'package:book_ease/features/discover/presentation/views/discover_view.dart';
 import 'package:book_ease/features/booking/presentation/views/booking_view.dart';
 import 'package:book_ease/features/admin/presentation/views/admin_view.dart';
 import 'package:book_ease/features/register/presentation/views/register_view.dart';
@@ -28,6 +29,7 @@ class AppRoutes {
   static const String providerAvailability = '/provider_availability';
   static const String admin = '/admin';
   static const String booking = '/booking';
+  static const String discover = '/discover';
   static const String serviceDetails = '/service_details';
   static const String bookingSummary = '/booking_summary';
   static const String chat = '/chat';
@@ -69,6 +71,9 @@ class AppRoutes {
 
       case booking:
         return MaterialPageRoute(builder: (_) => const BookingView());
+
+      case discover:
+        return MaterialPageRoute(builder: (_) => const DiscoverView());
 
       case serviceDetails:
         final model = routeSettings.arguments as ServiceDetailsModel;

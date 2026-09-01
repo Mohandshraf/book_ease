@@ -5,7 +5,6 @@ import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/core/widgets/custom_text_field.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_state.dart';
-import 'package:book_ease/features/register/presentation/views/widgets/custom_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -28,6 +27,7 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
 
   bool isPasswordObscure = true;
   bool isConfirmPasswordObscure = true;
+  bool isUsingMobile = false;
   bool agree = false;
 
   @override
@@ -41,309 +41,518 @@ class _RegisterViewBodyState extends State<RegisterViewBody> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-        child: Form(
-          key: formKey,
-          child: BlocConsumer<AuthCubit, AuthState>(
-            listener: (context, state) {
-              if (state is AuthSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text("Account created successfully. Please sign in."),
-                    backgroundColor: AppColors.primary,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
+    return SingleChildScrollView(
+      physics: const BouncingScrollPhysics(),
+      child: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is AuthSuccess) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text("Account created successfully. Please sign in."),
+                backgroundColor: AppColors.primary,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
 
-                Navigator.pushNamedAndRemoveUntil(
-                  context,
-                  AppRoutes.login,
-                  (route) => false,
-                );
-              }
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              AppRoutes.login,
+              (route) => false,
+            );
+          }
 
-              if (state is AuthFailure) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: AppColors.error,
-                    behavior: SnackBarBehavior.floating,
-                  ),
-                );
-              }
-            },
-            builder: (context, state) {
-              return Skeletonizer(
-                enabled: state is AuthLoading,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    FadeSlideTransition(
-                      delay: const Duration(milliseconds: 50),
-                      child: ScaleOnTap(
-                        onTap: () => Navigator.pop(context),
-                        child: Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: AppColors.border, width: 1.2),
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(14),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.primary.withValues(alpha: 0.04),
-                                blurRadius: 8,
-                                offset: const Offset(0, 3),
+          if (state is AuthFailure) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: AppColors.error,
+                behavior: SnackBarBehavior.floating,
+              ),
+            );
+          }
+        },
+        builder: (context, state) {
+          return Skeletonizer(
+            enabled: state is AuthLoading,
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                child: Form(
+                  key: formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Top Bar with Back Arrow & Theme Moon Icon
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 100),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                if (Navigator.canPop(context)) {
+                                  Navigator.pop(context);
+                                } else {
+                                  Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+                                }
+                              },
+                              child: const Icon(
+                                Icons.arrow_back_ios_new_rounded,
+                                size: 20,
+                                color: AppColors.primary,
                               ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.arrow_back_ios_new_rounded,
-                            size: 18,
-                            color: AppColors.textPrimary,
+                            ),
+                            Container(
+                              width: 36,
+                              height: 36,
+                              decoration: BoxDecoration(
+                                color: AppColors.primaryLight,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.dark_mode_outlined,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Gap(24),
+
+                      // Header Title & Subtitle (Exact Match to HTML Prototype)
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 150),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: const [
+                            Text(
+                              "Create Account",
+                              style: TextStyle(
+                                fontSize: 26,
+                                fontWeight: FontWeight.w900,
+                                color: AppColors.primary,
+                                letterSpacing: -0.6,
+                              ),
+                            ),
+                            Gap(4),
+                            Text(
+                              "Sign up to get started!",
+                              style: TextStyle(
+                                fontSize: 13,
+                                color: AppColors.textSecondary,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Gap(24),
+
+                      // Form Fields
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 200),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // Full Name
+                            const Text(
+                              "Full Name",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+                            const Gap(8),
+                            CustomTextField(
+                              validator: (value) => Validators.name(value),
+                              controller: fullNameController,
+                              hintText: "Enter full name",
+                              prefixIcon: const Icon(
+                                Icons.person_outline_rounded,
+                                color: AppColors.textMuted,
+                                size: 20,
+                              ),
+                            ),
+
+                            const Gap(16),
+
+                            // Email Address with Mobile Switcher
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  isUsingMobile ? "Mobile Number" : "Email Address",
+                                  style: const TextStyle(
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    color: AppColors.textPrimary,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () {
+                                    setState(() {
+                                      isUsingMobile = !isUsingMobile;
+                                    });
+                                  },
+                                  child: Text(
+                                    isUsingMobile ? "Email Address?" : "Mobile Number?",
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w700,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                            const Gap(8),
+
+                            CustomTextField(
+                              validator: (value) => isUsingMobile
+                                  ? Validators.phone(value)
+                                  : Validators.email(value),
+                              controller: emailController,
+                              hintText: isUsingMobile
+                                  ? "Enter mobile number"
+                                  : "Enter email address",
+                              keyboardType: isUsingMobile
+                                  ? TextInputType.phone
+                                  : TextInputType.emailAddress,
+                              prefixIcon: Icon(
+                                isUsingMobile
+                                    ? Icons.phone_android_rounded
+                                    : Icons.email_outlined,
+                                color: AppColors.textMuted,
+                                size: 20,
+                              ),
+                            ),
+
+                            const Gap(16),
+
+                            // Password
+                            const Text(
+                              "Password",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+
+                            const Gap(8),
+
+                            CustomTextField(
+                              validator: (value) => Validators.password(value),
+                              controller: passwordController,
+                              hintText: "Enter password",
+                              obscureText: isPasswordObscure,
+                              prefixIcon: const Icon(
+                                Icons.lock_outline_rounded,
+                                color: AppColors.textMuted,
+                                size: 20,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  isPasswordObscure
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.textMuted,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isPasswordObscure = !isPasswordObscure;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            const Gap(16),
+
+                            // Confirm Password
+                            const Text(
+                              "Confirm Password",
+                              style: TextStyle(
+                                fontSize: 13,
+                                fontWeight: FontWeight.w700,
+                                color: AppColors.textPrimary,
+                              ),
+                            ),
+
+                            const Gap(8),
+
+                            CustomTextField(
+                              validator: (value) => Validators.confirmPassword(
+                                value,
+                                passwordController.text,
+                              ),
+                              controller: confirmPasswordController,
+                              hintText: "Confirm password",
+                              obscureText: isConfirmPasswordObscure,
+                              prefixIcon: const Icon(
+                                Icons.lock_outline_rounded,
+                                color: AppColors.textMuted,
+                                size: 20,
+                              ),
+                              suffixIcon: IconButton(
+                                icon: Icon(
+                                  isConfirmPasswordObscure
+                                      ? Icons.visibility_off_outlined
+                                      : Icons.visibility_outlined,
+                                  color: AppColors.textMuted,
+                                  size: 20,
+                                ),
+                                onPressed: () {
+                                  setState(() {
+                                    isConfirmPasswordObscure = !isConfirmPasswordObscure;
+                                  });
+                                },
+                              ),
+                            ),
+
+                            const Gap(14),
+
+                            // Terms and Privacy Checkbox
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  width: 24,
+                                  height: 24,
+                                  child: Checkbox(
+                                    value: agree,
+                                    activeColor: AppColors.primary,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    onChanged: (val) {
+                                      setState(() {
+                                        agree = val ?? false;
+                                      });
+                                    },
+                                  ),
+                                ),
+                                const Gap(8),
+                                const Expanded(
+                                  child: Text(
+                                    "I agree to the Terms of Service & Privacy Policy",
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      color: AppColors.textSecondary,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Gap(22),
+
+                      // Primary Sign Up Button
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 250),
+                        child: ScaleOnTap(
+                          onTap: () {
+                            if (!agree) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                const SnackBar(
+                                  content: Text(
+                                    "Please accept Terms & Privacy Policy",
+                                  ),
+                                  backgroundColor: AppColors.warning,
+                                  behavior: SnackBarBehavior.floating,
+                                ),
+                              );
+                              return;
+                            }
+                            if (formKey.currentState!.validate()) {
+                              context.read<AuthCubit>().register(
+                                name: fullNameController.text.trim(),
+                                email: emailController.text.trim(),
+                                password: passwordController.text.trim(),
+                              );
+                            }
+                          },
+                          child: Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(vertical: 16),
+                            decoration: BoxDecoration(
+                              color: AppColors.primary,
+                              borderRadius: BorderRadius.circular(20),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.28),
+                                  blurRadius: 16,
+                                  offset: const Offset(0, 6),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Text(
+                                state is AuthLoading ? "Creating account..." : "Sign Up",
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                    ),
 
-                    const Gap(24),
+                      const Gap(22),
 
-                    const FadeSlideTransition(
-                      delay: Duration(milliseconds: 100),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Create Account",
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.w800,
-                              color: AppColors.textPrimary,
-                              letterSpacing: -0.8,
+                      // Divider: — or sign up with —
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 300),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Container(height: 1, color: AppColors.border),
                             ),
-                          ),
-                          Gap(8),
-                          Text(
-                            "Join thousands of happy BookEase members",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.textSecondary,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const Gap(32),
-
-                    FadeSlideTransition(
-                      delay: const Duration(milliseconds: 150),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          _buildLabel("FULL NAME"),
-                          const Gap(8),
-                          CustomTextField(
-                            validator: (value) => Validators.name(value),
-                            controller: fullNameController,
-                            hintText: "Alex Johnson",
-                            prefixIcon: const Icon(
-                              Icons.person_outline,
-                              color: AppColors.textMuted,
-                              size: 20,
-                            ),
-                          ),
-                          const Gap(20),
-                          _buildLabel("EMAIL ADDRESS"),
-                          const Gap(8),
-                          CustomTextField(
-                            validator: (value) => Validators.email(value),
-                            controller: emailController,
-                            hintText: "alex@email.com",
-                            keyboardType: TextInputType.emailAddress,
-                            prefixIcon: const Icon(
-                              Icons.mail_outline,
-                              color: AppColors.textMuted,
-                              size: 20,
-                            ),
-                          ),
-                          const Gap(20),
-                          _buildLabel("PASSWORD"),
-                          const Gap(8),
-                          CustomTextField(
-                            validator: (value) => Validators.password(value),
-                            controller: passwordController,
-                            hintText: "Min. 8 characters",
-                            obscureText: isPasswordObscure,
-                            prefixIcon: const Icon(
-                              Icons.lock_outline,
-                              color: AppColors.textMuted,
-                              size: 20,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                isPasswordObscure
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: AppColors.textMuted,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isPasswordObscure = !isPasswordObscure;
-                                });
-                              },
-                            ),
-                          ),
-                          const Gap(20),
-                          _buildLabel("CONFIRM PASSWORD"),
-                          const Gap(8),
-                          CustomTextField(
-                            validator: (value) => Validators.confirmPassword(
-                              value,
-                              passwordController.text,
-                            ),
-                            controller: confirmPasswordController,
-                            hintText: "Repeat your password",
-                            obscureText: isConfirmPasswordObscure,
-                            prefixIcon: const Icon(
-                              Icons.lock_outline,
-                              color: AppColors.textMuted,
-                              size: 20,
-                            ),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                isConfirmPasswordObscure
-                                    ? Icons.visibility_off_outlined
-                                    : Icons.visibility_outlined,
-                                color: AppColors.textMuted,
-                                size: 20,
-                              ),
-                              onPressed: () {
-                                setState(() {
-                                  isConfirmPasswordObscure = !isConfirmPasswordObscure;
-                                });
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    const Gap(24),
-
-                    FadeSlideTransition(
-                      delay: const Duration(milliseconds: 200),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            width: 24,
-                            height: 24,
-                            child: Checkbox(
-                              value: agree,
-                              activeColor: AppColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(6),
-                              ),
-                              side: const BorderSide(color: AppColors.border, width: 1.5),
-                              onChanged: (value) {
-                                setState(() {
-                                  agree = value ?? false;
-                                });
-                              },
-                            ),
-                          ),
-                          const Gap(10),
-                          Expanded(
-                            child: RichText(
-                              text: const TextSpan(
+                            const Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 14),
+                              child: Text(
+                                "— or sign up with —",
                                 style: TextStyle(
-                                  color: AppColors.textSecondary,
-                                  fontSize: 14,
-                                  height: 1.4,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w500,
+                                  color: AppColors.textMuted,
                                 ),
-                                children: [
-                                  TextSpan(text: "I agree to the "),
-                                  TextSpan(
-                                    text: "Terms of Service",
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                  TextSpan(text: " and "),
-                                  TextSpan(
-                                    text: "Privacy Policy",
-                                    style: TextStyle(
-                                      color: AppColors.primary,
-                                      fontWeight: FontWeight.w700,
-                                    ),
-                                  ),
-                                ],
                               ),
                             ),
-                          ),
-                        ],
+                            Expanded(
+                              child: Container(height: 1, color: AppColors.border),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    const Gap(28),
+                      const Gap(18),
 
-                    FadeSlideTransition(
-                      delay: const Duration(milliseconds: 250),
-                      child: CustomButton(
-                        text: state is AuthLoading
-                            ? "Creating account..."
-                            : "Create Account",
-                        onPressed: () {
-                          if (!agree) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  "Please accept Terms & Privacy Policy",
-                                ),
-                                backgroundColor: AppColors.warning,
-                                behavior: SnackBarBehavior.floating,
+                      // Circular Social Buttons Row (Exact Match to HTML Prototype)
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 350),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            _SocialCircularButton(
+                              iconWidget: Image.asset(
+                                "assets/images/google.png",
+                                width: 20,
+                                height: 20,
                               ),
-                            );
-                            return;
-                          }
-                          if (formKey.currentState!.validate()) {
-                            context.read<AuthCubit>().register(
-                              name: fullNameController.text.trim(),
-                              email: emailController.text.trim(),
-                              password: passwordController.text.trim(),
-                            );
-                          }
-                        },
+                              onTap: () {
+                                context.read<AuthCubit>().signInWithGoogle();
+                              },
+                            ),
+                            const Gap(16),
+                            _SocialCircularButton(
+                              iconWidget: Image.asset(
+                                "assets/images/apple.png",
+                                width: 20,
+                                height: 20,
+                              ),
+                              onTap: () {},
+                            ),
+                            const Gap(16),
+                            _SocialCircularButton(
+                              iconWidget: const Icon(
+                                Icons.facebook,
+                                color: Color(0xFF1877F2),
+                                size: 24,
+                              ),
+                              onTap: () {},
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
 
-                    const Gap(24),
-                  ],
+                      const Gap(24),
+
+                      // Footer: Already have an account? Log In
+                      FadeSlideTransition(
+                        delay: const Duration(milliseconds: 400),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Text(
+                              "Already have an account? ",
+                              style: TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 13,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.pushNamed(context, AppRoutes.login);
+                              },
+                              child: const Text(
+                                "Log In",
+                                style: TextStyle(
+                                  color: AppColors.primary,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+
+                      const Gap(16),
+                    ],
+                  ),
                 ),
-              );
-            },
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLabel(String text) {
-    return Text(
-      text,
-      style: const TextStyle(
-        color: AppColors.textMuted,
-        fontWeight: FontWeight.w700,
-        fontSize: 12,
-        letterSpacing: 0.8,
+              ),
+            ),
+          );
+        },
       ),
     );
   }
 }
 
+class _SocialCircularButton extends StatelessWidget {
+  const _SocialCircularButton({
+    required this.iconWidget,
+    required this.onTap,
+  });
+
+  final Widget iconWidget;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ScaleOnTap(
+      onTap: onTap,
+      child: Container(
+        width: 50,
+        height: 50,
+        decoration: BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+          border: Border.all(color: AppColors.border, width: 1.2),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Center(child: iconWidget),
+      ),
+    );
+  }
+}

@@ -132,11 +132,11 @@ class BookingSummaryView extends StatelessWidget {
           color: Colors.white,
           border: Border(top: BorderSide(color: AppColors.border, width: 1)),
         ),
-        padding: const EdgeInsets.fromLTRB(20, 16, 20, 16),
+        padding: const EdgeInsets.fromLTRB(20, 14, 20, 18),
         child: SafeArea(
           child: SizedBox(
             width: double.infinity,
-            height: 52,
+            height: 56,
             child: ScaleOnTap(
               onTap: onProceedToPaymentPressed ??
                   () {
@@ -154,18 +154,13 @@ class BookingSummaryView extends StatelessWidget {
                   },
               child: Container(
                 decoration: BoxDecoration(
-                  gradient: const LinearGradient(
-                    colors: [
-                      AppColors.primaryGradientStart,
-                      AppColors.primaryGradientEnd,
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(16),
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(28),
                   boxShadow: [
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: .3),
-                      blurRadius: 14,
-                      offset: const Offset(0, 5),
+                      blurRadius: 16,
+                      offset: const Offset(0, 6),
                     ),
                   ],
                 ),
@@ -174,8 +169,9 @@ class BookingSummaryView extends StatelessWidget {
                   "Proceed to Payment",
                   style: TextStyle(
                     fontSize: 16,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w800,
                     color: Colors.white,
+                    letterSpacing: 0.2,
                   ),
                 ),
               ),
