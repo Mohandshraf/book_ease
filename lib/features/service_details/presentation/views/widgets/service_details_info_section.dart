@@ -1,4 +1,5 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -136,21 +137,11 @@ class ServiceDetailsInfoSection extends StatelessWidget {
               // Right Doctor Portrait Photo
               ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.network(
-                  model.imageUrl,
+                child: SafeImage(
+                  imageSource: model.imageUrl,
                   width: 125,
                   height: 155,
                   fit: BoxFit.cover,
-                  errorBuilder: (context, error, stackTrace) => Container(
-                    width: 125,
-                    height: 155,
-                    color: AppColors.primaryLight,
-                    child: const Icon(
-                      Icons.person_rounded,
-                      color: AppColors.primary,
-                      size: 48,
-                    ),
-                  ),
                 ),
               ),
             ],

@@ -14,6 +14,7 @@ import 'package:book_ease/features/notifications/data/cubit/notification_cubit.d
 import 'package:book_ease/features/notifications/data/repo/notification_repo.dart';
 import 'package:book_ease/features/notifications/data/repo/notification_repo_impl.dart';
 import 'package:book_ease/features/notifications/data/services/notification_services.dart';
+import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/provider_availability/data/cubit/provider_availability_cubit.dart';
 import 'package:book_ease/features/provider_availability/data/repo/provider_availability_repo.dart';
 import 'package:book_ease/features/provider_availability/data/repo/provider_availability_repo_impl.dart';
@@ -43,7 +44,8 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ProviderServicesRepo>(() => ProviderServicesRepoImpl());
   sl.registerLazySingleton<ProviderAvailabilityRepo>(() => ProviderAvailabilityRepoImpl());
 
-  // Cubits / Blocs (Factories so new instances can be provided or injected)
+  // Cubits / Blocs
+  sl.registerLazySingleton<SavedProvidersCubit>(() => SavedProvidersCubit());
   sl.registerFactory<AuthCubit>(() => AuthCubit(sl<AuthRepo>()));
   sl.registerFactory<UserCubit>(() => UserCubit(sl<AuthRepo>()));
   sl.registerFactory<BookingCubit>(() => BookingCubit(sl<BookingRepo>()));

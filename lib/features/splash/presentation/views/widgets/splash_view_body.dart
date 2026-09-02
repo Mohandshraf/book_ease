@@ -29,12 +29,12 @@ class _SplashViewBodyState extends State<SplashViewBody>
 
     _controller = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1500),
+      duration: const Duration(milliseconds: 900),
     );
 
     _dotsController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 700),
+      duration: const Duration(milliseconds: 500),
     )..repeat();
 
     _logoScale = Tween<double>(begin: .78, end: 1).animate(
@@ -78,7 +78,8 @@ class _SplashViewBodyState extends State<SplashViewBody>
   }
 
   void _navigateToNextScreen() async {
-    final minimumSplashTimer = Future.delayed(const Duration(seconds: 2));
+    final minimumSplashTimer =
+        Future.delayed(const Duration(milliseconds: 900));
 
     if (FirebaseAuth.instance.currentUser == null) {
       await minimumSplashTimer;

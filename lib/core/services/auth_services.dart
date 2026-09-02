@@ -127,8 +127,38 @@ class FirebaseAuthService {
     }
     final uid = user.uid;
 
-    final doc =
-        await FirebaseFirestore.instance.collection("users").doc(uid).get();
+    // 1. Instant Cache Check (<15ms): If cached locally, return immediately!
+    try {
+      final cachedDoc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .get(const GetOptions(source: Source.cache));
+      if (cachedDoc.exists && cachedDoc.data() != null) {
+        return cachedDoc;
+      }
+    } catch (_) {
+      // Not in local cache yet, proceed to server
+    }
+
+    // 2. Fetch from server with a fast timeout (1500ms max)
+    DocumentSnapshot<Map<String, dynamic>> doc;
+    try {
+      doc = await FirebaseFirestore.instance
+          .collection("users")
+          .doc(uid)
+          .get()
+          .timeout(const Duration(milliseconds: 1500));
+    } catch (_) {
+      // 3. If server timed out or offline, try cache one last time
+      try {
+        doc = await FirebaseFirestore.instance
+            .collection("users")
+            .doc(uid)
+            .get(const GetOptions(source: Source.cache));
+      } catch (_) {
+        rethrow;
+      }
+    }
 
     // If Firestore doc has empty name but Firebase Auth displayName exists, sync it
     if (doc.exists) {
@@ -137,7 +167,7 @@ class FirebaseAuthService {
         final displayName = user.displayName;
         if (displayName != null && displayName.trim().isNotEmpty) {
           try {
-            await FirebaseFirestore.instance
+            FirebaseFirestore.instance
                 .collection("users")
                 .doc(uid)
                 .set({"name": displayName.trim()}, SetOptions(merge: true));

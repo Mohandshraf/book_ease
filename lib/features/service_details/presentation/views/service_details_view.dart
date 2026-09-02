@@ -1,10 +1,13 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/messages/presentation/views/chat_view.dart';
+import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
+import 'package:book_ease/features/profile/cubit/saved_providers_state.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/booking_summary_view.dart';
 import 'package:book_ease/features/service_details/presentation/views/widgets/service_details_view_body.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
 class ServiceDetailsView extends StatefulWidget {
@@ -89,39 +92,107 @@ class _ServiceDetailsViewState extends State<ServiceDetailsView> {
                       color: AppColors.textPrimary,
                     ),
                   ),
-                  // Circular Share / Bookmark Button
-                  ScaleOnTap(
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text("Doctor link copied to clipboard!"),
-                          duration: Duration(seconds: 2),
-                        ),
-                      );
-                    },
-                    child: Container(
-                      width: 46,
-                      height: 46,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: Colors.white,
-                        border: Border.all(color: AppColors.border, width: 1.2),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF0F172A).withValues(alpha: .04),
-                            blurRadius: 10,
-                            offset: const Offset(0, 2),
+                  // Circular Bookmark and Share Buttons
+                  Row(
+                    children: [
+                      BlocBuilder<SavedProvidersCubit, SavedProvidersState>(
+                        builder: (context, state) {
+                          final docId = widget.model.serviceId ??
+                              widget.model.providerId ??
+                              widget.model.providerName;
+                          final isSaved =
+                              context.read<SavedProvidersCubit>().isSaved(docId);
+                          return ScaleOnTap(
+                            onTap: () {
+                              context
+                                  .read<SavedProvidersCubit>()
+                                  .toggleSaveDoctor(widget.model);
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    isSaved
+                                        ? "${widget.model.providerName} removed from saved"
+                                        : "${widget.model.providerName} saved to favorites",
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
+                            },
+                            child: Container(
+                              width: 44,
+                              height: 44,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isSaved
+                                    ? const Color(0xFFFDF2F8)
+                                    : Colors.white,
+                                border: Border.all(
+                                  color: isSaved
+                                      ? const Color(0xFFFBCFE8)
+                                      : AppColors.border,
+                                  width: 1.2,
+                                ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF0F172A)
+                                        .withValues(alpha: .04),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
+                              ),
+                              child: Center(
+                                child: Icon(
+                                  isSaved
+                                      ? Icons.bookmark_rounded
+                                      : Icons.bookmark_border_rounded,
+                                  color: isSaved
+                                      ? const Color(0xFFEC4899)
+                                      : AppColors.textPrimary,
+                                  size: 20,
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                      const Gap(8),
+                      ScaleOnTap(
+                        onTap: () {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text("Doctor link copied to clipboard!"),
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 44,
+                          height: 44,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: Colors.white,
+                            border: Border.all(color: AppColors.border, width: 1.2),
+                            boxShadow: [
+                              BoxShadow(
+                                color: const Color(0xFF0F172A)
+                                    .withValues(alpha: .04),
+                                blurRadius: 10,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                      child: const Center(
-                        child: Icon(
-                          Icons.share_outlined,
-                          color: AppColors.textPrimary,
-                          size: 20,
+                          child: const Center(
+                            child: Icon(
+                              Icons.share_outlined,
+                              color: AppColors.textPrimary,
+                              size: 20,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),

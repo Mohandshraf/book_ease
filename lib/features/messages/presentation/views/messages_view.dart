@@ -1,5 +1,6 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/data/models/chat_conversation_model.dart';
@@ -291,7 +292,7 @@ class _MessagesViewState extends State<MessagesView> {
                               backgroundImage:
                                   chat.otherUserImage != null &&
                                       chat.otherUserImage!.isNotEmpty
-                                  ? NetworkImage(chat.otherUserImage!)
+                                  ? safeImageProvider(chat.otherUserImage!)
                                   : null,
                               backgroundColor: AppColors.cardBackground,
                               child:

@@ -37,7 +37,7 @@ class HomeHeader extends StatelessWidget {
 
           //     CircleAvatar(
           //       radius: 28,
-          //       backgroundImage: NetworkImage("https://picsum.photos/200"),
+          //       backgroundImage: AssetImage("assets/images/default_user.png"),
           //     ),
           //   ],
           // ),

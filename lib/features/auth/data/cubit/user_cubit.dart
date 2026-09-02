@@ -41,7 +41,22 @@ class UserCubit extends Cubit<UserCubitState> {
         emit(const UserDataFailure('User data not found'));
       }
     } catch (e) {
-      emit(UserDataFailure(e.toString()));
+      final currentUser = FirebaseAuth.instance.currentUser;
+      if (currentUser != null) {
+        final fallbackData = <String, dynamic>{
+          'uid': currentUser.uid,
+          'email': currentUser.email ?? '',
+          'name': (currentUser.displayName != null &&
+                  currentUser.displayName!.trim().isNotEmpty)
+              ? currentUser.displayName!.trim()
+              : 'User',
+          'photoUrl': currentUser.photoURL,
+          'role': 'customer',
+        };
+        emit(UserDataLoaded(fallbackData));
+      } else {
+        emit(UserDataFailure(e.toString()));
+      }
     }
   }
 

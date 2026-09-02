@@ -8,6 +8,7 @@ import 'package:book_ease/features/messages/presentation/views/chat_view.dart';
 import 'package:book_ease/features/notifications/presentation/views/notifications_view.dart';
 import 'package:book_ease/features/on_boarding/presentation/views/on_boarding_view.dart';
 import 'package:book_ease/features/profile/presentation/views/edit_profile_view.dart';
+import 'package:book_ease/features/profile/presentation/views/saved_providers_view.dart';
 import 'package:book_ease/features/provider_availability/presentation/views/provider_availability_view.dart';
 import 'package:book_ease/features/role_selection/presentation/views/choose_role_view.dart';
 import 'package:book_ease/features/root/presentation/views/root_view.dart';
@@ -36,6 +37,7 @@ class AppRoutes {
   static const String editProfile = '/edit_profile';
   static const String settings = '/settings';
   static const String notifications = '/notifications';
+  static const String savedProviders = '/saved_providers';
 
   static Route<dynamic> onGenerateRoute(RouteSettings routeSettings) {
     switch (routeSettings.name) {
@@ -118,6 +120,9 @@ class AppRoutes {
 
       case notifications:
         return MaterialPageRoute(builder: (_) => const NotificationsView());
+
+      case savedProviders:
+        return MaterialPageRoute(builder: (_) => const SavedProvidersView());
 
       default:
         return MaterialPageRoute(

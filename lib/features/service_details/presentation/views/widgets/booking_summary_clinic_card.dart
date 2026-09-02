@@ -1,4 +1,5 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -28,17 +29,11 @@ class BookingSummaryClinicCard extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(14),
-            child: Image.network(
-              model.imageUrl,
+            child: SafeImage(
+              imageSource: model.imageUrl,
               width: 70,
               height: 70,
               fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) => Container(
-                width: 70,
-                height: 70,
-                color: AppColors.cardBackground,
-                child: const Icon(Icons.medical_services_outlined, color: AppColors.primary),
-              ),
             ),
           ),
           const Gap(16),

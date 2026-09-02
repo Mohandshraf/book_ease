@@ -6,10 +6,12 @@ import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
 import 'package:book_ease/features/booking/data/repo/booking_repo.dart';
+import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/provider_services/data/models/service_model.dart';
 import 'package:book_ease/features/provider_services/data/repo/provider_services_repo.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -30,16 +32,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   List<ServiceModel> _firestoreServices = [];
   String _selectedCategory = "All";
   final TextEditingController _searchController = TextEditingController();
-  final Set<String> _bookmarkedDoctors = {};
-
-  final List<String> _categories = const [
-    "All",
-    "Cardiology",
-    "Dermatology",
-    "Dentist",
-    "General",
-    "Neurology",
-  ];
 
   // Default curated doctors matching the design mockup if Firestore has few or no items
   final List<Map<String, dynamic>> _mockDoctors = const [
@@ -51,8 +43,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "rating": 4.9,
       "reviews": 190,
       "price": 85.0,
-      "image":
-          "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=400",
+      "image": "assets/images/doctor1.png",
       "about":
           "Dr. Jenny Watson is a top-rated cardiologist with over 12 years of experience in cardiovascular wellness, heart disease prevention, and non-invasive cardiac imaging.",
       "location": "City Heart Clinic • 1.5 km",
@@ -65,8 +56,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "rating": 4.8,
       "reviews": 142,
       "price": 90.0,
-      "image":
-          "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&q=80&w=400",
+      "image": "assets/images/doctor2.png",
       "about":
           "Dr. Ali Khan specializes in adult cardiology, heart rhythm diagnostics, and hypertension management with cutting-edge medical protocols.",
       "location": "Central Medical Hospital • 2.1 km",
@@ -79,8 +69,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "rating": 4.9,
       "reviews": 215,
       "price": 75.0,
-      "image":
-          "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=400",
+      "image": "assets/images/doctor3.png",
       "about":
           "Board-certified dermatologist focusing on advanced skin health, medical dermatology, and modern laser therapy.",
       "location": "Derma Care Pavilion • 0.8 km",
@@ -93,8 +82,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "rating": 4.7,
       "reviews": 98,
       "price": 60.0,
-      "image":
-          "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&q=80&w=400",
+      "image": "assets/images/image1.png",
       "about":
           "Experienced dental surgeon specializing in cosmetic dentistry, painless root canals, and teeth restoration.",
       "location": "Smile Dental Center • 3.2 km",
@@ -107,11 +95,36 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       "rating": 4.9,
       "reviews": 310,
       "price": 50.0,
-      "image":
-          "https://images.unsplash.com/photo-1527613426441-4da17471b66d?auto=format&fit=crop&q=80&w=400",
+      "image": "assets/images/image2.png",
       "about":
           "Family physician providing comprehensive primary healthcare, preventative checkups, and chronic disease support.",
       "location": "Community Care Center • 1.0 km",
+    },
+    {
+      "id": "doc_6",
+      "name": "Dr. Marcus Vance",
+      "specialty": "Neurologist",
+      "category": "Neurology",
+      "rating": 4.9,
+      "reviews": 160,
+      "price": 110.0,
+      "image": "assets/images/image3.png",
+      "about":
+          "Expert in neurological disorders, migraine treatments, EEG diagnostics, and stroke recovery care.",
+      "location": "Brain & Spine Institute • 2.8 km",
+    },
+    {
+      "id": "doc_7",
+      "name": "Dr. Sophia Patel",
+      "specialty": "Pediatrician",
+      "category": "Pediatrics",
+      "rating": 4.8,
+      "reviews": 230,
+      "price": 65.0,
+      "image": "assets/images/default_doctor.png",
+      "about":
+          "Dedicated pediatric specialist passionate about child wellness, newborn health checks, and vaccination care.",
+      "location": "Children's Health Pavilion • 1.7 km",
     },
   ];
 
@@ -181,7 +194,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       priceUnit: s.priceUnit,
       imageUrl: (s.imageUrl != null && s.imageUrl!.isNotEmpty)
           ? s.imageUrl!
-          : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=800",
+          : "assets/images/doctor1.png",
       aboutText: s.description.isNotEmpty
           ? s.description
           : "Experienced medical specialist dedicated to providing first-class patient care.",
@@ -207,10 +220,50 @@ class _HomeViewBodyState extends State<HomeViewBody> {
       priceUnit: "per visit",
       imageUrl: doc["image"],
       aboutText: doc["about"],
-      specialties: [doc["category"], "Consultation", "Specialist"],
+      specialties: [doc["category"], doc["specialty"], "Consultation", "Specialist"],
       availableDates: mockServiceDetails.availableDates,
       availableTimes: mockServiceDetails.availableTimes,
     );
+  }
+
+  bool _matchesSpecialty(ServiceDetailsModel doc, String category) {
+    if (category == "All") return true;
+    final catLower = category.toLowerCase();
+
+    if (catLower == "dentist" || catLower == "dental") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("dent")) ||
+          doc.title.toLowerCase().contains("dent") ||
+          doc.aboutText.toLowerCase().contains("dent");
+    }
+    if (catLower == "cardiology" || catLower == "cardiologist") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("cardio")) ||
+          doc.title.toLowerCase().contains("cardio") ||
+          doc.aboutText.toLowerCase().contains("cardio");
+    }
+    if (catLower == "neurology" || catLower == "neurologist") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("neuro")) ||
+          doc.title.toLowerCase().contains("neuro") ||
+          doc.aboutText.toLowerCase().contains("neuro");
+    }
+    if (catLower == "pediatrics" || catLower == "pediatrician") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("pediatric") || s.toLowerCase().contains("child")) ||
+          doc.title.toLowerCase().contains("pediatric") ||
+          doc.aboutText.toLowerCase().contains("pediatric");
+    }
+    if (catLower == "dermatology" || catLower == "dermatologist") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("derma") || s.toLowerCase().contains("skin")) ||
+          doc.title.toLowerCase().contains("derma") ||
+          doc.aboutText.toLowerCase().contains("derma");
+    }
+    if (catLower == "general") {
+      return doc.specialties.any((s) => s.toLowerCase().contains("general") || s.toLowerCase().contains("family")) ||
+          doc.title.toLowerCase().contains("general") ||
+          doc.aboutText.toLowerCase().contains("general") ||
+          doc.aboutText.toLowerCase().contains("family");
+    }
+
+    return doc.specialties.any((s) => s.toLowerCase().contains(catLower)) ||
+        doc.title.toLowerCase().contains(catLower);
   }
 
   String _getUserName(UserCubitState state) {
@@ -242,10 +295,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
     // Filter by Category and Search query
     final filteredDoctors = allDoctors.where((doc) {
-      final matchesCategory = _selectedCategory == "All" ||
-          doc.specialties.any(
-              (s) => s.toLowerCase().contains(_selectedCategory.toLowerCase())) ||
-          doc.title.toLowerCase().contains(_selectedCategory.toLowerCase());
+      final matchesCategory = _matchesSpecialty(doc, _selectedCategory);
 
       final matchesQuery = query.isEmpty ||
           doc.providerName.toLowerCase().contains(query) ||
@@ -284,17 +334,16 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                               color: AppColors.border,
                               width: 1.5,
                             ),
-                            image: userPhoto.isNotEmpty
-                                ? DecorationImage(
-                                    image: NetworkImage(userPhoto),
-                                    fit: BoxFit.cover,
-                                  )
-                                : const DecorationImage(
-                                    image: NetworkImage(
-                                      "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&q=80&w=200",
-                                    ),
-                                    fit: BoxFit.cover,
-                                  ),
+                          ),
+                          child: ClipOval(
+                            child: SafeImage(
+                              imageSource: userPhoto.isNotEmpty
+                                  ? userPhoto
+                                  : "assets/images/default_user.png",
+                              width: 48,
+                              height: 48,
+                              fit: BoxFit.cover,
+                            ),
                           ),
                         ),
                         const Gap(12),
@@ -540,14 +589,60 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Top Specialists",
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                        letterSpacing: -0.3,
-                      ),
+                    Row(
+                      children: [
+                        const Text(
+                          "Top Specialists",
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                            color: AppColors.textPrimary,
+                            letterSpacing: -0.3,
+                          ),
+                        ),
+                        if (_selectedCategory != "All") ...[
+                          const Gap(8),
+                          ScaleOnTap(
+                            onTap: () {
+                              setState(() {
+                                _selectedCategory = "All";
+                              });
+                            },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 4,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: AppColors.primary.withValues(alpha: 0.25),
+                                ),
+                              ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    _selectedCategory,
+                                    style: const TextStyle(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.bold,
+                                      color: AppColors.primary,
+                                    ),
+                                  ),
+                                  const Gap(4),
+                                  const Icon(
+                                    Icons.close_rounded,
+                                    size: 14,
+                                    color: AppColors.primary,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ],
+                      ],
                     ),
                     ScaleOnTap(
                       onTap: () {
@@ -567,72 +662,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
 
                 const Gap(14),
 
-                // Horizontal Category Filter Pills
-                SizedBox(
-                  height: 38,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _categories.length,
-                    separatorBuilder: (context, index) => const Gap(8),
-                    itemBuilder: (context, index) {
-                      final cat = _categories[index];
-                      final isSelected = _selectedCategory == cat;
-                      return ScaleOnTap(
-                        onTap: () {
-                          setState(() {
-                            _selectedCategory = cat;
-                          });
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 18,
-                            vertical: 8,
-                          ),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? AppColors.primary
-                                : Colors.white,
-                            borderRadius: BorderRadius.circular(20),
-                            border: Border.all(
-                              color: isSelected
-                                  ? AppColors.primary
-                                  : AppColors.border,
-                              width: 1,
-                            ),
-                            boxShadow: isSelected
-                                ? [
-                                    BoxShadow(
-                                      color: AppColors.primary
-                                          .withValues(alpha: .25),
-                                      blurRadius: 8,
-                                      offset: const Offset(0, 3),
-                                    ),
-                                  ]
-                                : [],
-                          ),
-                          child: Center(
-                            child: Text(
-                              cat,
-                              style: TextStyle(
-                                color: isSelected
-                                    ? Colors.white
-                                    : AppColors.textSecondary,
-                                fontSize: 13,
-                                fontWeight: isSelected
-                                    ? FontWeight.bold
-                                    : FontWeight.w600,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-
-                const Gap(16),
-
                 // Popular Doctors List Cards
                 if (filteredDoctors.isNotEmpty)
                   ListView.separated(
@@ -646,41 +675,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     },
                   )
                 else
-                  Container(
-                    width: double.infinity,
-                    padding: const EdgeInsets.all(30),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(22),
-                      border: Border.all(color: AppColors.border),
-                    ),
-                    child: Column(
-                      children: const [
-                        Icon(
-                          Icons.search_off_rounded,
-                          size: 40,
-                          color: AppColors.textMuted,
-                        ),
-                        Gap(10),
-                        Text(
-                          "No doctors found",
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.textPrimary,
-                          ),
-                        ),
-                        Gap(4),
-                        Text(
-                          "Try searching for another specialty or name",
-                          style: TextStyle(
-                            fontSize: 13,
-                            color: AppColors.textSecondary,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                  _buildEmptySpecialistsState(),
               ],
             ),
           ),
@@ -689,8 +684,100 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     );
   }
 
+  Widget _buildEmptySpecialistsState() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(22),
+        border: Border.all(color: AppColors.border),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadowColor.withValues(alpha: 0.02),
+            blurRadius: 10,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Container(
+            width: 56,
+            height: 56,
+            decoration: const BoxDecoration(
+              color: AppColors.surfaceContainerLow,
+              shape: BoxShape.circle,
+            ),
+            child: const Icon(
+              Icons.search_off_rounded,
+              size: 28,
+              color: AppColors.textMuted,
+            ),
+          ),
+          const Gap(12),
+          Text(
+            _selectedCategory == "All"
+                ? "No specialists found"
+                : "No specialists found in $_selectedCategory",
+            style: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: AppColors.textPrimary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          const Gap(6),
+          const Text(
+            "Try searching or choose another specialty",
+            style: TextStyle(
+              fontSize: 13,
+              color: AppColors.textSecondary,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          if (_selectedCategory != "All" || _searchController.text.isNotEmpty) ...[
+            const Gap(16),
+            ScaleOnTap(
+              onTap: () {
+                setState(() {
+                  _selectedCategory = "All";
+                  _searchController.clear();
+                });
+              },
+              child: Container(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 18,
+                  vertical: 8,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: const Text(
+                  "Show All Specialists",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 13,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildCircularCategoriesRow() {
     final List<Map<String, dynamic>> specialtyItems = [
+      {
+        "name": "All",
+        "icon": Icons.grid_view_rounded,
+        "bg": const Color(0xFFF1F5F9),
+        "color": AppColors.textSecondary,
+      },
       {
         "name": "Cardiology",
         "icon": Icons.favorite_rounded,
@@ -730,7 +817,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     ];
 
     return SizedBox(
-      height: 96,
+      height: 98,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: specialtyItems.length,
@@ -742,8 +829,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           return ScaleOnTap(
             onTap: () {
               setState(() {
-                _selectedCategory =
-                    _selectedCategory == item["name"] ? "All" : item["name"];
+                if (item["name"] == "All") {
+                  _selectedCategory = "All";
+                } else {
+                  _selectedCategory =
+                      _selectedCategory == item["name"] ? "All" : item["name"];
+                }
               });
             },
             child: Column(
@@ -925,7 +1016,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         : (_nextBooking!.serviceTitle ?? "Doctor"));
     final specialty = _nextBooking!.serviceTitle ?? "Specialist";
     final doctorPhoto = _nextBooking!.providerImage ??
-        "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200";
+        "assets/images/default_doctor.png";
 
     return Container(
       padding: const EdgeInsets.all(18),
@@ -958,8 +1049,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
-                  image: DecorationImage(
-                    image: NetworkImage(doctorPhoto),
+                ),
+                child: ClipOval(
+                  child: SafeImage(
+                    imageSource: doctorPhoto,
+                    width: 52,
+                    height: 52,
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -1179,8 +1274,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   }
 
   Widget _buildDoctorCard(BuildContext context, ServiceDetailsModel doc) {
-    final docId = doc.serviceId ?? doc.providerName;
-    final isBookmarked = _bookmarkedDoctors.contains(docId);
+    final docId = doc.serviceId ?? doc.providerId ?? doc.providerName;
+    final savedCubit = context.watch<SavedProvidersCubit>();
+    final isBookmarked = savedCubit.isSaved(docId);
     final specialtyName = doc.specialties.isNotEmpty
         ? doc.specialties.first
         : "Cardiologist";
@@ -1213,21 +1309,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             // Doctor Photo
             ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              child: Image.network(
-                doc.imageUrl,
+              child: SafeImage(
+                imageSource: doc.imageUrl,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 80,
-                  height: 80,
-                  color: AppColors.primaryLight,
-                  child: const Icon(
-                    Icons.person_rounded,
-                    color: AppColors.primary,
-                    size: 36,
-                  ),
-                ),
               ),
             ),
             const Gap(14),
@@ -1277,20 +1363,27 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                           const Gap(6),
                           GestureDetector(
                             onTap: () {
-                              setState(() {
-                                if (isBookmarked) {
-                                  _bookmarkedDoctors.remove(docId);
-                                } else {
-                                  _bookmarkedDoctors.add(docId);
-                                }
-                              });
+                              context
+                                  .read<SavedProvidersCubit>()
+                                  .toggleSaveDoctor(doc);
+                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(
+                                    isBookmarked
+                                        ? "${doc.providerName} removed from saved"
+                                        : "${doc.providerName} added to saved providers",
+                                  ),
+                                  duration: const Duration(seconds: 2),
+                                ),
+                              );
                             },
                             child: Icon(
                               isBookmarked
                                   ? Icons.bookmark_rounded
                                   : Icons.bookmark_border_rounded,
                               color: isBookmarked
-                                  ? AppColors.primary
+                                  ? const Color(0xFFEC4899)
                                   : AppColors.textMuted,
                               size: 18,
                             ),

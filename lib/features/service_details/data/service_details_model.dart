@@ -44,6 +44,47 @@ class ServiceDetailsModel {
     required this.availableDates,
     required this.availableTimes,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'serviceId': serviceId,
+      'providerId': providerId,
+      'providerImage': providerImage,
+      'title': title,
+      'providerName': providerName,
+      'location': location,
+      'rating': rating,
+      'reviewsCount': reviewsCount,
+      'price': price,
+      'priceUnit': priceUnit,
+      'imageUrl': imageUrl,
+      'aboutText': aboutText,
+      'specialties': specialties,
+      'availableTimes': availableTimes,
+    };
+  }
+
+  factory ServiceDetailsModel.fromMap(Map<String, dynamic> map) {
+    return ServiceDetailsModel(
+      serviceId: map['serviceId'],
+      providerId: map['providerId'],
+      providerImage: map['providerImage'],
+      title: map['title'] ?? '',
+      providerName: map['providerName'] ?? '',
+      location: map['location'] ?? '',
+      rating: (map['rating'] as num?)?.toDouble() ?? 5.0,
+      reviewsCount: (map['reviewsCount'] as num?)?.toInt() ?? 0,
+      price: (map['price'] as num?)?.toDouble() ?? 0.0,
+      priceUnit: map['priceUnit'] ?? 'per visit',
+      imageUrl: map['imageUrl'] ?? '',
+      aboutText: map['aboutText'] ?? '',
+      specialties: List<String>.from(map['specialties'] ?? []),
+      availableDates: generateDynamicDateOptions(),
+      availableTimes: List<String>.from(map['availableTimes'] ?? [
+        "9:00 AM", "10:00 AM", "11:00 AM", "2:00 PM", "3:00 PM"
+      ]),
+    );
+  }
 }
 
 List<DateOption> generateDynamicDateOptions([int count = 7]) {
@@ -64,8 +105,7 @@ List<DateOption> generateDynamicDateOptions([int count = 7]) {
 final ServiceDetailsModel mockServiceDetails = ServiceDetailsModel(
   serviceId: "mock_service_sarah",
   providerId: "dr_sarah_mitchell",
-  providerImage:
-      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200",
+  providerImage: "assets/images/doctor1.png",
   title: "City Medical Clinic",
   providerName: "Dr. Sarah Mitchell",
   location: "Downtown, 0.8 km",
@@ -73,8 +113,7 @@ final ServiceDetailsModel mockServiceDetails = ServiceDetailsModel(
   reviewsCount: 284,
   price: 80.0,
   priceUnit: "per session",
-  imageUrl:
-      "https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&q=80&w=800",
+  imageUrl: "assets/images/doctor1.png",
   aboutText:
       "Dr. Sarah Mitchell is a board-certified physician with over 15 years of experience in family and general medicine, specializing in preventive care and chronic disease management.",
   specialties: const ["General Medicine", "Family Care", "Preventive"],

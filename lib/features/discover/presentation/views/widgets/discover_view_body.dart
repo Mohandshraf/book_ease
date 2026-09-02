@@ -86,7 +86,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
         priceUnit: s.priceUnit,
         imageUrl: (s.imageUrl != null && s.imageUrl!.isNotEmpty)
             ? s.imageUrl!
-            : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=800",
+            : "assets/images/default_doctor.png",
         aboutText: s.description.isNotEmpty
             ? s.description
             : "Experienced specialist providing top-tier professional consultations.",
@@ -106,7 +106,7 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
         "price": "From \$${s.price.toStringAsFixed(0)}",
         "image": (s.imageUrl != null && s.imageUrl!.isNotEmpty)
             ? s.imageUrl!
-            : "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&q=80&w=200",
+            : "assets/images/default_doctor.png",
         "model": dynamicModel,
       };
     }).toList();

@@ -247,7 +247,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             iconColor: const Color(0xffEC4899),
             iconBackgroundColor: const Color(0xffFDF2F8),
             onTap: () {
-              // Action
+              Navigator.pushNamed(context, AppRoutes.savedProviders);
             },
           ),
           MenuOptionTile(

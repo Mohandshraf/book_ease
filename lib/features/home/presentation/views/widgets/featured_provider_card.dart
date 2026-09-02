@@ -1,5 +1,6 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
 import 'package:flutter/material.dart';
@@ -37,22 +38,15 @@ class FeaturedProviderCard extends StatelessWidget {
           children: [
             Stack(
               children: [
-                ClipRRect(
-                  borderRadius: const BorderRadius.vertical(
+                const ClipRRect(
+                  borderRadius: BorderRadius.vertical(
                     top: Radius.circular(22),
                   ),
-                  child: Image.network(
-                    "https://picsum.photos/300/180",
+                  child: SafeImage(
+                    imageSource: "assets/images/doctor2.png",
                     height: 140,
                     width: double.infinity,
                     fit: BoxFit.cover,
-                    errorBuilder: (context, error, stackTrace) => Container(
-                      height: 140,
-                      color: AppColors.primaryLight,
-                      child: const Center(
-                        child: Icon(Icons.business_rounded, color: AppColors.primary, size: 36),
-                      ),
-                    ),
                   ),
                 ),
                 Positioned(

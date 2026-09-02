@@ -6,6 +6,7 @@ import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
+import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/provider_availability/data/cubit/provider_availability_cubit.dart';
 import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
 import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
@@ -53,6 +54,9 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<ProviderDashboardCubit>(
           create: (_) => sl<ProviderDashboardCubit>(),
+        ),
+        BlocProvider<SavedProvidersCubit>(
+          create: (_) => sl<SavedProvidersCubit>()..loadSavedProviders(),
         ),
       ],
       child: MaterialApp(

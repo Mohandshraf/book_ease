@@ -1,5 +1,6 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -51,24 +52,11 @@ class DiscoverProviderCard extends StatelessWidget {
             // Doctor Profile Image
             ClipRRect(
               borderRadius: BorderRadius.circular(18),
-              child: Image.network(
-                image,
+              child: SafeImage(
+                imageSource: image,
                 width: 80,
                 height: 80,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 80,
-                  height: 80,
-                  decoration: BoxDecoration(
-                    color: AppColors.primaryLight,
-                    borderRadius: BorderRadius.circular(18),
-                  ),
-                  child: const Icon(
-                    Icons.person_rounded,
-                    color: AppColors.primary,
-                    size: 36,
-                  ),
-                ),
               ),
             ),
             const Gap(14),

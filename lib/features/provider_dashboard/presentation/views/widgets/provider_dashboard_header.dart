@@ -1,4 +1,5 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,7 +80,7 @@ class ProviderDashboardHeader extends StatelessWidget {
                 radius: 28,
                 backgroundColor: Colors.white24,
                 backgroundImage: photoUrl != null && photoUrl.isNotEmpty
-                    ? NetworkImage(photoUrl)
+                    ? safeImageProvider(photoUrl)
                     : null,
                 child: photoUrl == null || photoUrl.isEmpty
                     ? Text(

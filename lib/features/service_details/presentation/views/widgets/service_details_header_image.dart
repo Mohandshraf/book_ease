@@ -1,3 +1,4 @@
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -19,15 +20,11 @@ class _ServiceDetailsHeaderImageState extends State<ServiceDetailsHeaderImage> {
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Container(
+        SafeImage(
+          imageSource: widget.model.imageUrl,
           height: 320,
           width: double.infinity,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: NetworkImage(widget.model.imageUrl),
-              fit: BoxFit.cover,
-            ),
-          ),
+          fit: BoxFit.cover,
         ),
         Container(
           height: 320,

@@ -37,6 +37,15 @@ class UserAvatar extends StatelessWidget {
         } catch (_) {}
       }
 
+      // Check if Asset
+      if (img.startsWith('assets/')) {
+        return CircleAvatar(
+          radius: radius,
+          backgroundColor: bg,
+          backgroundImage: AssetImage(img),
+        );
+      }
+
       // Check if Network URL
       if (img.startsWith('http://') || img.startsWith('https://')) {
         return CircleAvatar(

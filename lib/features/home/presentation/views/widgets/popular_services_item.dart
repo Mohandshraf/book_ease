@@ -1,5 +1,6 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
 import 'package:flutter/material.dart';
@@ -36,20 +37,11 @@ class PopularServiceItem extends StatelessWidget {
           children: [
             ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(
-                "https://picsum.photos/90",
+              child: const SafeImage(
+                imageSource: "assets/images/doctor1.png",
                 width: 70,
                 height: 70,
                 fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 70,
-                  height: 70,
-                  color: AppColors.primaryLight,
-                  child: const Icon(
-                    Icons.medical_services_rounded,
-                    color: AppColors.primary,
-                  ),
-                ),
               ),
             ),
             const SizedBox(width: 14),
