@@ -1379,11 +1379,11 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                           const Gap(6),
                           GestureDetector(
                             onTap: () {
-                              context
-                                  .read<SavedProvidersCubit>()
-                                  .toggleSaveDoctor(doc);
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              final cubit = context.read<SavedProvidersCubit>();
+                              final messenger = ScaffoldMessenger.of(context);
+                              cubit.toggleSaveDoctor(doc);
+                              messenger.hideCurrentSnackBar();
+                              messenger.showSnackBar(
                                 SnackBar(
                                   content: Text(
                                     isBookmarked

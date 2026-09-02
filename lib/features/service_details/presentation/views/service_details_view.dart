@@ -104,11 +104,11 @@ class _ServiceDetailsViewState extends State<ServiceDetailsView> {
                               context.read<SavedProvidersCubit>().isSaved(docId);
                           return ScaleOnTap(
                             onTap: () {
-                              context
-                                  .read<SavedProvidersCubit>()
-                                  .toggleSaveDoctor(widget.model);
-                              ScaffoldMessenger.of(context).hideCurrentSnackBar();
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              final cubit = context.read<SavedProvidersCubit>();
+                              final messenger = ScaffoldMessenger.of(context);
+                              cubit.toggleSaveDoctor(widget.model);
+                              messenger.hideCurrentSnackBar();
+                              messenger.showSnackBar(
                                 SnackBar(
                                   content: Text(
                                     isSaved

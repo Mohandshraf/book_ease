@@ -401,43 +401,6 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                           ),
                         ],
                       ),
-                      if (_currentBooking.providerId.isNotEmpty) ...[
-                        const Gap(14),
-                        const Divider(height: 1, color: AppColors.border),
-                        const Gap(12),
-                        ScaleOnTap(
-                          onTap: () {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.chat,
-                              arguments: {
-                                'otherUserId': _currentBooking.providerId,
-                                'otherUserName': _currentBooking.providerName ??
-                                    'Doctor',
-                              },
-                            );
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Icon(
-                                Icons.chat_bubble_outline_rounded,
-                                color: AppColors.primary,
-                                size: 18,
-                              ),
-                              Gap(8),
-                              Text(
-                                "Message Doctor",
-                                style: TextStyle(
-                                  color: AppColors.primary,
-                                  fontSize: 13,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
                     ],
                   ),
                 ),
@@ -665,91 +628,39 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
           padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
           child: SafeArea(
             child: isActionable
-                ? Row(
-                    children: [
-                      // Secondary Action: Cancel Appointment
-                      Expanded(
-                        flex: 1,
-                        child: ScaleOnTap(
-                          onTap: _confirmCancelBooking,
-                          child: Container(
-                            height: 52,
-                            decoration: BoxDecoration(
-                              color: AppColors.errorLight,
-                              borderRadius: BorderRadius.circular(16),
-                            ),
-                            alignment: Alignment.center,
-                            child: const Text(
-                              "Cancel",
-                              style: TextStyle(
-                                color: AppColors.error,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ),
+                ? ScaleOnTap(
+                    onTap: _confirmCancelBooking,
+                    child: Container(
+                      height: 52,
+                      decoration: BoxDecoration(
+                        color: AppColors.errorLight,
+                        borderRadius: BorderRadius.circular(16),
+                        border: Border.all(
+                          color: AppColors.error.withValues(alpha: 0.2),
+                          width: 1,
                         ),
                       ),
-                      const Gap(12),
-                      // Primary Action: Message Doctor
-                      Expanded(
-                        flex: 2,
-                        child: ScaleOnTap(
-                          onTap: () {
-                            if (_currentBooking.providerId.isNotEmpty) {
-                              Navigator.pushNamed(
-                                context,
-                                AppRoutes.chat,
-                                arguments: {
-                                  'otherUserId': _currentBooking.providerId,
-                                  'otherUserName': _currentBooking.providerName ??
-                                      'Doctor',
-                                },
-                              );
-                            }
-                          },
-                          child: Container(
-                            height: 52,
-                            decoration: BoxDecoration(
-                              gradient: const LinearGradient(
-                                colors: [
-                                  AppColors.primaryGradientStart,
-                                  AppColors.primaryGradientEnd,
-                                ],
-                              ),
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: AppColors.primary.withValues(alpha: .3),
-                                  blurRadius: 12,
-                                  offset: const Offset(0, 4),
-                                ),
-                              ],
-                            ),
-                            alignment: Alignment.center,
-                            child: const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(
-                                  Icons.chat_bubble_outline_rounded,
-                                  color: Colors.white,
-                                  size: 18,
-                                ),
-                                Gap(8),
-                                Text(
-                                  "Message Doctor",
-                                  style: TextStyle(
-                                    fontSize: 15,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white,
-                                  ),
-                                ),
-                              ],
+                      alignment: Alignment.center,
+                      child: const Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.cancel_outlined,
+                            color: AppColors.error,
+                            size: 18,
+                          ),
+                          Gap(8),
+                          Text(
+                            "Cancel Appointment",
+                            style: TextStyle(
+                              color: AppColors.error,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 15,
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
+                    ),
                   )
                 : ScaleOnTap(
                     onTap: () {

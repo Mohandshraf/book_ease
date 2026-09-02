@@ -1,9 +1,9 @@
-import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/profile/cubit/saved_providers_state.dart';
+import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
 import 'package:flutter/material.dart';
@@ -91,7 +91,7 @@ class SavedProvidersViewBody extends StatelessWidget {
             const Gap(28),
             ScaleOnTap(
               onTap: () {
-                Navigator.pushNamed(context, AppRoutes.discover);
+                CustomerRootView.navigateToTab(context, 1);
               },
               child: Container(
                 padding: const EdgeInsets.symmetric(
@@ -255,11 +255,13 @@ class SavedProvidersViewBody extends StatelessWidget {
                           const Gap(8),
                           GestureDetector(
                             onTap: () {
-                              context
-                                  .read<SavedProvidersCubit>()
-                                  .toggleSaveDoctor(doc);
+                              final cubit = context.read<SavedProvidersCubit>();
+                              final messenger = ScaffoldMessenger.of(context);
 
-                              ScaffoldMessenger.of(context).showSnackBar(
+                              cubit.toggleSaveDoctor(doc);
+
+                              messenger.hideCurrentSnackBar();
+                              messenger.showSnackBar(
                                 SnackBar(
                                   content: Text(
                                     "${doc.providerName} removed from saved",
@@ -268,9 +270,7 @@ class SavedProvidersViewBody extends StatelessWidget {
                                     label: "Undo",
                                     textColor: AppColors.accentPeach,
                                     onPressed: () {
-                                      context
-                                          .read<SavedProvidersCubit>()
-                                          .toggleSaveDoctor(doc);
+                                      cubit.toggleSaveDoctor(doc);
                                     },
                                   ),
                                   duration: const Duration(seconds: 3),

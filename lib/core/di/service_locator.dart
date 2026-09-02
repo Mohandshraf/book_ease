@@ -38,7 +38,9 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<AuthRepo>(
     () => AuthRepoImpl(sl<FirebaseAuthService>()),
   );
-  sl.registerLazySingleton<BookingRepo>(() => BookingRepoImpl());
+  sl.registerLazySingleton<BookingRepo>(
+    () => BookingRepoImpl(chatServices: sl<ChatServices>()),
+  );
   sl.registerLazySingleton<ChatRepo>(() => ChatRepoImpl(sl<ChatServices>()));
   sl.registerLazySingleton<NotificationRepo>(() => NotificationRepoImpl(sl<NotificationServices>()));
   sl.registerLazySingleton<ProviderServicesRepo>(() => ProviderServicesRepoImpl());

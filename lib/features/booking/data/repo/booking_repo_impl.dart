@@ -1,14 +1,18 @@
+import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
 import 'package:book_ease/features/booking/data/repo/booking_repo.dart';
+import 'package:book_ease/features/messages/data/services/chat_services.dart';
 import 'package:book_ease/features/notifications/data/models/notification_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class BookingRepoImpl implements BookingRepo {
   final FirebaseFirestore _firestore;
+  final ChatServices? _chatServices;
 
-  BookingRepoImpl({FirebaseFirestore? firestore})
-      : _firestore = firestore ?? FirebaseFirestore.instance;
+  BookingRepoImpl({FirebaseFirestore? firestore, ChatServices? chatServices})
+      : _firestore = firestore ?? FirebaseFirestore.instance,
+        _chatServices = chatServices;
 
   @override
   Future<void> createBooking(BookingModel booking) async {
@@ -35,6 +39,7 @@ class BookingRepoImpl implements BookingRepo {
       customerEmail: email,
       providerId: booking.providerId,
       providerName: booking.providerName,
+      providerImage: booking.providerImage,
       serviceId: booking.serviceId,
       serviceTitle: booking.serviceTitle,
       price: booking.price,
@@ -73,6 +78,31 @@ class BookingRepoImpl implements BookingRepo {
         await _firestore
             .collection('notifications')
             .add(notification.toJson());
+      } catch (_) {}
+    }
+
+    // Automatically initialize Conversation in Messages between Customer and Provider
+    if (finalBooking.providerId.isNotEmpty) {
+      try {
+        final chatServices = _chatServices ??
+            (sl.isRegistered<ChatServices>() ? sl<ChatServices>() : ChatServices());
+        final serviceName = (finalBooking.serviceTitle != null &&
+                finalBooking.serviceTitle!.isNotEmpty)
+            ? finalBooking.serviceTitle!
+            : "a consultation";
+        final timeText = (finalBooking.bookingTime.isNotEmpty)
+            ? " for ${finalBooking.bookingTime}"
+            : "";
+
+        await chatServices.sendMessage(
+          receiverId: finalBooking.providerId,
+          receiverName: finalBooking.providerName ?? 'Service Provider',
+          receiverImage: finalBooking.providerImage,
+          receiverSpecialty: serviceName,
+          senderIdOverride: finalBooking.customerId,
+          senderNameOverride: finalBooking.customerName,
+          messageText: "Hello! I booked an appointment for $serviceName$timeText.",
+        );
       } catch (_) {}
     }
   }

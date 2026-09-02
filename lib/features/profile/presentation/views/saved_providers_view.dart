@@ -21,7 +21,10 @@ class SavedProvidersView extends StatelessWidget {
           padding: const EdgeInsets.only(left: 16),
           child: Center(
             child: ScaleOnTap(
-              onTap: () => Navigator.pop(context),
+              onTap: () {
+                ScaffoldMessenger.of(context).hideCurrentSnackBar();
+                Navigator.pop(context);
+              },
               child: Container(
                 width: 40,
                 height: 40,

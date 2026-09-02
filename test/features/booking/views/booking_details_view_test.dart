@@ -62,7 +62,7 @@ void main() {
     expect(find.text('Doctor Now'), findsOneWidget);
     expect(find.text('Dr. Sarah Connor'), findsOneWidget);
     expect(find.text('5.0'), findsOneWidget);
-    expect(find.text('Message Doctor'), findsWidgets);
+    expect(find.text('Message Doctor'), findsNothing);
 
     // Appointment Schedule
     expect(find.text('Appointment Schedule'), findsOneWidget);
@@ -87,6 +87,6 @@ void main() {
     expect(find.text('Paid'), findsOneWidget);
 
     // Action Buttons
-    expect(find.text('Cancel'), findsOneWidget);
+    expect(find.text('Cancel Appointment'), findsOneWidget);
   });
 }

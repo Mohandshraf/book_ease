@@ -58,19 +58,32 @@ class ChatServices {
     required String messageText,
     String? receiverImage,
     String? receiverSpecialty,
+    String? senderIdOverride,
+    String? senderNameOverride,
+    String? senderImageOverride,
+    String? senderSpecialtyOverride,
   }) async {
-    final senderId = currentUserId;
+    final senderId = (senderIdOverride != null && senderIdOverride.isNotEmpty)
+        ? senderIdOverride
+        : currentUserId;
     if (senderId.isEmpty || receiverId.isEmpty || messageText.trim().isEmpty) {
       return;
     }
 
-    String senderName = currentUserName;
+    String senderName = (senderNameOverride != null && senderNameOverride.isNotEmpty)
+        ? senderNameOverride
+        : currentUserName;
+    String? senderImage = senderImageOverride ?? _auth.currentUser?.photoURL;
     try {
       final userDoc = await _firestore.collection('users').doc(senderId).get();
       if (userDoc.exists && userDoc.data() != null) {
         final docName = userDoc.data()!['name'] as String?;
-        if (docName != null && docName.trim().isNotEmpty) {
+        if (docName != null && docName.trim().isNotEmpty && (senderNameOverride == null || senderNameOverride.isEmpty)) {
           senderName = docName.trim();
+        }
+        final docImage = userDoc.data()!['profileImage'] ?? userDoc.data()!['photoUrl'];
+        if (docImage != null && docImage.toString().trim().isNotEmpty && senderImage == null) {
+          senderImage = docImage.toString().trim();
         }
       }
     } catch (_) {}
@@ -145,8 +158,8 @@ class ChatServices {
       chatId: chatId,
       otherUserId: senderId,
       otherUserName: senderName,
-      otherUserImage: _auth.currentUser?.photoURL,
-      otherUserSpecialty: 'Patient',
+      otherUserImage: senderImage,
+      otherUserSpecialty: senderSpecialtyOverride ?? 'Patient',
       lastMessage: messageText.trim(),
       lastMessageTime: now,
       unread: true,
@@ -158,6 +171,16 @@ class ChatServices {
         .collection('conversations')
         .doc(senderId)
         .set(receiverConversation.toJson(), SetOptions(merge: true));
+
+    if (targetReceiverId != receiverId) {
+      await _firestore
+          .collection('users')
+          .doc(receiverId)
+          .collection('conversations')
+          .doc(senderId)
+          .set(receiverConversation.toJson(), SetOptions(merge: true))
+          .catchError((_) {});
+    }
 
     // Also send in-app notification to receiver
     try {

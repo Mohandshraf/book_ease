@@ -281,6 +281,7 @@ class _PaymentViewState extends State<PaymentView> {
                               customerEmail: currentUser?.email,
                               providerId: effectiveProviderId,
                               providerName: widget.model.providerName,
+                              providerImage: widget.model.imageUrl,
                               serviceId: effectiveServiceId,
                               serviceTitle: widget.model.title,
                               price: widget.totalPrice,
