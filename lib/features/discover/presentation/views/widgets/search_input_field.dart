@@ -45,23 +45,32 @@ class SearchInputField extends StatelessWidget {
             child: TextField(
               controller: controller,
               onChanged: onChanged,
+              textAlignVertical: TextAlignVertical.center,
+              style: const TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
               decoration: InputDecoration(
                 hintText: hintText,
                 hintStyle: const TextStyle(
                   color: AppColors.textMuted,
                   fontSize: 14,
+                  fontWeight: FontWeight.w400,
                 ),
                 border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                disabledBorder: InputBorder.none,
+                filled: false,
+                fillColor: Colors.transparent,
+                contentPadding: EdgeInsets.zero,
                 isDense: true,
               ),
             ),
           ),
           const SizedBox(width: 8),
-          Container(
-            height: 20,
-            width: 1,
-            color: AppColors.border,
-          ),
+          Container(height: 20, width: 1, color: AppColors.border),
           const SizedBox(width: 10),
           ScaleOnTap(
             onTap: onFilterTap,

@@ -51,16 +51,15 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
   void _subscribeToFirestoreServices() {
     try {
       final repo = sl<ProviderServicesRepo>();
-      _servicesSubscription = repo.getAllActiveServicesStream().listen(
-        (services) {
-          if (mounted) {
-            setState(() {
-              _firestoreServices = services;
-            });
-          }
-        },
-        onError: (_) {},
-      );
+      _servicesSubscription = repo.getAllActiveServicesStream().listen((
+        services,
+      ) {
+        if (mounted) {
+          setState(() {
+            _firestoreServices = services;
+          });
+        }
+      }, onError: (_) {});
     } catch (_) {}
   }
 
@@ -123,7 +122,9 @@ class _DiscoverViewBodyState extends State<DiscoverViewBody> {
           selectedCategory == "All" ||
           category == selectedCategory.toLowerCase() ||
           subtitle.contains(selectedCategory.toLowerCase()) ||
-          model.specialties.any((s) => s.toLowerCase().contains(selectedCategory.toLowerCase()));
+          model.specialties.any(
+            (s) => s.toLowerCase().contains(selectedCategory.toLowerCase()),
+          );
 
       final bool matchesQuery =
           query.isEmpty ||

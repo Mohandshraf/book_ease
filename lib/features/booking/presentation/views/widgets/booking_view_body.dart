@@ -1,3 +1,4 @@
+import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
@@ -263,22 +264,87 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                   if (activeBookings.isEmpty) {
                     return Center(
                       child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 40),
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 48,
+                          horizontal: 20,
+                        ),
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            const Icon(
-                              Icons.calendar_today_rounded,
-                              color: AppColors.accent,
-                              size: 44,
-                            ),
-                            const SizedBox(height: 12),
-                            Text(
-                              "No $selectedTab bookings found",
-                              style: const TextStyle(
-                                color: AppColors.textSecondary,
-                                fontSize: 14,
+                            Container(
+                              height: 80,
+                              width: 80,
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.08),
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.calendar_month_outlined,
+                                color: AppColors.primary,
+                                size: 38,
                               ),
                             ),
+                            const SizedBox(height: 18),
+                            Text(
+                              selectedTab == "Upcoming"
+                                  ? "No Upcoming Appointments"
+                                  : "No Past Appointments",
+                              style: const TextStyle(
+                                color: AppColors.textPrimary,
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                            Text(
+                              selectedTab == "Upcoming"
+                                  ? "You don't have any appointments booked yet. Browse top specialists and schedule your consultation."
+                                  : "You haven't completed any appointments yet.",
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(
+                                color: AppColors.textSecondary,
+                                fontSize: 13,
+                                height: 1.5,
+                              ),
+                            ),
+                            if (selectedTab == "Upcoming") ...[
+                              const SizedBox(height: 22),
+                              ScaleOnTap(
+                                onTap: () {
+                                  Navigator.pushNamed(context, AppRoutes.discover);
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 24,
+                                    vertical: 13,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    gradient: const LinearGradient(
+                                      colors: [
+                                        AppColors.primaryGradientStart,
+                                        AppColors.primaryGradientEnd,
+                                      ],
+                                    ),
+                                    borderRadius: BorderRadius.circular(16),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: AppColors.primary.withValues(alpha: 0.3),
+                                        blurRadius: 10,
+                                        offset: const Offset(0, 4),
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Text(
+                                    "Find a Doctor",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ],
                         ),
                       ),

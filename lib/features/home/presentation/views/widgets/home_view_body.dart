@@ -809,24 +809,123 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     ];
 
     final bool hasBooking = _nextBooking != null;
-    final bDate = hasBooking ? _nextBooking!.bookingDate : DateTime.now();
-    final dateStr = hasBooking
-        ? "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}"
-        : "Today • 14:00";
-    final timeStr = hasBooking ? _nextBooking!.bookingTime : "02:00 PM - 02:45 PM";
-    final doctorName = hasBooking
-        ? ((_nextBooking!.providerName != null &&
-                _nextBooking!.providerName!.isNotEmpty)
-            ? _nextBooking!.providerName!
-            : (_nextBooking!.serviceTitle ?? "Dr. Jenny Watson"))
-        : "Dr. Jenny Watson";
-    final specialty = hasBooking
-        ? (_nextBooking!.serviceTitle ?? "Cardiologist Specialist")
-        : "Cardiologist Specialist";
-    final doctorPhoto = hasBooking
-        ? (_nextBooking!.providerImage ??
-            "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200")
-        : "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200";
+
+    if (!hasBooking) {
+      return Container(
+        width: double.infinity,
+        padding: const EdgeInsets.all(20),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
+          border: Border.all(color: AppColors.border, width: 1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 10,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                Container(
+                  width: 48,
+                  height: 48,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary.withValues(alpha: 0.1),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: const Icon(
+                    Icons.event_available_rounded,
+                    color: AppColors.primary,
+                    size: 24,
+                  ),
+                ),
+                const Gap(14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text(
+                        "No upcoming appointments",
+                        style: TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 15,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      Gap(3),
+                      Text(
+                        "Book your consultation with certified doctors.",
+                        style: TextStyle(
+                          color: AppColors.textSecondary,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const Gap(16),
+            ScaleOnTap(
+              onTap: () {
+                Navigator.pushNamed(context, AppRoutes.discover);
+              },
+              child: Container(
+                width: double.infinity,
+                height: 44,
+                decoration: BoxDecoration(
+                  gradient: const LinearGradient(
+                    colors: [
+                      AppColors.primaryGradientStart,
+                      AppColors.primaryGradientEnd,
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(14),
+                  boxShadow: [
+                    BoxShadow(
+                      color: AppColors.primary.withValues(alpha: 0.25),
+                      blurRadius: 8,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.search_rounded, color: Colors.white, size: 16),
+                    Gap(8),
+                    Text(
+                      "Find a Doctor & Book",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    final bDate = _nextBooking!.bookingDate;
+    final dateStr =
+        "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}";
+    final timeStr = _nextBooking!.bookingTime;
+    final doctorName = ((_nextBooking!.providerName != null &&
+            _nextBooking!.providerName!.isNotEmpty)
+        ? _nextBooking!.providerName!
+        : (_nextBooking!.serviceTitle ?? "Doctor"));
+    final specialty = _nextBooking!.serviceTitle ?? "Specialist";
+    final doctorPhoto = _nextBooking!.providerImage ??
+        "https://images.unsplash.com/photo-1594824813588-466d7e0c4f8d?auto=format&fit=crop&q=80&w=200";
 
     return Container(
       padding: const EdgeInsets.all(18),
