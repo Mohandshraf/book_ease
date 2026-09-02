@@ -29,4 +29,16 @@ class BookingCubit extends Cubit<BookingState> {
       emit(BookingFailure(e.toString()));
     }
   }
+
+  Future<void> cancelBooking(String bookingId, String customerId) async {
+    emit(BookingLoading());
+
+    try {
+      await bookingRepo.updateBookingStatus(bookingId, 'cancelled');
+      final bookings = await bookingRepo.getUserBookings(customerId);
+      emit(BookingSuccess(bookings: bookings));
+    } catch (e) {
+      emit(BookingFailure(e.toString()));
+    }
+  }
 }

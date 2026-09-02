@@ -10,7 +10,9 @@ export 'customer_root_view.dart';
 export 'provider_root_view.dart';
 
 class RootView extends StatefulWidget {
-  const RootView({super.key});
+  final int initialIndex;
+
+  const RootView({super.key, this.initialIndex = 0});
 
   @override
   State<RootView> createState() => _RootViewState();
@@ -37,7 +39,7 @@ class _RootViewState extends State<RootView> {
       builder: (context, state) {
         if (state is UserDataLoading && state is! UserDataLoaded) {
           if (FirebaseAuth.instance.currentUser != null) {
-            return const CustomerRootView();
+            return CustomerRootView(initialIndex: widget.initialIndex);
           }
           return const Scaffold(
             backgroundColor: AppColors.background,
@@ -49,7 +51,7 @@ class _RootViewState extends State<RootView> {
 
         if (state is UserDataFailure) {
           if (FirebaseAuth.instance.currentUser != null) {
-            return const CustomerRootView();
+            return CustomerRootView(initialIndex: widget.initialIndex);
           }
           return Scaffold(
             backgroundColor: AppColors.background,
@@ -88,11 +90,11 @@ class _RootViewState extends State<RootView> {
           if (role == "provider") {
             return const ProviderRootView();
           }
-          return const CustomerRootView();
+          return CustomerRootView(initialIndex: widget.initialIndex);
         }
 
         if (FirebaseAuth.instance.currentUser != null) {
-          return const CustomerRootView();
+          return CustomerRootView(initialIndex: widget.initialIndex);
         }
 
         return const Scaffold(

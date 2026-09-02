@@ -51,8 +51,16 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   void getMessages(String otherUserId) {
+    // Optimistically mark this conversation as read in state
+    final updatedConvs = state.conversations.map((c) {
+      if (c.otherUserId == otherUserId) {
+        return c.copyWith(unread: false);
+      }
+      return c;
+    }).toList();
+
     emit(ChatLoading(
-      conversations: state.conversations,
+      conversations: updatedConvs,
       messages: state.activeChatUserId == otherUserId ? state.messages : const [],
       activeChatUserId: otherUserId,
     ));
@@ -85,6 +93,24 @@ class ChatCubit extends Cubit<ChatState> {
       ));
     }
   }
+
+  Future<void> markConversationAsRead(String otherUserId) async {
+    try {
+      await chatRepo.markAsRead(otherUserId);
+      final updatedConvs = state.conversations.map((c) {
+        if (c.otherUserId == otherUserId) {
+          return c.copyWith(unread: false);
+        }
+        return c;
+      }).toList();
+      emit(ConversationsLoaded(
+        updatedConvs,
+        messages: state.messages,
+        activeChatUserId: state.activeChatUserId,
+      ));
+    } catch (_) {}
+  }
+
 
   Future<void> sendMessage({
     required String receiverId,

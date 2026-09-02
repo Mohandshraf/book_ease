@@ -118,19 +118,33 @@ class BookingRepoImpl implements BookingRepo {
 
   @override
   Future<List<BookingModel>> getProviderBookings(String providerId) async {
+    final user = FirebaseAuth.instance.currentUser;
     final uid = providerId.isNotEmpty
         ? providerId
-        : (FirebaseAuth.instance.currentUser?.uid ?? "");
+        : (user?.uid ?? "");
     if (uid.isEmpty) return [];
 
+    final currentName = (user?.displayName ?? '').trim().toLowerCase();
+
     try {
-      final querySnapshot = await _firestore
-          .collection('bookings')
-          .where('providerId', isEqualTo: uid)
-          .get();
+      final querySnapshot = await _firestore.collection('bookings').get();
 
       final list = querySnapshot.docs
           .map((doc) => BookingModel.fromJson(doc.data(), doc.id))
+          .where((b) {
+            if (b.providerId == uid) return true;
+            if (currentName.isNotEmpty) {
+              final pName = (b.providerName ?? '').trim().toLowerCase();
+              final pId = b.providerId.trim().toLowerCase();
+              if (pName == currentName ||
+                  pId == currentName ||
+                  pName.contains(currentName) ||
+                  currentName.contains(pName)) {
+                return true;
+              }
+            }
+            return false;
+          })
           .toList();
 
       list.sort((a, b) => b.bookingDate.compareTo(a.bookingDate));
@@ -142,18 +156,34 @@ class BookingRepoImpl implements BookingRepo {
 
   @override
   Stream<List<BookingModel>> getProviderBookingsStream(String providerId) {
+    final user = FirebaseAuth.instance.currentUser;
     final uid = providerId.isNotEmpty
         ? providerId
-        : (FirebaseAuth.instance.currentUser?.uid ?? "");
+        : (user?.uid ?? "");
     if (uid.isEmpty) return Stream.value([]);
+
+    final currentName = (user?.displayName ?? '').trim().toLowerCase();
 
     return _firestore
         .collection('bookings')
-        .where('providerId', isEqualTo: uid)
         .snapshots()
         .map((snapshot) {
       final list = snapshot.docs
           .map((doc) => BookingModel.fromJson(doc.data(), doc.id))
+          .where((b) {
+            if (b.providerId == uid) return true;
+            if (currentName.isNotEmpty) {
+              final pName = (b.providerName ?? '').trim().toLowerCase();
+              final pId = b.providerId.trim().toLowerCase();
+              if (pName == currentName ||
+                  pId == currentName ||
+                  pName.contains(currentName) ||
+                  currentName.contains(pName)) {
+                return true;
+              }
+            }
+            return false;
+          })
           .toList();
       list.sort((a, b) => b.createdAt.compareTo(a.createdAt));
       return list;

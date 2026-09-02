@@ -1,5 +1,4 @@
 import 'package:book_ease/features/discover/presentation/views/discover_view.dart';
-import 'package:book_ease/features/booking/presentation/views/booking_view.dart';
 import 'package:book_ease/features/admin/presentation/views/admin_view.dart';
 import 'package:book_ease/features/register/presentation/views/register_view.dart';
 import 'package:book_ease/features/splash/presentation/views/splash_view.dart';
@@ -15,6 +14,8 @@ import 'package:book_ease/features/root/presentation/views/root_view.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/booking_summary_view.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
+import 'package:book_ease/features/booking/data/models/booking_model.dart';
+import 'package:book_ease/features/booking/presentation/views/booking_details_view.dart';
 import 'package:book_ease/features/settings/presentation/views/settings_view.dart';
 import 'package:flutter/material.dart';
 
@@ -30,6 +31,7 @@ class AppRoutes {
   static const String providerAvailability = '/provider_availability';
   static const String admin = '/admin';
   static const String booking = '/booking';
+  static const String bookingDetails = '/booking_details';
   static const String discover = '/discover';
   static const String serviceDetails = '/service_details';
   static const String bookingSummary = '/booking_summary';
@@ -57,10 +59,16 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const ChooseRoleView());
 
       case root:
-        return MaterialPageRoute(builder: (_) => const RootView());
+        final initialIndex = routeSettings.arguments as int? ?? 0;
+        return MaterialPageRoute(
+          builder: (_) => RootView(initialIndex: initialIndex),
+        );
 
       case customerRoot:
-        return MaterialPageRoute(builder: (_) => const CustomerRootView());
+        final initialIndex = routeSettings.arguments as int? ?? 0;
+        return MaterialPageRoute(
+          builder: (_) => CustomerRootView(initialIndex: initialIndex),
+        );
 
       case providerRoot:
         return MaterialPageRoute(builder: (_) => const ProviderRootView());
@@ -72,7 +80,16 @@ class AppRoutes {
         return MaterialPageRoute(builder: (_) => const AdminView());
 
       case booking:
-        return MaterialPageRoute(builder: (_) => const BookingView());
+        final initialIndex = routeSettings.arguments as int? ?? 2;
+        return MaterialPageRoute(
+          builder: (_) => CustomerRootView(initialIndex: initialIndex),
+        );
+
+      case bookingDetails:
+        final booking = routeSettings.arguments as BookingModel;
+        return MaterialPageRoute(
+          builder: (_) => BookingDetailsView(booking: booking),
+        );
 
       case discover:
         return MaterialPageRoute(builder: (_) => const DiscoverView());

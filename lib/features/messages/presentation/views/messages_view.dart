@@ -277,7 +277,7 @@ class _MessagesViewState extends State<MessagesView> {
                   },
                   child: Container(
                     color: chat.unread
-                        ? AppColors.primary.withValues(alpha: .03)
+                        ? const Color(0xFFEF4444).withValues(alpha: .04)
                         : Colors.transparent,
                     padding: const EdgeInsets.symmetric(
                       horizontal: 20,
@@ -313,12 +313,19 @@ class _MessagesViewState extends State<MessagesView> {
                                   height: 14,
                                   width: 14,
                                   decoration: BoxDecoration(
-                                    color: AppColors.primary,
+                                    color: const Color(0xFFEF4444),
                                     shape: BoxShape.circle,
                                     border: Border.all(
                                       color: Colors.white,
-                                      width: 2.5,
+                                      width: 2.2,
                                     ),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFFEF4444).withValues(alpha: 0.4),
+                                        blurRadius: 4,
+                                        offset: const Offset(0, 1),
+                                      ),
+                                    ],
                                   ),
                                 ),
                               ),
@@ -333,21 +340,26 @@ class _MessagesViewState extends State<MessagesView> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceBetween,
                                 children: [
-                                  Text(
-                                    chat.otherUserName,
-                                    style: TextStyle(
-                                      color: AppColors.textPrimary,
-                                      fontSize: 15,
-                                      fontWeight: chat.unread
-                                          ? FontWeight.bold
-                                          : FontWeight.w600,
+                                  Expanded(
+                                    child: Text(
+                                      chat.otherUserName,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: AppColors.textPrimary,
+                                        fontSize: 15,
+                                        fontWeight: chat.unread
+                                            ? FontWeight.bold
+                                            : FontWeight.w600,
+                                      ),
                                     ),
                                   ),
+                                  const Gap(8),
                                   Text(
                                     timeStr,
                                     style: TextStyle(
                                       color: chat.unread
-                                          ? AppColors.primary
+                                          ? const Color(0xFFEF4444)
                                           : AppColors.textMuted,
                                       fontSize: 12,
                                       fontWeight: chat.unread
@@ -370,19 +382,54 @@ class _MessagesViewState extends State<MessagesView> {
                                 ),
                               ],
                               const Gap(4),
-                              Text(
-                                chat.lastMessage,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                  color: chat.unread
-                                      ? AppColors.textPrimary
-                                      : AppColors.textSecondary,
-                                  fontSize: 13,
-                                  fontWeight: chat.unread
-                                      ? FontWeight.w600
-                                      : FontWeight.normal,
-                                ),
+                              Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      chat.lastMessage,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        color: chat.unread
+                                            ? AppColors.textPrimary
+                                            : AppColors.textSecondary,
+                                        fontSize: 13,
+                                        fontWeight: chat.unread
+                                            ? FontWeight.w700
+                                            : FontWeight.normal,
+                                      ),
+                                    ),
+                                  ),
+                                  if (chat.unread) ...[
+                                    const Gap(8),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 7,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFEF4444),
+                                        borderRadius: BorderRadius.circular(12),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFFEF4444).withValues(alpha: 0.35),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: const Text(
+                                        "1",
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 11,
+                                          fontWeight: FontWeight.bold,
+                                          height: 1.1,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ],
                           ),

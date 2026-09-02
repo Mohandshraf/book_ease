@@ -4,7 +4,6 @@ import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
-import 'package:book_ease/features/messages/presentation/views/messages_view.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/edit_profile_view.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
@@ -13,6 +12,7 @@ import 'package:book_ease/features/profile/presentation/views/widgets/profile_ca
 import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
 import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
 import 'package:book_ease/features/provider_services/data/cubit/provider_services_cubit.dart';
+import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
 import 'package:book_ease/features/settings/presentation/views/settings_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -238,7 +238,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             iconColor: AppColors.primary,
             iconBackgroundColor: AppColors.accentLilacLight,
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.booking);
+              CustomerRootView.navigateToTab(context, 2);
             },
           ),
           MenuOptionTile(
@@ -256,12 +256,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             iconColor: const Color(0xff06B6D4),
             iconBackgroundColor: const Color(0xffECFEFF),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MessagesView(),
-                ),
-              );
+              CustomerRootView.navigateToTab(context, 3);
             },
           ),
           MenuOptionTile(

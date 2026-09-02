@@ -90,5 +90,25 @@ void main() {
         ),
       ],
     );
+
+    blocTest<BookingCubit, BookingState>(
+      'emits [BookingLoading, BookingSuccess] when cancelBooking succeeds',
+      build: () {
+        when(() => mockBookingRepo.updateBookingStatus('bk1', 'cancelled'))
+            .thenAnswer((_) async {});
+        when(() => mockBookingRepo.getUserBookings('user123'))
+            .thenAnswer((_) async => []);
+        return bookingCubit;
+      },
+      act: (cubit) => cubit.cancelBooking('bk1', 'user123'),
+      expect: () => [
+        isA<BookingLoading>(),
+        isA<BookingSuccess>().having(
+          (s) => s.bookings?.length,
+          'bookings count',
+          0,
+        ),
+      ],
+    );
   });
 }

@@ -17,38 +17,125 @@ class ChooseRoleView extends StatefulWidget {
 
 class _ChooseRoleViewState extends State<ChooseRoleView> {
   String selectedRole = 'customer'; // 'customer' or 'provider'
+  bool _isSaving = false;
 
-  void _onContinue() {
-    // Save role in AuthCubit
-    context.read<AuthCubit>().saveRole(role: selectedRole);
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      final userCubit = context.read<UserCubit>();
+      final userState = userCubit.state;
+      if (userState is UserDataLoaded) {
+        final existingRole = userState.userData['role'];
+        if (existingRole == 'provider') {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.providerRoot,
+            (route) => false,
+          );
+          return;
+        } else if (existingRole == 'customer') {
+          Navigator.pushNamedAndRemoveUntil(
+            context,
+            AppRoutes.customerRoot,
+            (route) => false,
+          );
+          return;
+        }
+      } else {
+        userCubit.getCurrentUserData(emitLoading: false);
+      }
+    });
+  }
 
-    // Also directly handle navigation transition smoothly
-    if (selectedRole == 'provider') {
-      Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
-    } else {
-      Navigator.pushReplacementNamed(context, AppRoutes.customerRoot);
+  Future<void> _onContinue() async {
+    if (_isSaving) return;
+    setState(() => _isSaving = true);
+
+    try {
+      await context.read<AuthCubit>().saveRole(role: selectedRole);
+
+      if (!mounted) return;
+
+      // Update UserCubit state with the selected role immediately
+      final userCubit = context.read<UserCubit>();
+      final currentData = userCubit.state is UserDataLoaded
+          ? Map<String, dynamic>.from(
+              (userCubit.state as UserDataLoaded).userData)
+          : <String, dynamic>{};
+      currentData['role'] = selectedRole;
+      userCubit.setUserData(currentData);
+
+      if (selectedRole == 'provider') {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.providerRoot,
+          (route) => false,
+        );
+      } else {
+        Navigator.pushNamedAndRemoveUntil(
+          context,
+          AppRoutes.customerRoot,
+          (route) => false,
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _isSaving = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Failed to save role: $e"),
+          backgroundColor: AppColors.error,
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<AuthCubit, AuthState>(
-      listener: (context, state) {
-        if (state is AuthSuccess) {
-          if (state.userData != null) {
-            context.read<UserCubit>().setUserData(state.userData!);
-          }
-        }
-        if (state is AuthFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(state.message),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-            ),
-          );
-        }
-      },
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<UserCubit, UserCubitState>(
+          listener: (context, state) {
+            if (state is UserDataLoaded) {
+              final existingRole = state.userData['role'];
+              if (existingRole == 'provider') {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.providerRoot,
+                  (route) => false,
+                );
+              } else if (existingRole == 'customer') {
+                Navigator.pushNamedAndRemoveUntil(
+                  context,
+                  AppRoutes.customerRoot,
+                  (route) => false,
+                );
+              }
+            }
+          },
+        ),
+        BlocListener<AuthCubit, AuthState>(
+          listener: (context, state) {
+            if (state is AuthSuccess) {
+              if (state.userData != null) {
+                context.read<UserCubit>().setUserData(state.userData!);
+              }
+            }
+            if (state is AuthFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColors.error,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
+          },
+        ),
+      ],
       child: Scaffold(
         backgroundColor: Colors.white,
         body: SafeArea(
@@ -296,25 +383,34 @@ class _ChooseRoleViewState extends State<ChooseRoleView> {
                               ),
                             ],
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              Text(
-                                "Continue",
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w700,
+                          child: _isSaving
+                              ? const SizedBox(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: const [
+                                    Text(
+                                      "Continue",
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w700,
+                                      ),
+                                    ),
+                                    Gap(8),
+                                    Icon(
+                                      Icons.arrow_forward_rounded,
+                                      size: 16,
+                                      color: Colors.white,
+                                    ),
+                                  ],
                                 ),
-                              ),
-                              Gap(8),
-                              Icon(
-                                Icons.arrow_forward_rounded,
-                                size: 16,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
                         ),
                       ),
 

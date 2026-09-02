@@ -9,6 +9,7 @@ import 'package:book_ease/features/booking/data/repo/booking_repo.dart';
 import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/provider_services/data/models/service_model.dart';
 import 'package:book_ease/features/provider_services/data/repo/provider_services_repo.dart';
+import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
 import 'package:book_ease/features/service_details/presentation/views/service_details_view.dart';
 import 'package:book_ease/core/widgets/safe_image.dart';
@@ -528,7 +529,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     ),
                     ScaleOnTap(
                       onTap: () {
-                        Navigator.pushNamed(context, AppRoutes.booking);
+                        CustomerRootView.navigateToTab(context, 2);
                       },
                       child: const Text(
                         "View All",
@@ -1098,18 +1099,33 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               // Video and Chat Action Buttons
               Row(
                 children: [
-                  Container(
-                    width: 38,
-                    height: 38,
-                    decoration: BoxDecoration(
-                      color: Colors.white.withValues(alpha: 0.2),
-                      shape: BoxShape.circle,
-                    ),
-                    child: const Center(
-                      child: Icon(
-                        Icons.chat_bubble_outline_rounded,
-                        color: Colors.white,
-                        size: 18,
+                  ScaleOnTap(
+                    onTap: () {
+                      final pId = _nextBooking!.providerId;
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.chat,
+                        arguments: {
+                          'otherUserId': pId,
+                          'doctorName': doctorName,
+                          'otherUserImage': _nextBooking!.providerImage,
+                          'otherUserSpecialty': specialty,
+                        },
+                      );
+                    },
+                    child: Container(
+                      width: 38,
+                      height: 38,
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.2),
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Center(
+                        child: Icon(
+                          Icons.chat_bubble_outline_rounded,
+                          color: Colors.white,
+                          size: 18,
+                        ),
                       ),
                     ),
                   ),
@@ -1205,7 +1221,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               Expanded(
                 child: ScaleOnTap(
                   onTap: () {
-                    Navigator.pushNamed(context, AppRoutes.booking);
+                    CustomerRootView.navigateToTab(context, 2);
                   },
                   child: Container(
                     height: 42,
@@ -1231,7 +1247,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 child: ScaleOnTap(
                   onTap: () {
                     if (hasBooking) {
-                      Navigator.pushNamed(context, AppRoutes.booking);
+                      CustomerRootView.navigateToTab(context, 2);
                     } else {
                       final defaultDoc = _mockToDetails(_mockDoctors.first);
                       Navigator.push(

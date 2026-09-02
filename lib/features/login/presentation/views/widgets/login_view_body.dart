@@ -53,8 +53,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               context.read<UserCubit>().setUserData(state.userData!);
             }
 
-            // Post-login requirement: Route directly to Role Selection screen
-            Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
+            // Check if user already has a saved role
+            final role = state.userData?['role'];
+            if (role == 'provider') {
+              Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
+            } else if (role == 'customer') {
+              Navigator.pushReplacementNamed(context, AppRoutes.customerRoot);
+            } else if (role == 'admin') {
+              Navigator.pushReplacementNamed(context, AppRoutes.admin);
+            } else {
+              // Only prompt role selection if user has never selected a role
+              Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
+            }
           }
 
           if (state is AuthFailure) {

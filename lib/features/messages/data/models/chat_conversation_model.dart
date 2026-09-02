@@ -48,4 +48,27 @@ class ChatConversationModel {
       'unread': unread,
     };
   }
+
+  ChatConversationModel copyWith({
+    String? chatId,
+    String? otherUserId,
+    String? otherUserName,
+    String? otherUserImage,
+    String? otherUserSpecialty,
+    String? lastMessage,
+    DateTime? lastMessageTime,
+    bool? unread,
+  }) {
+    return ChatConversationModel(
+      chatId: chatId ?? this.chatId,
+      otherUserId: otherUserId ?? this.otherUserId,
+      otherUserName: otherUserName ?? this.otherUserName,
+      otherUserImage: otherUserImage ?? this.otherUserImage,
+      otherUserSpecialty: otherUserSpecialty ?? this.otherUserSpecialty,
+      lastMessage: lastMessage ?? this.lastMessage,
+      lastMessageTime: lastMessageTime ?? this.lastMessageTime,
+      unread: unread ?? this.unread,
+    );
+  }
 }
+

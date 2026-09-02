@@ -43,9 +43,12 @@ class ProviderDashboardCubit extends Cubit<ProviderDashboardState> {
             final status = b.status.toLowerCase();
             if (status == 'pending') pendingCount++;
             if (status == 'confirmed') confirmedCount++;
-            if (status == 'completed') {
-              completedCount++;
-              earnings += (b.price ?? 50.0);
+            if (status == 'completed') completedCount++;
+
+            // All paid/active bookings immediately reflect in provider earnings
+            if (status != 'cancelled' && status != 'rejected') {
+              final bookingPrice = (b.price != null && b.price! > 0) ? b.price! : 50.0;
+              earnings += bookingPrice;
             }
 
             final bDate = b.bookingDate;

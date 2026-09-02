@@ -36,6 +36,12 @@ class UserCubit extends Cubit<UserCubitState> {
           'name': currentUser.displayName ?? 'User',
           'photoUrl': currentUser.photoURL,
         };
+        if (state is UserDataLoaded) {
+          final existingRole = (state as UserDataLoaded).userData['role'];
+          if (existingRole != null) {
+            fallbackData['role'] = existingRole;
+          }
+        }
         emit(UserDataLoaded(fallbackData));
       } else {
         emit(const UserDataFailure('User data not found'));
@@ -51,8 +57,13 @@ class UserCubit extends Cubit<UserCubitState> {
               ? currentUser.displayName!.trim()
               : 'User',
           'photoUrl': currentUser.photoURL,
-          'role': 'customer',
         };
+        if (state is UserDataLoaded) {
+          final existingRole = (state as UserDataLoaded).userData['role'];
+          if (existingRole != null) {
+            fallbackData['role'] = existingRole;
+          }
+        }
         emit(UserDataLoaded(fallbackData));
       } else {
         emit(UserDataFailure(e.toString()));

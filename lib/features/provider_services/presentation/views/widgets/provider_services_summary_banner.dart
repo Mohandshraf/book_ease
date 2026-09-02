@@ -1,125 +1,137 @@
 import 'package:book_ease/core/theme/app_colors.dart';
-import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
 
 class ProviderServicesSummaryBanner extends StatelessWidget {
   final int activeCount;
   final int totalCount;
-  final VoidCallback onAddNew;
 
   const ProviderServicesSummaryBanner({
     super.key,
     required this.activeCount,
     required this.totalCount,
-    required this.onAddNew,
   });
 
   @override
   Widget build(BuildContext context) {
+    final inactiveCount = totalCount - activeCount;
+
     return Container(
-      padding: const EdgeInsets.all(18),
+      padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: AppColors.border,
+          color: AppColors.border.withValues(alpha: 0.8),
           width: 1,
         ),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+            color: const Color(0xFF0F172A).withValues(alpha: 0.03),
             blurRadius: 16,
             offset: const Offset(0, 4),
           ),
         ],
       ),
-      child: Column(
+      child: Row(
         children: [
-          Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                decoration: BoxDecoration(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(14),
-                ),
-                child: const Icon(
-                  Icons.medical_services_rounded,
-                  color: AppColors.primary,
-                  size: 22,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Text(
-                      'Service Catalog',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w800,
-                        color: AppColors.textPrimary,
-                        letterSpacing: -0.3,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      '$activeCount Active of $totalCount Total Services',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                        color: AppColors.textSecondary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              ScaleOnTap(
-                onTap: onAddNew,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(22),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.3),
-                        blurRadius: 8,
-                        offset: const Offset(0, 3),
-                      ),
-                    ],
-                  ),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.add_rounded,
-                        color: Colors.white,
-                        size: 18,
-                      ),
-                      SizedBox(width: 4),
-                      Text(
-                        'Add Service',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 13,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
+          // Stat 1: Total Services
+          Expanded(
+            child: _buildMetricTile(
+              icon: Icons.layers_outlined,
+              iconColor: AppColors.primary,
+              iconBg: AppColors.primaryLight,
+              title: 'Total Services',
+              value: '$totalCount',
+            ),
           ),
+          Container(
+            height: 36,
+            width: 1,
+            color: AppColors.borderLight,
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+          ),
+          // Stat 2: Active Services
+          Expanded(
+            child: _buildMetricTile(
+              icon: Icons.check_circle_outline_rounded,
+              iconColor: const Color(0xFF10B981),
+              iconBg: const Color(0xFFECFDF5),
+              title: 'Active & Live',
+              value: '$activeCount',
+            ),
+          ),
+          if (inactiveCount > 0) ...[
+            Container(
+              height: 36,
+              width: 1,
+              color: AppColors.borderLight,
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+            ),
+            // Stat 3: Paused / Inactive
+            Expanded(
+              child: _buildMetricTile(
+                icon: Icons.pause_circle_outline_rounded,
+                iconColor: const Color(0xFFF59E0B),
+                iconBg: const Color(0xFFFEF3C7),
+                title: 'Paused',
+                value: '$inactiveCount',
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
+
+  Widget _buildMetricTile({
+    required IconData icon,
+    required Color iconColor,
+    required Color iconBg,
+    required String title,
+    required String value,
+  }) {
+    return Row(
+      children: [
+        Container(
+          width: 38,
+          height: 38,
+          decoration: BoxDecoration(
+            color: iconBg,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Icon(icon, color: iconColor, size: 20),
+        ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                value,
+                style: const TextStyle(
+                  fontSize: 17,
+                  fontWeight: FontWeight.w800,
+                  color: AppColors.textPrimary,
+                  letterSpacing: -0.3,
+                ),
+              ),
+              const SizedBox(height: 1),
+              Text(
+                title,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: const TextStyle(
+                  fontSize: 11,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.textSecondary,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
 }
+

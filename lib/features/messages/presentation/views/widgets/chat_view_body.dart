@@ -40,6 +40,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
   void initState() {
     super.initState();
     context.read<ChatCubit>().getMessages(widget.otherUserId);
+    context.read<ChatCubit>().markConversationAsRead(widget.otherUserId);
   }
 
   @override

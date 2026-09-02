@@ -394,7 +394,13 @@ class _BookingViewBodyState extends State<BookingViewBody> {
                             ? (b.status[0].toUpperCase() +
                                 b.status.substring(1))
                             : "Confirmed",
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.bookingDetails,
+                            arguments: b,
+                          );
+                        },
                       );
                     },
                   );

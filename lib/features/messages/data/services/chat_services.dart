@@ -75,13 +75,30 @@ class ChatServices {
       }
     } catch (_) {}
 
-    final chatId = getChatId(senderId, receiverId);
+    // Resolve targetReceiverId if receiverId is a doctor's name or mock identifier
+    String targetReceiverId = receiverId;
+    if (targetReceiverId == receiverName ||
+        targetReceiverId.startsWith("doc_") ||
+        targetReceiverId.contains(" ")) {
+      try {
+        final query = await _firestore
+            .collection('users')
+            .where('name', isEqualTo: receiverName)
+            .limit(1)
+            .get();
+        if (query.docs.isNotEmpty) {
+          targetReceiverId = query.docs.first.id;
+        }
+      } catch (_) {}
+    }
+
+    final chatId = getChatId(senderId, targetReceiverId);
     final now = DateTime.now();
 
     final message = MessageModel(
       senderId: senderId,
       senderName: senderName,
-      receiverId: receiverId,
+      receiverId: targetReceiverId,
       receiverName: receiverName,
       messageText: messageText.trim(),
       timestamp: now,
@@ -97,7 +114,7 @@ class ChatServices {
     // 2. Update sender's conversation document
     final senderConversation = ChatConversationModel(
       chatId: chatId,
-      otherUserId: receiverId,
+      otherUserId: targetReceiverId,
       otherUserName: receiverName,
       otherUserImage: receiverImage,
       otherUserSpecialty: receiverSpecialty,
@@ -110,10 +127,20 @@ class ChatServices {
         .collection('users')
         .doc(senderId)
         .collection('conversations')
-        .doc(receiverId)
+        .doc(targetReceiverId)
         .set(senderConversation.toJson(), SetOptions(merge: true));
 
-    // 3. Update receiver's conversation document
+    // If targetReceiverId was different from original receiverId, also ensure original is set for sender
+    if (targetReceiverId != receiverId) {
+      await _firestore
+          .collection('users')
+          .doc(senderId)
+          .collection('conversations')
+          .doc(receiverId)
+          .set(senderConversation.toJson(), SetOptions(merge: true));
+    }
+
+    // 3. Update receiver's conversation document (Mark as UNREAD so red badge appears)
     final receiverConversation = ChatConversationModel(
       chatId: chatId,
       otherUserId: senderId,
@@ -127,10 +154,23 @@ class ChatServices {
 
     await _firestore
         .collection('users')
-        .doc(receiverId)
+        .doc(targetReceiverId)
         .collection('conversations')
         .doc(senderId)
         .set(receiverConversation.toJson(), SetOptions(merge: true));
+
+    // Also send in-app notification to receiver
+    try {
+      await _firestore.collection('notifications').add({
+        'userId': targetReceiverId,
+        'title': 'New Message from $senderName',
+        'body': messageText.trim(),
+        'type': 'new_message',
+        'relatedId': senderId,
+        'isRead': false,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+    } catch (_) {}
   }
 
   Future<void> markConversationAsRead(String otherUserId) async {
@@ -144,6 +184,7 @@ class ChatServices {
         .doc(otherUserId)
         .update({'unread': false}).catchError((_) {});
   }
+
 
   Future<void> editMessage({
     required String otherUserId,

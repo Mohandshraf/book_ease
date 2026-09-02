@@ -80,6 +80,38 @@ void main() {
         final state = cubit.state as ProviderDashboardLoaded;
         expect(state.stats.pendingRequests, 1);
         expect(state.stats.activeServicesCount, 1);
+        expect(state.stats.totalEarnings, 100.0);
+      },
+    );
+
+    blocTest<ProviderDashboardCubit, ProviderDashboardState>(
+      'calculates totalEarnings including pending, confirmed, and completed bookings while excluding cancelled and rejected',
+      build: () {
+        final bookings = [
+          sampleBooking.copyWith(id: 'b1', status: 'pending', price: 150.0),
+          sampleBooking.copyWith(id: 'b2', status: 'confirmed', price: 200.0),
+          sampleBooking.copyWith(id: 'b3', status: 'completed', price: 300.0),
+          sampleBooking.copyWith(id: 'b4', status: 'cancelled', price: 500.0),
+          sampleBooking.copyWith(id: 'b5', status: 'rejected', price: 400.0),
+        ];
+        when(() => mockBookingRepo.getProviderBookingsStream('p1'))
+            .thenAnswer((_) => Stream.value(bookings));
+        when(() => mockServicesRepo.getProviderServices('p1'))
+            .thenAnswer((_) async => [sampleService]);
+        return cubit;
+      },
+      act: (cubit) => cubit.loadDashboardData(providerId: 'p1'),
+      expect: () => [
+        isA<ProviderDashboardLoading>(),
+        isA<ProviderDashboardLoaded>(),
+      ],
+      verify: (_) {
+        final state = cubit.state as ProviderDashboardLoaded;
+        // 150 (pending) + 200 (confirmed) + 300 (completed) = 650
+        expect(state.stats.totalEarnings, 650.0);
+        expect(state.stats.pendingRequests, 1);
+        expect(state.stats.confirmedBookings, 1);
+        expect(state.stats.completedBookings, 1);
       },
     );
   });

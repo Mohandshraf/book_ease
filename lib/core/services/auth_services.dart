@@ -127,27 +127,29 @@ class FirebaseAuthService {
     }
     final uid = user.uid;
 
-    // 1. Instant Cache Check (<15ms): If cached locally, return immediately!
+    // 1. Instant Cache Check (<15ms): If cached locally and has a role, return immediately!
     try {
       final cachedDoc = await FirebaseFirestore.instance
           .collection("users")
           .doc(uid)
           .get(const GetOptions(source: Source.cache));
-      if (cachedDoc.exists && cachedDoc.data() != null) {
+      if (cachedDoc.exists &&
+          cachedDoc.data() != null &&
+          cachedDoc.data()!['role'] != null) {
         return cachedDoc;
       }
     } catch (_) {
       // Not in local cache yet, proceed to server
     }
 
-    // 2. Fetch from server with a fast timeout (1500ms max)
+    // 2. Fetch from server with a safe timeout (3500ms max)
     DocumentSnapshot<Map<String, dynamic>> doc;
     try {
       doc = await FirebaseFirestore.instance
           .collection("users")
           .doc(uid)
           .get()
-          .timeout(const Duration(milliseconds: 1500));
+          .timeout(const Duration(milliseconds: 3500));
     } catch (_) {
       // 3. If server timed out or offline, try cache one last time
       try {

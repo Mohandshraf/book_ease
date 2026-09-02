@@ -1,6 +1,6 @@
-import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -191,11 +191,7 @@ class BookingSuccessView extends StatelessWidget {
                     child: ScaleOnTap(
                       onTap: onViewBookingsPressed ??
                           () {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              AppRoutes.root,
-                              (route) => false,
-                            );
+                            CustomerRootView.navigateToTab(context, 2);
                           },
                       child: Container(
                         decoration: BoxDecoration(
@@ -229,11 +225,7 @@ class BookingSuccessView extends StatelessWidget {
                     child: ScaleOnTap(
                       onTap: onBackHomePressed ??
                           () {
-                            Navigator.pushNamedAndRemoveUntil(
-                              context,
-                              AppRoutes.root,
-                              (route) => false,
-                            );
+                            CustomerRootView.navigateToTab(context, 0);
                           },
                       child: Container(
                         decoration: BoxDecoration(

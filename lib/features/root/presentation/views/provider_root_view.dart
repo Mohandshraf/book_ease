@@ -1,10 +1,13 @@
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
+import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/presentation/views/messages_view.dart';
 import 'package:book_ease/features/provider_bookings/presentation/views/provider_bookings_view.dart';
 import 'package:book_ease/features/provider_dashboard/presentation/views/provider_dashboard_view.dart';
 import 'package:book_ease/features/provider_profile/presentation/views/provider_profile_view.dart';
 import 'package:book_ease/features/provider_services/presentation/views/provider_services_view.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProviderRootView extends StatefulWidget {
   const ProviderRootView({super.key});
@@ -21,6 +24,7 @@ class _ProviderRootViewState extends State<ProviderRootView> {
   @override
   void initState() {
     super.initState();
+    context.read<ChatCubit>().initConversations();
     pages = [
       ProviderDashboardView(
         onTabChangeRequested: (index) => setState(() => currentIndex = index),
@@ -69,7 +73,19 @@ class _ProviderRootViewState extends State<ProviderRootView> {
               _buildNavItem(0, Icons.dashboard_rounded, Icons.dashboard_outlined, "Dashboard"),
               _buildNavItem(1, Icons.calendar_month_rounded, Icons.calendar_month_outlined, "Bookings"),
               _buildNavItem(2, Icons.medical_services_rounded, Icons.medical_services_outlined, "Services"),
-              _buildNavItem(3, Icons.chat_bubble_rounded, Icons.chat_bubble_outline_rounded, "Messages"),
+              BlocBuilder<ChatCubit, ChatState>(
+                builder: (context, chatState) {
+                  final unreadCount =
+                      chatState.conversations.where((c) => c.unread).length;
+                  return _buildNavItem(
+                    3,
+                    Icons.chat_bubble_rounded,
+                    Icons.chat_bubble_outline_rounded,
+                    "Messages",
+                    badgeCount: unreadCount,
+                  );
+                },
+              ),
               _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, "Profile"),
             ],
           ),
@@ -82,8 +98,9 @@ class _ProviderRootViewState extends State<ProviderRootView> {
     int index,
     IconData activeIcon,
     IconData inactiveIcon,
-    String label,
-  ) {
+    String label, {
+    int badgeCount = 0,
+  }) {
     final isSelected = currentIndex == index;
     return GestureDetector(
       onTap: () {
@@ -106,10 +123,50 @@ class _ProviderRootViewState extends State<ProviderRootView> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              isSelected ? activeIcon : inactiveIcon,
-              color: isSelected ? Colors.white : const Color(0xFF94A3B8),
-              size: 24,
+            Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Icon(
+                  isSelected ? activeIcon : inactiveIcon,
+                  color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+                  size: 24,
+                ),
+                if (badgeCount > 0)
+                  Positioned(
+                    top: -4,
+                    right: -6,
+                    child: Container(
+                      padding: const EdgeInsets.all(3),
+                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFEF4444),
+                        shape: BoxShape.circle,
+                        border: Border.all(
+                          color: isSelected ? AppColors.primary : Colors.white,
+                          width: 1.5,
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFFEF4444).withValues(alpha: 0.45),
+                            blurRadius: 4,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Text(
+                          badgeCount > 9 ? '9+' : '$badgeCount',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 9,
+                            fontWeight: FontWeight.bold,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
             ),
             if (isSelected) ...[
               const SizedBox(width: 6),
@@ -129,3 +186,4 @@ class _ProviderRootViewState extends State<ProviderRootView> {
     );
   }
 }
+

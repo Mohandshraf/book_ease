@@ -20,6 +20,8 @@ class ProviderServicesViewBody extends StatefulWidget {
 }
 
 class _ProviderServicesViewBodyState extends State<ProviderServicesViewBody> {
+  String _selectedCategory = 'All';
+
   @override
   void initState() {
     super.initState();
@@ -120,10 +122,15 @@ class _ProviderServicesViewBodyState extends State<ProviderServicesViewBody> {
           }
 
           final activeCount = services.where((s) => s.isActive).length;
+          final categories = [
+            'All',
+            ...{...services.map((s) => s.category)},
+          ];
+          final displayedServices = _selectedCategory == 'All'
+              ? services
+              : services.where((s) => s.category == _selectedCategory).toList();
 
-          return Stack(
-            children: [
-              RefreshIndicator(
+          return RefreshIndicator(
                 color: AppColors.primary,
                 onRefresh: () async {
                   final uid = FirebaseAuth.instance.currentUser?.uid ?? '';
@@ -136,10 +143,10 @@ class _ProviderServicesViewBodyState extends State<ProviderServicesViewBody> {
                     left: 20,
                     right: 20,
                     top: 16,
-                    bottom: 120, // generous bottom padding to clear the bottom navigation bar
+                    bottom: 40,
                   ),
                   children: [
-                    // Header Section
+                    // Header Section with Single Prominent Add Button
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -167,99 +174,170 @@ class _ProviderServicesViewBodyState extends State<ProviderServicesViewBody> {
                             ),
                           ],
                         ),
+                        // THE ONE & ONLY Add Service Button
                         ScaleOnTap(
                           onTap: _openAddDialog,
                           child: Container(
-                            width: 44,
-                            height: 44,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryLight,
-                              shape: BoxShape.circle,
-                              border: Border.all(
-                                color: AppColors.primary.withValues(alpha: 0.2),
-                                width: 1,
-                              ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 9,
                             ),
-                            child: const Icon(
-                              Icons.add_rounded,
+                            decoration: BoxDecoration(
                               color: AppColors.primary,
-                              size: 24,
+                              borderRadius: BorderRadius.circular(16),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.primary.withValues(alpha: 0.28),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 3),
+                                ),
+                              ],
+                            ),
+                            child: const Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(
+                                  Icons.add_rounded,
+                                  color: Colors.white,
+                                  size: 18,
+                                ),
+                                SizedBox(width: 5),
+                                Text(
+                                  'Add Service',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w700,
+                                    letterSpacing: -0.2,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
 
-                    // Summary Banner with integrated Add Service button
+                    // Clean Metrics Bar (Without duplicate button)
                     ProviderServicesSummaryBanner(
                       activeCount: activeCount,
                       totalCount: services.length,
-                      onAddNew: _openAddDialog,
                     ),
-                    const SizedBox(height: 18),
+                    const SizedBox(height: 16),
+
+                    // Category Filter Chips (if more than 1 category exists)
+                    if (categories.length > 2) ...[
+                      SizedBox(
+                        height: 36,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length,
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(width: 8),
+                          itemBuilder: (context, idx) {
+                            final cat = categories[idx];
+                            final isSelected = cat == _selectedCategory;
+                            final count = cat == 'All'
+                                ? services.length
+                                : services.where((s) => s.category == cat).length;
+
+                            return ScaleOnTap(
+                              onTap: () {
+                                setState(() {
+                                  _selectedCategory = cat;
+                                });
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 200),
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 14,
+                                  vertical: 6,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? AppColors.primary
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? AppColors.primary
+                                        : AppColors.border,
+                                  ),
+                                ),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      cat,
+                                      style: TextStyle(
+                                        fontSize: 12,
+                                        fontWeight: isSelected
+                                            ? FontWeight.w700
+                                            : FontWeight.w600,
+                                        color: isSelected
+                                            ? Colors.white
+                                            : AppColors.textSecondary,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 5),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 6,
+                                        vertical: 1,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isSelected
+                                            ? Colors.white.withValues(alpha: 0.25)
+                                            : AppColors.surfaceMuted,
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: Text(
+                                        '$count',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                          color: isSelected
+                                              ? Colors.white
+                                              : AppColors.textMuted,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 14),
+                    ],
 
                     // Service Cards
-                    ...services.map(
-                      (service) => ProviderServiceCard(
-                        service: service,
-                        onEdit: _openEditDialog,
-                        onDelete: _confirmDelete,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-
-              // Floating Action Pill Button - positioned safely above the bottom navigation bar
-              Positioned(
-                bottom: 96,
-                right: 20,
-                child: ScaleOnTap(
-                  onTap: _openAddDialog,
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(30),
-                      boxShadow: [
-                        BoxShadow(
-                          color: AppColors.primary.withValues(alpha: 0.35),
-                          blurRadius: 18,
-                          offset: const Offset(0, 6),
-                        ),
-                        BoxShadow(
-                          color: const Color(0xFF0F172A).withValues(alpha: 0.08),
-                          blurRadius: 8,
-                          offset: const Offset(0, 2),
-                        ),
-                      ],
-                    ),
-                    child: const Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(
-                          Icons.add_circle_outline_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                        SizedBox(width: 8),
-                        Text(
-                          'Add Service',
+                    if (displayedServices.isEmpty)
+                      Container(
+                        padding: const EdgeInsets.all(32),
+                        alignment: Alignment.center,
+                        child: const Text(
+                          'No services found in this category.',
                           style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.2,
+                            fontSize: 13,
+                            color: AppColors.textSecondary,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
-                      ],
-                    ),
-                  ),
+                      )
+                    else
+                      ...displayedServices.map(
+                        (service) => ProviderServiceCard(
+                          service: service,
+                          onEdit: _openEditDialog,
+                          onDelete: _confirmDelete,
+                        ),
+                      ),
+                  ],
                 ),
-              ),
-            ],
-          );
+              );
         },
       ),
     );
