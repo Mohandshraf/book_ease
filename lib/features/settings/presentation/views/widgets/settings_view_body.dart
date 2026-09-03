@@ -1,13 +1,8 @@
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
-import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
-import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
-import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
-import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
-import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
-import 'package:book_ease/features/provider_services/data/cubit/provider_services_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -60,26 +55,11 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
             onTap: () async {
               debugPrint('LOGOUT DIALOG: Confirm clicked');
               final navigator = Navigator.of(context, rootNavigator: true);
-              final userCubit = context.read<UserCubit>();
               final authCubit = context.read<AuthCubit>();
-              final notifCubit = context.read<NotificationCubit>();
-              final pBookingsCubit = context.read<ProviderBookingsCubit>();
-              final pServicesCubit = context.read<ProviderServicesCubit>();
-              final pDashboardCubit = context.read<ProviderDashboardCubit>();
-              final chatCubit = context.read<ChatCubit>();
 
               Navigator.pop(dialogContext);
 
-              try {
-                userCubit.clearUserData();
-                notifCubit.reset();
-                pBookingsCubit.reset();
-                pServicesCubit.reset();
-                pDashboardCubit.reset();
-                chatCubit.reset();
-              } catch (e) {
-                debugPrint('Error resetting cubits: $e');
-              }
+              AppResetHelper.resetAllUserData(context);
 
               try {
                 await authCubit.signOut();

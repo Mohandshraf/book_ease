@@ -81,4 +81,9 @@ class ProviderAvailabilityCubit extends Cubit<ProviderAvailabilityState> {
     _currentModel = _currentModel!.copyWith(isAvailable: isAvailable);
     emit(ProviderAvailabilityLoaded(_currentModel!));
   }
+
+  void reset() {
+    _currentModel = null;
+    emit(ProviderAvailabilityInitial());
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/core/utils/validators.dart';
 import 'package:book_ease/core/widgets/custom_text_field.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
@@ -41,6 +42,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
       child: BlocConsumer<AuthCubit, AuthState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
+            AppResetHelper.resetAllUserData(context);
+
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
                 content: Text("Signed in successfully"),

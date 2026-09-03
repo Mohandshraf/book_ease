@@ -1,22 +1,29 @@
 import 'package:book_ease/features/provider_services/data/models/service_model.dart';
 
-abstract class ProviderServicesState {}
+abstract class ProviderServicesState {
+  const ProviderServicesState();
+}
 
-class ProviderServicesInitial extends ProviderServicesState {}
+class ProviderServicesInitial extends ProviderServicesState {
+  const ProviderServicesInitial();
+}
 
-class ProviderServicesLoading extends ProviderServicesState {}
+class ProviderServicesLoading extends ProviderServicesState {
+  const ProviderServicesLoading();
+}
 
 class ProviderServicesSuccess extends ProviderServicesState {
   final List<ServiceModel> services;
-  ProviderServicesSuccess(this.services);
+  const ProviderServicesSuccess(this.services);
 }
 
 class ProviderServicesError extends ProviderServicesState {
   final String message;
-  ProviderServicesError(this.message);
+  const ProviderServicesError(this.message);
 }
 
 class ProviderServiceActionSuccess extends ProviderServicesState {
   final String message;
-  ProviderServiceActionSuccess(this.message);
+  const ProviderServiceActionSuccess(this.message);
 }
+

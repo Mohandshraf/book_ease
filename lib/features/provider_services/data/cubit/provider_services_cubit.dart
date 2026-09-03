@@ -15,9 +15,16 @@ class ProviderServicesCubit extends Cubit<ProviderServicesState> {
   List<ServiceModel> get services => _services;
 
   void subscribeToServices({String? providerId}) {
-    emit(ProviderServicesLoading());
-    final uid = providerId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
     _servicesSubscription?.cancel();
+    _services = [];
+    emit(ProviderServicesLoading());
+
+    final uid = providerId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+    if (uid.isEmpty) {
+      emit(const ProviderServicesSuccess([]));
+      return;
+    }
+
     _servicesSubscription =
         _servicesRepo.getProviderServicesStream(uid).listen(
       (services) {
@@ -31,9 +38,16 @@ class ProviderServicesCubit extends Cubit<ProviderServicesState> {
   }
 
   Future<void> fetchServices({String? providerId}) async {
+    _servicesSubscription?.cancel();
+    _services = [];
     emit(ProviderServicesLoading());
+
     try {
       final uid = providerId ?? FirebaseAuth.instance.currentUser?.uid ?? '';
+      if (uid.isEmpty) {
+        emit(const ProviderServicesSuccess([]));
+        return;
+      }
       final services = await _servicesRepo.getProviderServices(uid);
       _services = services;
       emit(ProviderServicesSuccess(_services));

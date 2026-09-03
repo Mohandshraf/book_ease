@@ -1,17 +1,13 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
-import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
-import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/edit_profile_view.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/profile_card.dart';
-import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
-import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
-import 'package:book_ease/features/provider_services/data/cubit/provider_services_cubit.dart';
 import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
 import 'package:book_ease/features/settings/presentation/views/settings_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -70,26 +66,11 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             onTap: () async {
               debugPrint('CUSTOMER LOGOUT: Confirm clicked');
               final navigator = Navigator.of(context, rootNavigator: true);
-              final userCubit = context.read<UserCubit>();
               final authCubit = context.read<AuthCubit>();
-              final notifCubit = context.read<NotificationCubit>();
-              final pBookingsCubit = context.read<ProviderBookingsCubit>();
-              final pServicesCubit = context.read<ProviderServicesCubit>();
-              final pDashboardCubit = context.read<ProviderDashboardCubit>();
-              final chatCubit = context.read<ChatCubit>();
 
               Navigator.pop(dialogContext);
 
-              try {
-                userCubit.clearUserData();
-                notifCubit.reset();
-                pBookingsCubit.reset();
-                pServicesCubit.reset();
-                pDashboardCubit.reset();
-                chatCubit.reset();
-              } catch (e) {
-                debugPrint('Error resetting cubits: $e');
-              }
+              AppResetHelper.resetAllUserData(context);
 
               try {
                 await authCubit.signOut();

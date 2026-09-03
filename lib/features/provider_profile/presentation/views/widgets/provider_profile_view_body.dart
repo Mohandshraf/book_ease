@@ -1,12 +1,8 @@
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
+import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
-import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
-import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
-import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
-import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
-import 'package:book_ease/features/provider_services/data/cubit/provider_services_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
 import 'package:book_ease/features/provider_profile/presentation/views/widgets/credentials_dialog.dart';
@@ -52,24 +48,11 @@ class ProviderProfileViewBody extends StatelessWidget {
           ElevatedButton(
             onPressed: () async {
               final navigator = Navigator.of(context, rootNavigator: true);
-              final userCubit = context.read<UserCubit>();
               final authCubit = context.read<AuthCubit>();
-              final notifCubit = context.read<NotificationCubit>();
-              final pBookingsCubit = context.read<ProviderBookingsCubit>();
-              final pServicesCubit = context.read<ProviderServicesCubit>();
-              final pDashboardCubit = context.read<ProviderDashboardCubit>();
-              final chatCubit = context.read<ChatCubit>();
 
               Navigator.pop(dialogContext);
 
-              try {
-                userCubit.clearUserData();
-                notifCubit.reset();
-                pBookingsCubit.reset();
-                pServicesCubit.reset();
-                pDashboardCubit.reset();
-                chatCubit.reset();
-              } catch (_) {}
+              AppResetHelper.resetAllUserData(context);
 
               try {
                 await authCubit.signOut();

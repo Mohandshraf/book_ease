@@ -196,4 +196,8 @@ class SavedProvidersCubit extends Cubit<SavedProvidersState> {
       } catch (_) {}
     }
   }
+
+  void reset() {
+    emit(const SavedProvidersInitial());
+  }
 }

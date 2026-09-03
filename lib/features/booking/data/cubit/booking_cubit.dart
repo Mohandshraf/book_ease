@@ -41,4 +41,8 @@ class BookingCubit extends Cubit<BookingState> {
       emit(BookingFailure(e.toString()));
     }
   }
+
+  void reset() {
+    emit(BookingInitial());
+  }
 }
