@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
@@ -25,31 +26,7 @@ class BookingSummaryView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final weekdays = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
-    final months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-    final String formattedDate =
-        "${weekdays[selectedDate.weekday - 1]}, ${months[selectedDate.month - 1]} ${selectedDate.day}, ${selectedDate.year}";
+    final String formattedDate = context.localizedFormattedDate(selectedDate);
 
     const double bookingFee = 3.0;
     const double memberDiscount = 8.0;
@@ -81,17 +58,19 @@ class BookingSummaryView extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: const Icon(
-                  Icons.arrow_back_rounded,
+                child: Icon(
+                  context.isRtl
+                      ? Icons.arrow_forward_rounded
+                      : Icons.arrow_back_rounded,
                   color: AppColors.textPrimary,
                   size: 20,
                 ),
               ),
             ),
             const Gap(14),
-            const Text(
-              "Booking Summary",
-              style: TextStyle(
+            Text(
+              context.tr('summary_title'),
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -110,7 +89,7 @@ class BookingSummaryView extends StatelessWidget {
               const Gap(16),
               BookingSummaryAppointmentCard(
                 formattedDate: formattedDate,
-                selectedTime: selectedTime,
+                selectedTime: context.localizedTime(selectedTime),
                 providerName: model.providerName,
               ),
               const Gap(16),
@@ -165,9 +144,9 @@ class BookingSummaryView extends StatelessWidget {
                   ],
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  "Proceed to Payment",
-                  style: TextStyle(
+                child: Text(
+                  context.tr('summary_proceed_payment'),
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w800,
                     color: Colors.white,

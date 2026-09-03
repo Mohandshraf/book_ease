@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/widgets/safe_image.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
@@ -120,7 +121,7 @@ class ServiceDetailsInfoSection extends StatelessWidget {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        "From \$${model.price.toInt()} ${model.priceUnit}",
+                        "${context.tr('details_from')} \$${model.price.toInt()} ${model.priceUnit}",
                         style: const TextStyle(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
@@ -151,9 +152,9 @@ class ServiceDetailsInfoSection extends StatelessWidget {
         const Gap(24),
 
         // About Doctor Section
-        const Text(
-          "About Doctor",
-          style: TextStyle(
+        Text(
+          context.tr('details_about_doctor'),
+          style: const TextStyle(
             fontSize: 17,
             fontWeight: FontWeight.w800,
             color: AppColors.textPrimary,

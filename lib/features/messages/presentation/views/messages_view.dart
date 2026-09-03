@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/widgets/safe_image.dart';
@@ -23,7 +24,6 @@ class _MessagesViewState extends State<MessagesView> {
   @override
   void initState() {
     super.initState();
-    context.read<ChatCubit>().initConversations();
     _searchController.addListener(() {
       setState(() {
         _searchQuery = _searchController.text.trim().toLowerCase();
@@ -37,7 +37,7 @@ class _MessagesViewState extends State<MessagesView> {
     super.dispose();
   }
 
-  String _formatConversationTime(DateTime dt) {
+  String _formatConversationTime(DateTime dt, BuildContext context) {
     final now = DateTime.now();
     final today = DateTime(now.year, now.month, now.day);
     final chatDate = DateTime(dt.year, dt.month, dt.day);
@@ -46,25 +46,12 @@ class _MessagesViewState extends State<MessagesView> {
       final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
       final minute = dt.minute.toString().padLeft(2, '0');
       final period = dt.hour >= 12 ? 'PM' : 'AM';
-      return '$hour:$minute $period';
+      return context.localizedTime('$hour:$minute $period');
     } else if (today.difference(chatDate).inDays == 1) {
-      return 'Yesterday';
+      return context.tr('messages_yesterday');
     } else {
-      final months = [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec',
-      ];
-      return '${months[dt.month - 1]} ${dt.day}';
+      final month = context.localizedMonthShort(dt.month);
+      return '$month ${dt.day}';
     }
   }
 
@@ -73,23 +60,23 @@ class _MessagesViewState extends State<MessagesView> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          "Delete Chat",
-          style: TextStyle(
+        title: Text(
+          context.tr('messages_delete_chat'),
+          style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
         content: Text(
-          "Are you sure you want to delete the chat with ${chat.otherUserName}?",
+          "${context.tr('messages_delete_confirm')} ${chat.otherUserName}?",
           style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(color: AppColors.textSecondary),
+            child: Text(
+              context.tr('common_cancel'),
+              style: const TextStyle(color: AppColors.textSecondary),
             ),
           ),
           ElevatedButton(
@@ -103,7 +90,7 @@ class _MessagesViewState extends State<MessagesView> {
               Navigator.pop(dialogContext);
               context.read<ChatCubit>().deleteConversation(chat.otherUserId);
             },
-            child: const Text("Delete", style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('common_delete'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -122,9 +109,9 @@ class _MessagesViewState extends State<MessagesView> {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const Text(
-              "Messages",
-              style: TextStyle(
+            Text(
+              context.tr('messages_title'),
+              style: const TextStyle(
                 color: AppColors.textPrimary,
                 fontSize: 26,
                 fontWeight: FontWeight.bold,
@@ -140,10 +127,10 @@ class _MessagesViewState extends State<MessagesView> {
               ),
               child: TextField(
                 controller: _searchController,
-                decoration: const InputDecoration(
-                  hintText: "Search messages...",
-                  hintStyle: TextStyle(color: AppColors.textMuted, fontSize: 14),
-                  prefixIcon: Icon(
+                decoration: InputDecoration(
+                  hintText: context.tr('messages_search_hint'),
+                  hintStyle: const TextStyle(color: AppColors.textMuted, fontSize: 14),
+                  prefixIcon: const Icon(
                     Icons.search_rounded,
                     color: AppColors.textMuted,
                     size: 20,
@@ -153,7 +140,7 @@ class _MessagesViewState extends State<MessagesView> {
                   focusedBorder: InputBorder.none,
                   filled: false,
                   fillColor: Colors.transparent,
-                  contentPadding: EdgeInsets.symmetric(vertical: 12),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
             ),
@@ -204,18 +191,18 @@ class _MessagesViewState extends State<MessagesView> {
                     ),
                   ),
                   const Gap(16),
-                  const Text(
-                    "No messages yet",
-                    style: TextStyle(
+                  Text(
+                    context.tr('messages_no_messages_yet'),
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   const Gap(8),
-                  const Text(
-                    "Chat messages from providers will appear here",
-                    style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
+                  Text(
+                    context.tr('messages_empty_sub'),
+                    style: const TextStyle(color: AppColors.textSecondary, fontSize: 14),
                   ),
                 ],
               ),
@@ -229,27 +216,27 @@ class _MessagesViewState extends State<MessagesView> {
                 const Divider(color: AppColors.border, height: 1, indent: 84),
             itemBuilder: (context, index) {
               final chat = chats[index];
-              final timeStr = _formatConversationTime(chat.lastMessageTime);
+              final timeStr = _formatConversationTime(chat.lastMessageTime, context);
 
               return Dismissible(
                 key: Key(chat.otherUserId),
                 direction: DismissDirection.endToStart,
                 background: Container(
                   color: AppColors.error,
-                  alignment: Alignment.centerRight,
-                  padding: const EdgeInsets.only(right: 20),
-                  child: const Row(
+                  alignment: AlignmentDirectional.centerEnd,
+                  padding: const EdgeInsetsDirectional.only(end: 20),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
-                      Icon(
+                      const Icon(
                         Icons.delete_outline_rounded,
                         color: Colors.white,
                         size: 24,
                       ),
-                      Gap(8),
+                      const Gap(8),
                       Text(
-                        "Delete",
-                        style: TextStyle(
+                        context.tr('common_delete'),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontWeight: FontWeight.bold,
                         ),

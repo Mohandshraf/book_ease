@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -35,9 +36,9 @@ class BookingSummaryPriceCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Price Summary",
-            style: TextStyle(
+          Text(
+            context.tr('summary_price_title'),
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
@@ -45,17 +46,17 @@ class BookingSummaryPriceCard extends StatelessWidget {
           ),
           const Gap(16),
           _buildPriceRow(
-            label: "Consultation fee",
+            label: context.tr('summary_consultation_fee'),
             value: "\$${consultationFee.toStringAsFixed(2)}",
           ),
           const Gap(12),
           _buildPriceRow(
-            label: "Booking fee",
+            label: context.tr('summary_booking_fee'),
             value: "\$${bookingFee.toStringAsFixed(2)}",
           ),
           const Gap(12),
           _buildPriceRow(
-            label: "Member discount",
+            label: context.tr('summary_discount'),
             value: "-\$${memberDiscount.toStringAsFixed(2)}",
             isDiscount: true,
           ),
@@ -65,9 +66,9 @@ class BookingSummaryPriceCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Total",
-                style: TextStyle(
+              Text(
+                context.tr('summary_total'),
+                style: const TextStyle(
                   fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,

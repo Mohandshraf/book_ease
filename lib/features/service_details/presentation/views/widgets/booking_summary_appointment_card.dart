@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -35,9 +36,9 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Appointment Details",
-            style: TextStyle(
+          Text(
+            context.tr('summary_details_title'),
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
@@ -46,25 +47,25 @@ class BookingSummaryAppointmentCard extends StatelessWidget {
           const Gap(18),
           _buildDetailsRow(
             icon: Icons.calendar_today_outlined,
-            label: "Date",
+            label: context.tr('summary_date'),
             value: formattedDate,
           ),
           const Gap(14),
           _buildDetailsRow(
             icon: Icons.access_time_rounded,
-            label: "Time",
+            label: context.tr('summary_time'),
             value: selectedTime,
           ),
           const Gap(14),
           _buildDetailsRow(
             icon: Icons.location_on_outlined,
-            label: "Location",
+            label: context.tr('summary_location'),
             value: location,
           ),
           const Gap(14),
           _buildDetailsRow(
             icon: Icons.person_outline_rounded,
-            label: "Doctor",
+            label: context.tr('summary_doctor'),
             value: providerName,
           ),
         ],

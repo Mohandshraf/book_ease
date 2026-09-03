@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
@@ -30,16 +31,16 @@ class ChatActionBar extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                Icon(
+              children: [
+                const Icon(
                   Icons.calendar_month_outlined,
                   color: AppColors.primary,
                   size: 16,
                 ),
-                Gap(6),
+                const Gap(6),
                 Text(
-                  "Appointment details",
-                  style: TextStyle(
+                  context.tr('chat_appointment_details'),
+                  style: const TextStyle(
                     color: AppColors.primary,
                     fontWeight: FontWeight.w600,
                     fontSize: 13,
@@ -63,10 +64,10 @@ class ChatActionBar extends StatelessWidget {
                 color: AppColors.border,
               ),
             ),
-            child: const Center(
+            child: Center(
               child: Text(
-                "Reschedule",
-                style: TextStyle(
+                context.tr('chat_reschedule'),
+                style: const TextStyle(
                   color: AppColors.textSecondary,
                   fontWeight: FontWeight.w600,
                   fontSize: 13,
@@ -79,3 +80,4 @@ class ChatActionBar extends StatelessWidget {
     );
   }
 }
+

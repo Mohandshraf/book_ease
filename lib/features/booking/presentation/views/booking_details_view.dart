@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
@@ -35,17 +36,17 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        title: const Text(
-          "Cancel Appointment?",
-          style: TextStyle(
+        title: Text(
+          context.tr('booking_details_cancel_title'),
+          style: const TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
             color: AppColors.textPrimary,
           ),
         ),
-        content: const Text(
-          "Are you sure you want to cancel this booking? This action cannot be undone.",
-          style: TextStyle(
+        content: Text(
+          context.tr('booking_details_cancel_confirm'),
+          style: const TextStyle(
             fontSize: 14,
             color: AppColors.textSecondary,
             height: 1.4,
@@ -54,9 +55,9 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Keep Booking",
-              style: TextStyle(
+            child: Text(
+              context.tr('booking_details_keep'),
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
@@ -76,8 +77,8 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                     _currentBooking = _currentBooking.copyWith(status: 'cancelled');
                   });
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text("Booking cancelled successfully"),
+                    SnackBar(
+                      content: Text(context.tr('booking_details_cancelled_success')),
                       backgroundColor: AppColors.error,
                       behavior: SnackBarBehavior.floating,
                     ),
@@ -92,9 +93,9 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              "Yes, Cancel",
-              style: TextStyle(
+            child: Text(
+              context.tr('booking_details_yes_cancel'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -126,33 +127,8 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
       statusIcon = Icons.hourglass_top_rounded;
     }
 
-    final weekdays = [
-      "Monday",
-      "Tuesday",
-      "Wednesday",
-      "Thursday",
-      "Friday",
-      "Saturday",
-      "Sunday",
-    ];
-    final months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December",
-    ];
-
     final date = _currentBooking.bookingDate;
-    final String formattedDate =
-        "${weekdays[date.weekday - 1]}, ${months[date.month - 1]} ${date.day}, ${date.year}";
+    final String formattedDate = context.localizedFormattedDate(date);
 
     final bookingIdDisplay = _currentBooking.id != null && _currentBooking.id!.isNotEmpty
         ? "#${_currentBooking.id!.substring(0, _currentBooking.id!.length.clamp(0, 8)).toUpperCase()}"
@@ -202,17 +178,19 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.arrow_back_rounded,
+                  child: Icon(
+                    context.isRtl
+                        ? Icons.arrow_forward_rounded
+                        : Icons.arrow_back_rounded,
                     color: AppColors.textPrimary,
                     size: 20,
                   ),
                 ),
               ),
               const Gap(14),
-              const Text(
-                "Booking Details",
-                style: TextStyle(
+              Text(
+                context.tr('booking_details_title'),
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -251,9 +229,9 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            "Booking Reference",
-                            style: TextStyle(
+                          Text(
+                            context.tr('booking_details_ref'),
+                            style: const TextStyle(
                               color: AppColors.textMuted,
                               fontSize: 12,
                               fontWeight: FontWeight.w500,
@@ -290,10 +268,15 @@ class _BookingDetailsViewState extends State<BookingDetailsView> {
                             ),
                             const Gap(5),
                             Text(
-                              _currentBooking.status.isNotEmpty
-                                  ? (_currentBooking.status[0].toUpperCase() +
-                                      _currentBooking.status.substring(1))
-                                  : "Confirmed",
+                              statusLower == "completed"
+                                  ? context.tr('bookings_status_completed')
+                                  : statusLower == "cancelled"
+                                      ? context.tr('bookings_status_cancelled')
+                                      : statusLower == "rejected"
+                                          ? context.tr('bookings_status_rejected')
+                                          : statusLower == "pending"
+                                              ? context.tr('bookings_status_pending')
+                                              : context.tr('bookings_status_confirmed'),
                               style: TextStyle(
                                 color: badgeTextColor,
                                 fontSize: 12,

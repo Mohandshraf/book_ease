@@ -1,7 +1,9 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/service_details/data/cubit/booking_date_cubit.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
+import 'package:book_ease/features/service_details/presentation/cubit/booking_selection_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -36,40 +38,6 @@ class _ServiceDetailsDateTimePickerState
         DateTime(widget.selectedDate.year, widget.selectedDate.month, 1);
   }
 
-  static const List<String> _shortMonths = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep",
-    "Oct",
-    "Nov",
-    "Dec"
-  ];
-
-  static const List<String> _weekdays = [
-    "Monday",
-    "Tuesday",
-    "Wednesday",
-    "Thursday",
-    "Friday",
-    "Saturday",
-    "Sunday"
-  ];
-
-  static const List<String> _weekdayHeaders = [
-    "Sun",
-    "Mon",
-    "Tue",
-    "Wed",
-    "Thu",
-    "Fri",
-    "Sat"
-  ];
 
   @override
   void initState() {
@@ -119,9 +87,8 @@ class _ServiceDetailsDateTimePickerState
   }
 
   void _onDateTap(DateTime date) {
-    const dayNames = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
     final option = DateOption(
-      dayName: dayNames[date.weekday - 1],
+      dayName: context.localizedWeekdayShort(date.weekday),
       dayNumber: date.day,
       date: date,
     );
@@ -163,8 +130,8 @@ class _ServiceDetailsDateTimePickerState
         : DateTime(currentMonth.year, currentMonth.month, 1);
 
     final dateString =
-        "${headerDate.day} ${_shortMonths[headerDate.month - 1]}, ${headerDate.year.toString().substring(2)}";
-    final weekdayString = _weekdays[headerDate.weekday - 1];
+        "${headerDate.day} ${context.localizedMonthShort(headerDate.month)}, ${headerDate.year.toString().substring(2)}";
+    final weekdayString = context.localizedWeekdayFull(headerDate.weekday);
 
     final firstDayOfMonth =
         DateTime(currentMonth.year, currentMonth.month, 1);
@@ -196,20 +163,21 @@ class _ServiceDetailsDateTimePickerState
               BoxShadow(
                 color: const Color(0xFF0F172A).withValues(alpha: 0.04),
                 blurRadius: 18,
-                offset: const Offset(0, 6),
+                offset: const Offset(0, 4),
               ),
             ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // Top Header: Date + Weekday + Month Navigation Arrows
+              // Top Bar of Calendar Card: Left (Selected Date/Day) | Right (Prev/Next chevrons)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.baseline,
-                    textBaseline: TextBaseline.alphabetic,
+                  // Left: Date string (e.g. "4 Oct, 21") + Weekday (e.g. "Monday")
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
                         dateString,
@@ -220,19 +188,20 @@ class _ServiceDetailsDateTimePickerState
                           letterSpacing: -0.3,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      const SizedBox(height: 2),
                       Text(
                         weekdayString,
                         style: const TextStyle(
-                          fontSize: 15,
-                          fontWeight: FontWeight.w400,
-                          color: AppColors.textMuted,
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textSecondary,
                         ),
                       ),
                     ],
                   ),
+
+                  // Right: Navigation Buttons (Previous / Next Month)
                   Row(
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       ScaleOnTap(
                         onTap: _canGoPreviousMonth ? _goToPreviousMonth : null,
@@ -244,8 +213,10 @@ class _ServiceDetailsDateTimePickerState
                               color: Colors.grey.shade50,
                               shape: BoxShape.circle,
                             ),
-                            child: const Icon(
-                              Icons.chevron_left_rounded,
+                            child: Icon(
+                              context.isRtl
+                                  ? Icons.chevron_right_rounded
+                                  : Icons.chevron_left_rounded,
                               size: 22,
                               color: AppColors.textPrimary,
                             ),
@@ -261,8 +232,10 @@ class _ServiceDetailsDateTimePickerState
                             color: Colors.grey.shade50,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.chevron_right_rounded,
+                          child: Icon(
+                            context.isRtl
+                                ? Icons.chevron_left_rounded
+                                : Icons.chevron_right_rounded,
                             size: 22,
                             color: AppColors.textPrimary,
                           ),
@@ -278,22 +251,22 @@ class _ServiceDetailsDateTimePickerState
               // Weekday Names Header Row (Sun Mon Tue Wed Thu Fri Sat)
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: _weekdayHeaders
-                    .map(
-                      (header) => Expanded(
-                        child: Center(
-                          child: Text(
-                            header,
-                            style: const TextStyle(
-                              fontSize: 13,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.textMuted,
-                            ),
-                          ),
+                children: List.generate(7, (index) {
+                  final weekday = index == 0 ? 7 : index;
+                  final header = context.localizedWeekdayShort(weekday);
+                  return Expanded(
+                    child: Center(
+                      child: Text(
+                        header,
+                        style: const TextStyle(
+                          fontSize: 13,
+                          fontWeight: FontWeight.w600,
+                          color: AppColors.textMuted,
                         ),
                       ),
-                    )
-                    .toList(),
+                    ),
+                  );
+                }),
               ),
 
               const Gap(12),
@@ -409,9 +382,9 @@ class _ServiceDetailsDateTimePickerState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text(
-              "Select Time",
-              style: TextStyle(
+            Text(
+              context.tr('details_select_time'),
+              style: const TextStyle(
                 fontSize: 17,
                 fontWeight: FontWeight.w800,
                 color: AppColors.textPrimary,
@@ -425,7 +398,7 @@ class _ServiceDetailsDateTimePickerState
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                "${availableTimes.length} Slots",
+                "${availableTimes.length} ${context.tr('details_slots')}",
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontSize: 12,
@@ -488,7 +461,7 @@ class _ServiceDetailsDateTimePickerState
                 ),
                 child: Center(
                   child: Text(
-                    time,
+                    context.localizedTime(time),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight:

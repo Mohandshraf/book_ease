@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
@@ -104,7 +105,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
     final hour = dt.hour % 12 == 0 ? 12 : dt.hour % 12;
     final minute = dt.minute.toString().padLeft(2, '0');
     final period = dt.hour >= 12 ? 'PM' : 'AM';
-    return '$hour:$minute $period';
+    return context.localizedTime('$hour:$minute $period');
   }
 
   void _showMessageOptions(MessageModel msg, bool isMe) {
@@ -156,9 +157,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 ListTile(
                   leading: const Icon(Icons.copy_rounded,
                       color: AppColors.textPrimary),
-                  title: const Text(
-                    "Copy text",
-                    style: TextStyle(
+                  title: Text(
+                    context.tr('chat_copy_text'),
+                    style: const TextStyle(
                       color: AppColors.textPrimary,
                       fontWeight: FontWeight.w600,
                     ),
@@ -167,9 +168,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     Navigator.pop(bottomSheetContext);
                     Clipboard.setData(ClipboardData(text: msg.messageText));
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Message copied to clipboard"),
-                        duration: Duration(seconds: 1),
+                      SnackBar(
+                        content: Text(context.tr('chat_copied_clipboard')),
+                        duration: const Duration(seconds: 1),
                         behavior: SnackBarBehavior.floating,
                       ),
                     );
@@ -178,10 +179,10 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                 if (isMe && msg.id != null) ...[
                   ListTile(
                     leading: const Icon(Icons.edit_rounded,
-                        color: AppColors.primary),
-                    title: const Text(
-                      "Edit message",
-                      style: TextStyle(
+                            color: AppColors.primary),
+                    title: Text(
+                      context.tr('chat_edit_message'),
+                      style: const TextStyle(
                         color: AppColors.textPrimary,
                         fontWeight: FontWeight.w600,
                       ),
@@ -203,9 +204,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                   ListTile(
                     leading: const Icon(Icons.delete_outline_rounded,
                         color: AppColors.error),
-                    title: const Text(
-                      "Delete message",
-                      style: TextStyle(
+                    title: Text(
+                      context.tr('chat_delete_message'),
+                      style: const TextStyle(
                         color: AppColors.error,
                         fontWeight: FontWeight.w600,
                       ),
@@ -230,18 +231,18 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          "Delete Message",
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        title: Text(
+          context.tr('chat_delete_message_title'),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        content: const Text(
-          "Are you sure you want to delete this message?",
-          style: TextStyle(color: AppColors.textSecondary),
+        content: Text(
+          context.tr('chat_delete_message_confirm'),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(context.tr('common_cancel'), style: const TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -255,7 +256,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                     messageId: msg.id!,
                   );
             },
-            child: const Text("Delete", style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('common_delete'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -267,18 +268,18 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          "Clear Chat Messages",
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        title: Text(
+          context.tr('chat_clear_title'),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        content: const Text(
-          "Are you sure you want to clear all messages in this chat?",
-          style: TextStyle(color: AppColors.textSecondary),
+        content: Text(
+          context.tr('chat_clear_confirm'),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(context.tr('common_cancel'), style: const TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -289,7 +290,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
               Navigator.pop(dialogContext);
               context.read<ChatCubit>().clearChatMessages(widget.otherUserId);
             },
-            child: const Text("Clear", style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('chat_clear_action'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -301,18 +302,18 @@ class _ChatViewBodyState extends State<ChatViewBody> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          "Delete Chat",
-          style: TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
+        title: Text(
+          context.tr('chat_delete_convo_title'),
+          style: const TextStyle(fontWeight: FontWeight.bold, color: AppColors.textPrimary),
         ),
-        content: const Text(
-          "Are you sure you want to delete this chat conversation?",
-          style: TextStyle(color: AppColors.textSecondary),
+        content: Text(
+          context.tr('chat_delete_convo_confirm'),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text("Cancel", style: TextStyle(color: AppColors.textSecondary)),
+            child: Text(context.tr('common_cancel'), style: const TextStyle(color: AppColors.textSecondary)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -324,7 +325,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
               context.read<ChatCubit>().deleteConversation(widget.otherUserId);
               Navigator.maybePop(context);
             },
-            child: const Text("Delete", style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('common_delete'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -396,7 +397,7 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           ),
                           const Gap(12),
                           Text(
-                            "Start conversation with ${widget.doctorName}",
+                            "${context.tr('chat_start_with')} ${widget.doctorName}",
                             textAlign: TextAlign.center,
                             style: const TextStyle(
                               color: AppColors.textSecondary,
@@ -467,9 +468,9 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              const Text(
-                                "Editing message",
-                                style: TextStyle(
+                              Text(
+                                context.tr('chat_editing_banner'),
+                                style: const TextStyle(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.bold,
                                   fontSize: 12,
@@ -518,8 +519,8 @@ class _ChatViewBodyState extends State<ChatViewBody> {
                               onSubmitted: (_) => _sendMessage(),
                               decoration: InputDecoration(
                                 hintText: _editingMessage != null
-                                    ? "Edit message..."
-                                    : "Type a message...",
+                                    ? context.tr('chat_editing_banner')
+                                    : context.tr('chat_type_hint'),
                                 hintStyle: const TextStyle(
                                   color: AppColors.textMuted,
                                   fontSize: 14,

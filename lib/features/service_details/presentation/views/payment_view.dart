@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
@@ -99,31 +100,8 @@ class _PaymentViewState extends State<PaymentView> {
     return BlocConsumer<BookingCubit, BookingState>(
       listener: (context, state) {
         if (state is BookingSuccess) {
-          final weekdays = [
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-            "Sunday"
-          ];
-          final months = [
-            "January",
-            "February",
-            "March",
-            "April",
-            "May",
-            "June",
-            "July",
-            "August",
-            "September",
-            "October",
-            "November",
-            "December"
-          ];
           final String formattedDate =
-              "${weekdays[widget.selectedDate.weekday - 1]}, ${months[widget.selectedDate.month - 1]} ${widget.selectedDate.day}, ${widget.selectedDate.year}";
+              context.localizedFormattedDate(widget.selectedDate);
 
           Navigator.pushReplacement(
             context,
@@ -132,7 +110,7 @@ class _PaymentViewState extends State<PaymentView> {
                 providerName: widget.model.title,
                 doctorName: widget.model.providerName,
                 dateText: formattedDate,
-                timeText: widget.selectedTime,
+                timeText: context.localizedTime(widget.selectedTime),
                 amountPaid: widget.totalPrice,
               ),
             ),
@@ -174,17 +152,19 @@ class _PaymentViewState extends State<PaymentView> {
                         ),
                       ],
                     ),
-                    child: const Icon(
-                      Icons.arrow_back_rounded,
+                    child: Icon(
+                      context.isRtl
+                          ? Icons.arrow_forward_rounded
+                          : Icons.arrow_back_rounded,
                       color: AppColors.textPrimary,
                       size: 20,
                     ),
                   ),
                 ),
                 const Gap(14),
-                const Text(
-                  "Payment",
-                  style: TextStyle(
+                Text(
+                  context.tr('payment_title'),
+                  style: const TextStyle(
                     color: AppColors.textPrimary,
                     fontSize: 20,
                     fontWeight: FontWeight.bold,
@@ -321,7 +301,7 @@ class _PaymentViewState extends State<PaymentView> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
-                                "Pay \$${widget.totalPrice.toStringAsFixed(2)}",
+                                "${context.tr('payment_pay_button')} \$${widget.totalPrice.toStringAsFixed(2)}",
                                 style: const TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w800,
@@ -330,8 +310,10 @@ class _PaymentViewState extends State<PaymentView> {
                                 ),
                               ),
                               const Gap(8),
-                              const Icon(
-                                Icons.arrow_forward_rounded,
+                              Icon(
+                                context.isRtl
+                                    ? Icons.arrow_back_rounded
+                                    : Icons.arrow_forward_rounded,
                                 color: Colors.white,
                                 size: 18,
                               ),

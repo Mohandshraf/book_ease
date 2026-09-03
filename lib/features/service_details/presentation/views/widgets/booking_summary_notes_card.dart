@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -26,9 +27,9 @@ class BookingSummaryNotesCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            "Add Notes",
-            style: TextStyle(
+          Text(
+            context.tr('summary_notes_title'),
+            style: const TextStyle(
               fontSize: 17,
               fontWeight: FontWeight.bold,
               color: AppColors.textPrimary,
@@ -39,7 +40,7 @@ class BookingSummaryNotesCard extends StatelessWidget {
             controller: controller,
             maxLines: 3,
             decoration: InputDecoration(
-              hintText: "Any special requests or medical notes...",
+              hintText: context.tr('summary_notes_hint'),
               hintStyle: const TextStyle(
                 color: AppColors.textMuted,
                 fontSize: 14,

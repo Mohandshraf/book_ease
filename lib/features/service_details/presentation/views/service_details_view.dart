@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
@@ -75,18 +76,20 @@ class _ServiceDetailsViewState extends State<ServiceDetailsView> {
                           ),
                         ],
                       ),
-                      child: const Center(
+                      child: Center(
                         child: Icon(
-                          Icons.arrow_back_rounded,
+                          context.isRtl
+                              ? Icons.arrow_forward_rounded
+                              : Icons.arrow_back_rounded,
                           color: AppColors.textPrimary,
                           size: 22,
                         ),
                       ),
                     ),
                   ),
-                  const Text(
-                    "Doctor Details",
-                    style: TextStyle(
+                  Text(
+                    context.tr('details_doctor_title'),
+                    style: const TextStyle(
                       fontSize: 17,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
@@ -203,9 +206,9 @@ class _ServiceDetailsViewState extends State<ServiceDetailsView> {
                       ScaleOnTap(
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Doctor link copied to clipboard!"),
-                              duration: Duration(seconds: 2),
+                            SnackBar(
+                              content: Text(context.tr('details_link_copied')),
+                              duration: const Duration(seconds: 2),
                             ),
                           );
                         },
@@ -358,10 +361,10 @@ class _ServiceDetailsViewState extends State<ServiceDetailsView> {
                         ),
                       ],
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Book an Appointment",
-                        style: TextStyle(
+                        context.tr('details_book_appointment'),
+                        style: const TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.w800,
                           color: Colors.white,

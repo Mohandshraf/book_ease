@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
@@ -44,8 +45,8 @@ class ChatHeader extends StatelessWidget {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.arrow_back_rounded,
+                  child: Icon(
+                    context.isRtl ? Icons.arrow_forward_rounded : Icons.arrow_back_rounded,
                     color: AppColors.textPrimary,
                     size: 20,
                   ),
@@ -126,16 +127,16 @@ class ChatHeader extends StatelessWidget {
                   }
                 },
                 itemBuilder: (context) => [
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'clear',
                     child: Row(
                       children: [
-                        Icon(Icons.cleaning_services_rounded,
+                        const Icon(Icons.cleaning_services_rounded,
                             color: AppColors.textSecondary, size: 18),
-                        Gap(10),
+                        const Gap(10),
                         Text(
-                          "Clear chat",
-                          style: TextStyle(
+                          context.tr('chat_menu_clear'),
+                          style: const TextStyle(
                             color: AppColors.textPrimary,
                             fontWeight: FontWeight.w500,
                           ),
@@ -143,16 +144,16 @@ class ChatHeader extends StatelessWidget {
                       ],
                     ),
                   ),
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(Icons.delete_outline_rounded,
+                        const Icon(Icons.delete_outline_rounded,
                             color: AppColors.error, size: 18),
-                        Gap(10),
+                        const Gap(10),
                         Text(
-                          "Delete chat",
-                          style: TextStyle(
+                          context.tr('chat_menu_delete'),
+                          style: const TextStyle(
                             color: AppColors.error,
                             fontWeight: FontWeight.w500,
                           ),
@@ -169,3 +170,4 @@ class ChatHeader extends StatelessWidget {
     );
   }
 }
+

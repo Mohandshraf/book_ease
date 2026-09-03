@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/root/presentation/views/customer_root_view.dart';
@@ -105,22 +106,22 @@ class BookingSuccessView extends StatelessWidget {
               const Gap(24),
 
               // Title and Description
-              const Text(
-                "Booking Confirmed!",
+              Text(
+                context.tr('success_title'),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 26,
                   fontWeight: FontWeight.bold,
                   color: AppColors.textPrimary,
                 ),
               ),
               const Gap(10),
-              const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  "Your appointment has been successfully booked. A confirmation has been sent to your email.",
+                  context.tr('success_sub'),
                   textAlign: TextAlign.center,
-                  style: TextStyle(
+                  style: const TextStyle(
                     fontSize: 14,
                     color: AppColors.textSecondary,
                     height: 1.5,
@@ -141,9 +142,9 @@ class BookingSuccessView extends StatelessWidget {
                 ),
                 child: Column(
                   children: [
-                    const Text(
-                      "CONFIRMATION CODE",
-                      style: TextStyle(
+                    Text(
+                      context.tr('success_code_label'),
+                      style: const TextStyle(
                         fontSize: 11,
                         fontWeight: FontWeight.bold,
                         color: AppColors.textMuted,
@@ -164,16 +165,28 @@ class BookingSuccessView extends StatelessWidget {
                     const Gap(16),
 
                     // Detail items
-                    _buildSummaryDetailRow(label: "Provider", value: providerName),
-                    const Gap(14),
-                    _buildSummaryDetailRow(label: "Doctor", value: doctorName),
-                    const Gap(14),
-                    _buildSummaryDetailRow(label: "Date", value: dateText),
-                    const Gap(14),
-                    _buildSummaryDetailRow(label: "Time", value: timeText),
+                    _buildSummaryDetailRow(
+                      label: context.tr('success_provider'),
+                      value: providerName,
+                    ),
                     const Gap(14),
                     _buildSummaryDetailRow(
-                      label: "Paid",
+                      label: context.tr('success_doctor'),
+                      value: doctorName,
+                    ),
+                    const Gap(14),
+                    _buildSummaryDetailRow(
+                      label: context.tr('success_date'),
+                      value: dateText,
+                    ),
+                    const Gap(14),
+                    _buildSummaryDetailRow(
+                      label: context.tr('success_time'),
+                      value: timeText,
+                    ),
+                    const Gap(14),
+                    _buildSummaryDetailRow(
+                      label: context.tr('success_paid'),
                       value: "\$${amountPaid.toStringAsFixed(2)}",
                     ),
                   ],
@@ -206,9 +219,9 @@ class BookingSuccessView extends StatelessWidget {
                           ],
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
-                          "View My Bookings",
-                          style: TextStyle(
+                        child: Text(
+                          context.tr('success_view_bookings'),
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: Colors.white,
@@ -234,9 +247,9 @@ class BookingSuccessView extends StatelessWidget {
                           border: Border.all(color: AppColors.border, width: 1.5),
                         ),
                         alignment: Alignment.center,
-                        child: const Text(
-                          "Back to Home",
-                          style: TextStyle(
+                        child: Text(
+                          context.tr('success_back_home'),
+                          style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w800,
                             color: AppColors.textPrimary,

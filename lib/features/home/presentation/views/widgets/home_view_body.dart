@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:book_ease/core/di/service_locator.dart';
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
@@ -35,6 +36,33 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   List<ServiceModel> _firestoreServices = [];
   String _selectedCategory = "All";
   final TextEditingController _searchController = TextEditingController();
+
+  String _getCategoryDisplayName(BuildContext context, String catName) {
+    final key = 'cat_${catName.toLowerCase().replaceAll(' ', '_')}';
+    final translated = context.tr(key);
+    return translated != key ? translated : catName;
+  }
+
+  String _formatAppointmentDate(BuildContext context, DateTime bDate) {
+    if (context.isRtl) {
+      const arMonths = [
+        "يناير", "فبراير", "مارس", "أبريل", "مايو", "يونيو",
+        "يوليو", "أغسطس", "سبتمبر", "أكتوبر", "نوفمبر", "ديسمبر"
+      ];
+      const arDays = [
+        "الاثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة", "السبت", "الأحد"
+      ];
+      return "${arDays[bDate.weekday - 1]}، ${bDate.day} ${arMonths[bDate.month - 1]}";
+    }
+    const months = [
+      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
+      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
+    ];
+    const days = [
+      "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
+    ];
+    return "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}";
+  }
 
   // Default curated doctors matching the design mockup if Firestore has few or no items
   final List<Map<String, dynamic>> _mockDoctors = const [
@@ -354,9 +382,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
-                              "Good morning!",
-                              style: TextStyle(
+                            Text(
+                              context.tr('home_greeting'),
+                              style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
@@ -459,9 +487,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 const Gap(20),
 
                 // 2. Large Bold Typography Headline
-                const Text(
-                  "Find Your Best\nHealthcare Provider 🩺",
-                  style: TextStyle(
+                Text(
+                  context.tr('home_headline'),
+                  style: const TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.w800,
                     color: AppColors.textPrimary,
@@ -498,9 +526,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                             fontSize: 15,
                             fontWeight: FontWeight.w500,
                           ),
-                          decoration: const InputDecoration(
-                            hintText: "Search doctors, clinics, specialties...",
-                            hintStyle: TextStyle(
+                          decoration: InputDecoration(
+                            hintText: context.tr('home_search_hint'),
+                            hintStyle: const TextStyle(
                               color: AppColors.textMuted,
                               fontSize: 14,
                               fontWeight: FontWeight.w400,
@@ -521,22 +549,16 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         child: Container(
                           width: 38,
                           height: 38,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(color: AppColors.border),
-                            boxShadow: [
-                              BoxShadow(
-                                color: AppColors.shadowColor.withValues(alpha: 0.05),
-                                blurRadius: 6,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: const Icon(
-                            Icons.tune_rounded,
+                          decoration: const BoxDecoration(
                             color: AppColors.primary,
-                            size: 18,
+                            shape: BoxShape.circle,
+                          ),
+                          child: const Center(
+                            child: Icon(
+                              Icons.tune_rounded,
+                              color: Colors.white,
+                              size: 18,
+                            ),
                           ),
                         ),
                       ),
@@ -550,9 +572,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Upcoming Appointment",
-                      style: TextStyle(
+                    Text(
+                      context.tr('home_upcoming_appointment'),
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -563,9 +585,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       onTap: () {
                         CustomerRootView.navigateToTab(context, 2);
                       },
-                      child: const Text(
-                        "View All",
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('common_view_all'),
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
@@ -586,9 +608,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Text(
-                      "Specialties",
-                      style: TextStyle(
+                    Text(
+                      context.tr('home_specialties'),
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w800,
                         color: AppColors.textPrimary,
@@ -599,9 +621,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.discover);
                       },
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('common_see_all'),
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
@@ -624,9 +646,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   children: [
                     Row(
                       children: [
-                        const Text(
-                          "Top Specialists",
-                          style: TextStyle(
+                        Text(
+                          context.tr('home_top_specialists'),
+                          style: const TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.w800,
                             color: AppColors.textPrimary,
@@ -657,7 +679,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    _selectedCategory,
+                                    _getCategoryDisplayName(context, _selectedCategory),
                                     style: const TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.bold,
@@ -681,9 +703,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.discover);
                       },
-                      child: const Text(
-                        "See All",
-                        style: TextStyle(
+                      child: Text(
+                        context.tr('common_see_all'),
+                        style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w700,
                           color: AppColors.primary,
@@ -751,8 +773,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
           const Gap(12),
           Text(
             _selectedCategory == "All"
-                ? "No specialists found"
-                : "No specialists found in $_selectedCategory",
+                ? context.tr('home_no_specialists_found')
+                : "${context.tr('home_no_specialists_found')} (${_getCategoryDisplayName(context, _selectedCategory)})",
             style: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.bold,
@@ -761,9 +783,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             textAlign: TextAlign.center,
           ),
           const Gap(6),
-          const Text(
-            "Try searching or choose another specialty",
-            style: TextStyle(
+          Text(
+            context.tr('home_try_searching_specialties'),
+            style: const TextStyle(
               fontSize: 13,
               color: AppColors.textSecondary,
             ),
@@ -787,9 +809,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                   color: AppColors.primary,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: const Text(
-                  "Show All Specialists",
-                  style: TextStyle(
+                child: Text(
+                  context.tr('home_show_all_specialists'),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 13,
                     fontWeight: FontWeight.w700,
@@ -905,7 +927,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 ),
                 const Gap(6),
                 Text(
-                  item["name"] as String,
+                  _getCategoryDisplayName(context, item["name"] as String),
                   style: TextStyle(
                     fontSize: 12,
                     fontWeight:
@@ -924,14 +946,6 @@ class _HomeViewBodyState extends State<HomeViewBody> {
   }
 
   Widget _buildUpcomingAppointmentCard(BuildContext context) {
-    const months = [
-      "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-      "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-    ];
-    const days = [
-      "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"
-    ];
-
     final bool hasBooking = _nextBooking != null;
 
     if (!hasBooking) {
@@ -971,19 +985,19 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: const [
+                    children: [
                       Text(
-                        "No upcoming appointments",
-                        style: TextStyle(
+                        context.tr('home_no_upcoming'),
+                        style: const TextStyle(
                           color: AppColors.textPrimary,
                           fontSize: 15,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Gap(3),
+                      const Gap(3),
                       Text(
-                        "Book your consultation with certified doctors.",
-                        style: TextStyle(
+                        context.tr('home_book_consultation_sub'),
+                        style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 12,
                         ),
@@ -1019,12 +1033,12 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.search_rounded, color: Colors.white, size: 16),
-                    Gap(8),
+                  children: [
+                    const Icon(Icons.search_rounded, color: Colors.white, size: 16),
+                    const Gap(8),
                     Text(
-                      "Find a Doctor & Book",
-                      style: TextStyle(
+                      context.tr('home_find_doctor_book'),
+                      style: const TextStyle(
                         color: Colors.white,
                         fontSize: 13,
                         fontWeight: FontWeight.bold,
@@ -1040,8 +1054,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
     }
 
     final bDate = _nextBooking!.bookingDate;
-    final dateStr =
-        "${bDate.day} ${months[bDate.month - 1]}, ${days[bDate.weekday - 1]}";
+    final dateStr = _formatAppointmentDate(context, bDate);
     final timeStr = _nextBooking!.bookingTime;
     final doctorName = ((_nextBooking!.providerName != null &&
             _nextBooking!.providerName!.isNotEmpty)
@@ -1261,10 +1274,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(21),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Re-Schedule",
-                        style: TextStyle(
+                        context.tr('home_reschedule'),
+                        style: const TextStyle(
                           color: AppColors.primary,
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -1301,10 +1314,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                         width: 1,
                       ),
                     ),
-                    child: const Center(
+                    child: Center(
                       child: Text(
-                        "Details",
-                        style: TextStyle(
+                        context.tr('home_details'),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 13,
                           fontWeight: FontWeight.bold,
@@ -1384,7 +1397,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          specialtyName,
+                          _getCategoryDisplayName(context, specialtyName),
                           style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.w700,
@@ -1479,7 +1492,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        "\$${doc.price.toStringAsFixed(0)} / visit",
+                        "\$${doc.price.toStringAsFixed(0)} ${context.tr('home_per_visit')}",
                         style: const TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.w800,
@@ -1495,9 +1508,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                           color: AppColors.primary,
                           borderRadius: BorderRadius.circular(16),
                         ),
-                        child: const Text(
-                          "Book Now",
-                          style: TextStyle(
+                        child: Text(
+                          context.tr('home_book_now'),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
