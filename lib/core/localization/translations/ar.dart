@@ -265,4 +265,16 @@ const Map<String, String> arTranslations = {
   'discover_popular_1': 'فحص شامل',
   'discover_popular_2': 'طبيب أسنان قريب',
   'discover_popular_3': 'استشارة جلدية',
+
+  // OnBoarding
+  'onboarding_skip': 'تخطي',
+  'onboarding_next': 'التالي',
+  'onboarding_get_started': 'ابدأ الآن',
+  'onboarding_title_1': 'اعثر على أفضل الأطباء',
+  'onboarding_desc_1': 'استكشف أطباء ومراكز طبية معتمدة في جميع التخصصات بالقرب منك.',
+  'onboarding_title_2': 'حجز المواعيد بكل سهولة',
+  'onboarding_desc_2': 'اختر اليوم والوقت المناسب لك واحجز موعدك فوراً وبكل يسر.',
+  'onboarding_title_3': 'محادثة مباشرة ورعاية متكاملة',
+  'onboarding_desc_3': 'تواصل مباشرة مع أطبائك، وتابع مواعيدك وسجلاتك الصحية باطمئنان.',
 };
+

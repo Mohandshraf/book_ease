@@ -1,4 +1,6 @@
+import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/services/app_preferences.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -81,13 +83,21 @@ class _SplashViewBodyState extends State<SplashViewBody>
     final minimumSplashTimer =
         Future.delayed(const Duration(milliseconds: 900));
 
+    final appPrefs = sl<AppPreferences>();
+
+    // Case 1: No active Firebase Auth session
     if (FirebaseAuth.instance.currentUser == null) {
       await minimumSplashTimer;
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+      if (appPrefs.isOnboardingSeen) {
+        Navigator.pushReplacementNamed(context, AppRoutes.login);
+      } else {
+        Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+      }
       return;
     }
 
+    // Case 2: Active Firebase session exists -> fetch user profile & role
     final userCubit = context.read<UserCubit>();
     await Future.wait([
       userCubit.getCurrentUserData(),
@@ -99,15 +109,30 @@ class _SplashViewBodyState extends State<SplashViewBody>
     final state = userCubit.state;
     if (state is UserDataLoaded) {
       final role = state.userData['role'];
+      if (role != null) {
+        appPrefs.setUserRole(role);
+      }
       if (role == 'provider') {
         Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
       } else if (role == 'customer') {
         Navigator.pushReplacementNamed(context, AppRoutes.customerRoot);
+      } else if (role == 'admin') {
+        Navigator.pushReplacementNamed(context, AppRoutes.admin);
       } else {
         Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
       }
     } else {
-      Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
+      // Fallback to cached role if network delayed
+      final cachedRole = appPrefs.userRole;
+      if (cachedRole == 'provider') {
+        Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
+      } else if (cachedRole == 'customer') {
+        Navigator.pushReplacementNamed(context, AppRoutes.customerRoot);
+      } else if (cachedRole == 'admin') {
+        Navigator.pushReplacementNamed(context, AppRoutes.admin);
+      } else {
+        Navigator.pushReplacementNamed(context, AppRoutes.chooseRole);
+      }
     }
   }
 

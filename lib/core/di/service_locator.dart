@@ -22,14 +22,20 @@ import 'package:book_ease/features/provider_availability/data/repo/provider_avai
 import 'package:book_ease/features/provider_bookings/data/cubit/provider_bookings_cubit.dart';
 import 'package:book_ease/features/provider_dashboard/data/cubit/provider_dashboard_cubit.dart';
 import 'package:book_ease/features/provider_services/data/cubit/provider_services_cubit.dart';
+import 'package:book_ease/core/services/app_preferences.dart';
 import 'package:book_ease/features/provider_services/data/repo/provider_services_repo.dart';
 import 'package:book_ease/features/provider_services/data/repo/provider_services_repo_impl.dart';
 import 'package:book_ease/features/service_details/data/cubit/booking_date_cubit.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 final GetIt sl = GetIt.instance;
 
 Future<void> setupServiceLocator() async {
+  // Storage & Preferences
+  final sharedPreferences = await SharedPreferences.getInstance();
+  sl.registerSingleton<AppPreferences>(AppPreferences(sharedPreferences));
+
   // Services
   sl.registerLazySingleton<FirebaseAuthService>(() => FirebaseAuthService());
   sl.registerLazySingleton<ChatServices>(() => ChatServices());

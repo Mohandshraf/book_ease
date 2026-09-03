@@ -265,4 +265,16 @@ const Map<String, String> frTranslations = {
   'discover_popular_1': 'Bilan général',
   'discover_popular_2': 'Dentiste proche',
   'discover_popular_3': 'Consultation dermatologie',
+
+  // OnBoarding
+  'onboarding_skip': 'Passer',
+  'onboarding_next': 'Suivant',
+  'onboarding_get_started': 'Commencer',
+  'onboarding_title_1': 'Trouvez des médecins fiables',
+  'onboarding_desc_1': 'Découvrez des spécialistes médicaux et des cliniques certifiées près de chez vous.',
+  'onboarding_title_2': 'Réservation simple et rapide',
+  'onboarding_desc_2': 'Sélectionnez la date et le créneau horaire souhaités et réservez instantanément.',
+  'onboarding_title_3': 'Chat direct et suivi santé',
+  'onboarding_desc_3': 'Communiquez facilement avec vos médecins et gérez vos consultations en toute sérénité.',
 };
+

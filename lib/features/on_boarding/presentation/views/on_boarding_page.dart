@@ -1,197 +1,134 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
+import 'package:book_ease/features/on_boarding/data/models/on_boarding_model.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
 class OnBoardingPage extends StatelessWidget {
   const OnBoardingPage({
     super.key,
-    required this.image,
-    required this.title,
-    required this.description,
-    required this.buttonText,
-    required this.onPressed,
-    required this.currentIndex,
-    required this.bottonColor,
-    required this.backgroundColor,
+    required this.model,
   });
 
-  final String image;
-  final String title;
-  final String description;
-  final String buttonText;
-  final VoidCallback onPressed;
-  final int currentIndex;
-  final Color bottonColor;
-  final Color backgroundColor;
+  final OnBoardingModel model;
 
   @override
   Widget build(BuildContext context) {
-    return ColoredBox(
-      color: backgroundColor,
-      child: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            children: [
-              const Gap(16),
+    final size = MediaQuery.of(context).size;
 
-              Expanded(
-                flex: 6,
-                child: Center(
-                  child: AnimatedSwitcher(
-                    duration: const Duration(milliseconds: 500),
-                    transitionBuilder: (child, animation) {
-                      return FadeTransition(
-                        opacity: animation,
-                        child: ScaleTransition(
-                          scale: Tween<double>(
-                            begin: 0.94,
-                            end: 1,
-                          ).animate(animation),
-                          child: child,
-                        ),
-                      );
-                    },
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 24),
+      child: Column(
+        children: [
+          const Spacer(flex: 1),
+
+          // Illustration Container with Soft Accent & Shadows
+          FadeSlideTransition(
+            delay: const Duration(milliseconds: 150),
+            child: Container(
+              width: double.infinity,
+              height: size.height * 0.44,
+              decoration: BoxDecoration(
+                color: AppColors.primaryLight.withValues(alpha: 0.45),
+                borderRadius: BorderRadius.circular(36),
+                border: Border.all(
+                  color: AppColors.primary.withValues(alpha: 0.08),
+                  width: 1.5,
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.08),
+                    blurRadius: 28,
+                    offset: const Offset(0, 14),
+                  ),
+                ],
+              ),
+              child: Stack(
+                alignment: Alignment.center,
+                children: [
+                  // Decorative subtle background glow
+                  Positioned(
+                    top: 20,
+                    right: 20,
+                    child: Container(
+                      width: 90,
+                      height: 90,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primary.withValues(alpha: 0.06),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 20,
+                    left: 20,
+                    child: Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.secondary.withValues(alpha: 0.06),
+                      ),
+                    ),
+                  ),
+
+                  // The Main Image Illustration
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
                     child: Image.asset(
-                      image,
-                      key: ValueKey(image),
+                      model.image,
                       fit: BoxFit.contain,
+                      width: double.infinity,
+                      height: double.infinity,
                     ),
                   ),
-                ),
+                ],
               ),
-
-              const Gap(16),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 400),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0.12, 0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Text(
-                    title,
-                    key: ValueKey(title),
-                    style: const TextStyle(
-                      color: AppColors.textPrimary,
-                      fontSize: 30,
-                      fontWeight: FontWeight.w800,
-                      letterSpacing: -0.6,
-                      height: 1.25,
-                    ),
-                  ),
-                ),
-              ),
-
-              const Gap(14),
-
-              Align(
-                alignment: Alignment.centerLeft,
-                child: AnimatedSwitcher(
-                  duration: const Duration(milliseconds: 500),
-                  transitionBuilder: (child, animation) {
-                    return FadeTransition(
-                      opacity: animation,
-                      child: SlideTransition(
-                        position: Tween<Offset>(
-                          begin: const Offset(0.12, 0),
-                          end: Offset.zero,
-                        ).animate(animation),
-                        child: child,
-                      ),
-                    );
-                  },
-                  child: Text(
-                    description,
-                    key: ValueKey(description),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      height: 1.55,
-                      color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                ),
-              ),
-
-              const Gap(24),
-
-              Row(
-                children: List.generate(
-                  3,
-                  (index) => AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    margin: const EdgeInsets.only(right: 8),
-                    height: 7,
-                    width: currentIndex == index ? 28 : 7,
-                    decoration: BoxDecoration(
-                      color: currentIndex == index
-                          ? AppColors.primary
-                          : AppColors.border,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                  ),
-                ),
-              ),
-
-              const Gap(24),
-
-              ScaleOnTap(
-                onTap: onPressed,
-                child: Container(
-                  width: double.infinity,
-                  height: 56,
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(28),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.primary.withValues(alpha: 0.35),
-                        blurRadius: 20,
-                        offset: const Offset(0, 8),
-                      ),
-                    ],
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        buttonText,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w800,
-                          color: Colors.white,
-                          letterSpacing: -0.2,
-                        ),
-                      ),
-                      const SizedBox(width: 8),
-                      const Icon(
-                        Icons.arrow_forward_rounded,
-                        color: Colors.white,
-                        size: 20,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-
-              const Gap(24),
-            ],
+            ),
           ),
-        ),
+
+          const Spacer(flex: 2),
+
+          // Title
+          FadeSlideTransition(
+            delay: const Duration(milliseconds: 250),
+            child: Text(
+              context.tr(model.titleKey),
+              textAlign: TextAlign.center,
+              style: const TextStyle(
+                fontSize: 26,
+                fontWeight: FontWeight.w900,
+                color: AppColors.textPrimary,
+                letterSpacing: -0.6,
+                height: 1.3,
+              ),
+            ),
+          ),
+
+          const Gap(14),
+
+          // Description
+          FadeSlideTransition(
+            delay: const Duration(milliseconds: 350),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Text(
+                context.tr(model.descKey),
+                textAlign: TextAlign.center,
+                style: const TextStyle(
+                  fontSize: 15,
+                  height: 1.6,
+                  color: AppColors.textSecondary,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ),
+
+          const Spacer(flex: 3),
+        ],
       ),
     );
   }
 }
-

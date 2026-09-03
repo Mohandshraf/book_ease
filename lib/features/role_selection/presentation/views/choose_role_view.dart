@@ -1,4 +1,6 @@
+import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/services/app_preferences.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
@@ -29,6 +31,7 @@ class _ChooseRoleViewState extends State<ChooseRoleView> {
       if (userState is UserDataLoaded) {
         final existingRole = userState.userData['role'];
         if (existingRole == 'provider') {
+          sl<AppPreferences>().setUserRole('provider');
           Navigator.pushNamedAndRemoveUntil(
             context,
             AppRoutes.providerRoot,
@@ -36,6 +39,7 @@ class _ChooseRoleViewState extends State<ChooseRoleView> {
           );
           return;
         } else if (existingRole == 'customer') {
+          sl<AppPreferences>().setUserRole('customer');
           Navigator.pushNamedAndRemoveUntil(
             context,
             AppRoutes.customerRoot,
@@ -66,6 +70,7 @@ class _ChooseRoleViewState extends State<ChooseRoleView> {
           : <String, dynamic>{};
       currentData['role'] = selectedRole;
       userCubit.setUserData(currentData);
+      sl<AppPreferences>().setUserRole(selectedRole);
 
       if (selectedRole == 'provider') {
         Navigator.pushNamedAndRemoveUntil(
@@ -102,12 +107,14 @@ class _ChooseRoleViewState extends State<ChooseRoleView> {
             if (state is UserDataLoaded) {
               final existingRole = state.userData['role'];
               if (existingRole == 'provider') {
+                sl<AppPreferences>().setUserRole('provider');
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppRoutes.providerRoot,
                   (route) => false,
                 );
               } else if (existingRole == 'customer') {
+                sl<AppPreferences>().setUserRole('customer');
                 Navigator.pushNamedAndRemoveUntil(
                   context,
                   AppRoutes.customerRoot,

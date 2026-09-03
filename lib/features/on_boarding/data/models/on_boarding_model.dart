@@ -1,19 +1,11 @@
-import 'dart:ui';
-
 class OnBoardingModel {
   final String image;
-  final String title;
-  final String description;
-  final String buttonText;
-  final Color backgroundColor;
-  final Color bottonColor;
+  final String titleKey;
+  final String descKey;
 
   const OnBoardingModel({
     required this.image,
-    required this.title,
-    required this.description,
-    required this.buttonText,
-    required this.backgroundColor,
-    required this.bottonColor,
+    required this.titleKey,
+    required this.descKey,
   });
 }

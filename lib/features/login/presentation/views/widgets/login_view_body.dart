@@ -1,4 +1,6 @@
+import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/services/app_preferences.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/utils/app_reset_helper.dart';
@@ -58,6 +60,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
             // Check if user already has a saved role
             final role = state.userData?['role'];
+            if (role != null) {
+              sl<AppPreferences>().setUserRole(role);
+            }
+
             if (role == 'provider') {
               Navigator.pushReplacementNamed(context, AppRoutes.providerRoot);
             } else if (role == 'customer') {
@@ -91,26 +97,12 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Top Bar with Back Arrow & Theme Moon Icon
+                      // Top Bar with Theme Moon Icon (Back button removed per UX specs)
                       FadeSlideTransition(
                         delay: const Duration(milliseconds: 100),
                         child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisAlignment: MainAxisAlignment.end,
                           children: [
-                            GestureDetector(
-                              onTap: () {
-                                if (Navigator.canPop(context)) {
-                                  Navigator.pop(context);
-                                } else {
-                                  Navigator.pushReplacementNamed(context, AppRoutes.onBoarding);
-                                }
-                              },
-                              child: const Icon(
-                                Icons.arrow_back_ios_new_rounded,
-                                size: 20,
-                                color: AppColors.primary,
-                              ),
-                            ),
                             Container(
                               width: 36,
                               height: 36,

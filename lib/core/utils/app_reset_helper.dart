@@ -1,3 +1,5 @@
+import 'package:book_ease/core/di/service_locator.dart';
+import 'package:book_ease/core/services/app_preferences.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
@@ -12,6 +14,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AppResetHelper {
   static void resetAllUserData(BuildContext context) {
+    try {
+      sl<AppPreferences>().clearUserRole();
+    } catch (_) {}
     try {
       context.read<UserCubit>().clearUserData();
     } catch (_) {}

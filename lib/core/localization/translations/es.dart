@@ -265,4 +265,16 @@ const Map<String, String> esTranslations = {
   'discover_popular_1': 'Chequeo general',
   'discover_popular_2': 'Dentista cercano',
   'discover_popular_3': 'Consulta dermatológica',
+
+  // OnBoarding
+  'onboarding_skip': 'Saltar',
+  'onboarding_next': 'Siguiente',
+  'onboarding_get_started': 'Empezar',
+  'onboarding_title_1': 'Encuentra especialistas confiables',
+  'onboarding_desc_1': 'Descubre médicos verificados y clínicas especializadas cerca de ti.',
+  'onboarding_title_2': 'Reserva de citas sin complicaciones',
+  'onboarding_desc_2': 'Selecciona la fecha y el horario de tu preferencia y confirma al instante.',
+  'onboarding_title_3': 'Chat directo y control de salud',
+  'onboarding_desc_3': 'Conéctate con tus profesionales de salud y gestiona tus citas médicas fácilmente.',
 };
+

@@ -265,4 +265,16 @@ const Map<String, String> enTranslations = {
   'discover_popular_1': 'General checkup',
   'discover_popular_2': 'Dentist near me',
   'discover_popular_3': 'Skin consultation',
+
+  // OnBoarding
+  'onboarding_skip': 'Skip',
+  'onboarding_next': 'Next',
+  'onboarding_get_started': 'Get Started',
+  'onboarding_title_1': 'Find Trusted Healthcare',
+  'onboarding_desc_1': 'Discover verified doctors and clinics across various specialties nearby.',
+  'onboarding_title_2': 'Easy Appointment Booking',
+  'onboarding_desc_2': 'Choose your preferred date, pick available time slots, and book instantly.',
+  'onboarding_title_3': 'Direct Chat & Health Care',
+  'onboarding_desc_3': 'Connect with your doctor directly, manage appointments, and stay healthy.',
 };
+
