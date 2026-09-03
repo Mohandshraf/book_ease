@@ -3,7 +3,6 @@ import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/service_details/data/cubit/booking_date_cubit.dart';
 import 'package:book_ease/features/service_details/data/service_details_model.dart';
-import 'package:book_ease/features/service_details/presentation/cubit/booking_selection_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
