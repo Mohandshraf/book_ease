@@ -79,12 +79,54 @@ void main() {
     );
 
     blocTest<NotificationCubit, NotificationState>(
+      'optimistically updates state when marking single notification as read in NotificationLoaded',
+      build: () {
+        when(() => mockRepo.markAsRead('n1')).thenAnswer((_) async {});
+        return cubit;
+      },
+      seed: () => NotificationLoaded(
+        notifications: [sampleNotification1, sampleNotification2],
+        unreadCount: 1,
+      ),
+      act: (cubit) => cubit.markAsRead('n1'),
+      expect: () => [
+        isA<NotificationLoaded>()
+            .having((s) => s.unreadCount, 'unread count', 0)
+            .having((s) => s.notifications.first.isRead, 'n1 isRead', true),
+      ],
+      verify: (_) {
+        verify(() => mockRepo.markAsRead('n1')).called(1);
+      },
+    );
+
+    blocTest<NotificationCubit, NotificationState>(
       'marks all notifications as read via repo',
       build: () {
         when(() => mockRepo.markAllAsRead()).thenAnswer((_) async {});
         return cubit;
       },
       act: (cubit) => cubit.markAllAsRead(),
+      verify: (_) {
+        verify(() => mockRepo.markAllAsRead()).called(1);
+      },
+    );
+
+    blocTest<NotificationCubit, NotificationState>(
+      'optimistically updates state when marking all notifications as read in NotificationLoaded',
+      build: () {
+        when(() => mockRepo.markAllAsRead()).thenAnswer((_) async {});
+        return cubit;
+      },
+      seed: () => NotificationLoaded(
+        notifications: [sampleNotification1, sampleNotification2],
+        unreadCount: 1,
+      ),
+      act: (cubit) => cubit.markAllAsRead(),
+      expect: () => [
+        isA<NotificationLoaded>()
+            .having((s) => s.unreadCount, 'unread count', 0)
+            .having((s) => s.notifications.every((n) => n.isRead), 'all isRead', true),
+      ],
       verify: (_) {
         verify(() => mockRepo.markAllAsRead()).called(1);
       },

@@ -1,9 +1,12 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_state.dart';
 import 'package:book_ease/features/profile/presentation/views/edit_profile_view.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
@@ -39,24 +42,24 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
         backgroundColor: Colors.white,
         surfaceTintColor: Colors.transparent,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text(
-          "Log out",
-          style: TextStyle(
+        title: Text(
+          context.tr('profile_log_out_title'),
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: const Text(
-          "Are you sure you want to log out of your account?",
-          style: TextStyle(color: AppColors.textSecondary, height: 1.4),
+        content: Text(
+          context.tr('profile_log_out_confirm'),
+          style: const TextStyle(color: AppColors.textSecondary, height: 1.4),
         ),
         actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(
+            child: Text(
+              context.tr('common_cancel'),
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
@@ -98,9 +101,9 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                   ),
                 ],
               ),
-              child: const Text(
-                "Log out",
-                style: TextStyle(
+              child: Text(
+                context.tr('profile_log_out'),
+                style: const TextStyle(
                   color: Colors.white,
                   fontWeight: FontWeight.bold,
                   fontSize: 14,
@@ -124,9 +127,9 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text(
-                "Profile",
-                style: TextStyle(
+              Text(
+                context.tr('profile_title'),
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 28,
                   fontWeight: FontWeight.bold,
@@ -215,7 +218,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           // Menu Options
           MenuOptionTile(
             icon: Icons.calendar_month_outlined,
-            title: "My bookings",
+            title: context.tr('profile_appointments'),
             iconColor: AppColors.primary,
             iconBackgroundColor: AppColors.accentLilacLight,
             onTap: () {
@@ -224,7 +227,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           ),
           MenuOptionTile(
             icon: Icons.favorite_outline_rounded,
-            title: "Saved providers",
+            title: context.tr('profile_saved_providers'),
             iconColor: const Color(0xffEC4899),
             iconBackgroundColor: const Color(0xffFDF2F8),
             onTap: () {
@@ -233,20 +236,27 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           ),
           MenuOptionTile(
             icon: Icons.chat_bubble_outline_rounded,
-            title: "Messages",
+            title: context.tr('profile_messages'),
             iconColor: const Color(0xff06B6D4),
             iconBackgroundColor: const Color(0xffECFEFF),
             onTap: () {
               CustomerRootView.navigateToTab(context, 3);
             },
           ),
-          MenuOptionTile(
-            icon: Icons.notifications_none_rounded,
-            title: "Notifications",
-            iconColor: const Color(0xffF59E0B),
-            iconBackgroundColor: const Color(0xffFEF3C7),
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.notifications);
+          BlocBuilder<NotificationCubit, NotificationState>(
+            builder: (context, notifState) {
+              final unreadCount =
+                  notifState is NotificationLoaded ? notifState.unreadCount : 0;
+              return MenuOptionTile(
+                icon: Icons.notifications_none_rounded,
+                title: context.tr('profile_notifications'),
+                iconColor: const Color(0xffF59E0B),
+                iconBackgroundColor: const Color(0xffFEF3C7),
+                badgeCount: unreadCount,
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.notifications);
+                },
+              );
             },
           ),
 

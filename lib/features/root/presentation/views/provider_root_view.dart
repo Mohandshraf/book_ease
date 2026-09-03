@@ -1,7 +1,9 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/presentation/views/messages_view.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/provider_bookings/presentation/views/provider_bookings_view.dart';
 import 'package:book_ease/features/provider_dashboard/presentation/views/provider_dashboard_view.dart';
 import 'package:book_ease/features/provider_profile/presentation/views/provider_profile_view.dart';
@@ -25,6 +27,7 @@ class _ProviderRootViewState extends State<ProviderRootView> {
   void initState() {
     super.initState();
     context.read<ChatCubit>().initConversations();
+    context.read<NotificationCubit>().subscribeToNotifications();
     pages = [
       ProviderDashboardView(
         onTabChangeRequested: (index) => setState(() => currentIndex = index),
@@ -70,9 +73,9 @@ class _ProviderRootViewState extends State<ProviderRootView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.dashboard_rounded, Icons.dashboard_outlined, "Dashboard"),
-              _buildNavItem(1, Icons.calendar_month_rounded, Icons.calendar_month_outlined, "Bookings"),
-              _buildNavItem(2, Icons.medical_services_rounded, Icons.medical_services_outlined, "Services"),
+              _buildNavItem(0, Icons.dashboard_rounded, Icons.dashboard_outlined, context.tr('nav_dashboard')),
+              _buildNavItem(1, Icons.calendar_month_rounded, Icons.calendar_month_outlined, context.tr('nav_bookings')),
+              _buildNavItem(2, Icons.medical_services_rounded, Icons.medical_services_outlined, context.tr('nav_services')),
               BlocBuilder<ChatCubit, ChatState>(
                 builder: (context, chatState) {
                   final unreadCount =
@@ -81,12 +84,12 @@ class _ProviderRootViewState extends State<ProviderRootView> {
                     3,
                     Icons.chat_bubble_rounded,
                     Icons.chat_bubble_outline_rounded,
-                    "Messages",
+                    context.tr('nav_messages'),
                     badgeCount: unreadCount,
                   );
                 },
               ),
-              _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, "Profile"),
+              _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, context.tr('nav_profile')),
             ],
           ),
         ),

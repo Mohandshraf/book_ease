@@ -33,8 +33,8 @@ void main() {
       expect(find.text('Terms of Service'), findsOneWidget);
       expect(find.text('Privacy Policy'), findsOneWidget);
 
-      // Verify buttons
-      expect(find.text('Log Out'), findsOneWidget);
+      // Verify buttons (Log Out removed from Settings, only present in Profile)
+      expect(find.text('Log Out'), findsNothing);
       expect(find.text('Save Settings'), findsOneWidget);
 
       // Verify switches exist and can be toggled

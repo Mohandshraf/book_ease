@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:flutter/material.dart';
@@ -42,17 +43,19 @@ class LogoutButton extends StatelessWidget {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: const Icon(
-                    Icons.logout_rounded,
+                  child: Icon(
+                    context.isRtl
+                        ? Icons.logout_rounded
+                        : Icons.logout_rounded,
                     color: AppColors.cancelled,
                     size: 20,
                   ),
                 ),
                 const SizedBox(width: 16),
                 // Text
-                const Text(
-                  "Log out",
-                  style: TextStyle(
+                Text(
+                  context.tr('profile_log_out'),
+                  style: const TextStyle(
                     color: AppColors.cancelled,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,

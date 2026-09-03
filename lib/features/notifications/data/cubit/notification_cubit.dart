@@ -28,12 +28,31 @@ class NotificationCubit extends Cubit<NotificationState> {
   }
 
   Future<void> markAsRead(String notificationId) async {
+    if (state is NotificationLoaded) {
+      final current = (state as NotificationLoaded).notifications;
+      final updated = current
+          .map((n) => n.id == notificationId ? n.copyWith(isRead: true) : n)
+          .toList();
+      final unreadCount = updated.where((n) => !n.isRead).length;
+      emit(NotificationLoaded(
+        notifications: updated,
+        unreadCount: unreadCount,
+      ));
+    }
     try {
       await _repo.markAsRead(notificationId);
     } catch (_) {}
   }
 
   Future<void> markAllAsRead([String? userId]) async {
+    if (state is NotificationLoaded) {
+      final current = (state as NotificationLoaded).notifications;
+      final updated = current.map((n) => n.copyWith(isRead: true)).toList();
+      emit(NotificationLoaded(
+        notifications: updated,
+        unreadCount: 0,
+      ));
+    }
     try {
       await _repo.markAllAsRead(userId);
     } catch (_) {}

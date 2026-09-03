@@ -1,8 +1,7 @@
-import 'package:book_ease/core/routes/app_routes.dart';
+import 'package:book_ease/core/localization/app_localizations.dart';
+import 'package:book_ease/core/localization/cubit/locale_cubit.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
-import 'package:book_ease/core/utils/app_reset_helper.dart';
-import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,88 +20,34 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
   bool _soundAndVibrate = true;
   String _selectedLanguage = "English (US)";
 
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (dialogContext) => AlertDialog(
-        backgroundColor: Colors.white,
-        surfaceTintColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Text(
-          "Log out",
-          style: TextStyle(
-            color: AppColors.textPrimary,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        content: const Text(
-          "Are you sure you want to log out of your account?",
-          style: TextStyle(color: AppColors.textSecondary, height: 1.4),
-        ),
-        actionsPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
-          ScaleOnTap(
-            onTap: () async {
-              debugPrint('LOGOUT DIALOG: Confirm clicked');
-              final navigator = Navigator.of(context, rootNavigator: true);
-              final authCubit = context.read<AuthCubit>();
-
-              Navigator.pop(dialogContext);
-
-              AppResetHelper.resetAllUserData(context);
-
-              try {
-                await authCubit.signOut();
-                debugPrint('LOGOUT DIALOG: Sign out complete');
-              } catch (e) {
-                debugPrint('Error signing out: $e');
-              }
-
-              debugPrint('LOGOUT DIALOG: Navigating to login...');
-              navigator.pushNamedAndRemoveUntil(
-                AppRoutes.login,
-                (route) => false,
-              );
-            },
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 10),
-              decoration: BoxDecoration(
-                color: AppColors.cancelled,
-                borderRadius: BorderRadius.circular(14),
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.cancelled.withValues(alpha: 0.25),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                ],
-              ),
-              child: const Text(
-                "Log out",
-                style: TextStyle(
-                  color: Colors.white,
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
+  String _getLanguageDisplayName(String code) {
+    switch (code) {
+      case 'ar':
+        return "العربية (Arabic)";
+      case 'fr':
+        return "Français (French)";
+      case 'es':
+        return "Español (Spanish)";
+      default:
+        return "English (US)";
+    }
   }
 
   void _showLanguagePicker() {
+    LocaleCubit? localeCubit;
+    try {
+      localeCubit = context.read<LocaleCubit>();
+    } catch (_) {}
+
+    final currentCode = localeCubit?.state.languageCode ?? 'en';
+
+    final languages = [
+      {'name': "English (US)", 'code': 'en'},
+      {'name': "العربية (Arabic)", 'code': 'ar'},
+      {'name': "Français (French)", 'code': 'fr'},
+      {'name': "Español (Spanish)", 'code': 'es'},
+    ];
+
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.white,
@@ -110,7 +55,6 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       builder: (ctx) {
-        final languages = ["English (US)", "English (UK)", "العربية (Arabic)", "Français (French)", "Español (Spanish)"];
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 16),
@@ -118,11 +62,11 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   child: Text(
-                    "Select Language",
-                    style: TextStyle(
+                    context.tr('settings_select_language'),
+                    style: const TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
                       color: AppColors.textPrimary,
@@ -130,23 +74,36 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                ...languages.map((lang) => ListTile(
-                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                  title: Text(
-                    lang,
-                    style: TextStyle(
-                      fontWeight: lang == _selectedLanguage ? FontWeight.bold : FontWeight.normal,
-                      color: lang == _selectedLanguage ? AppColors.primary : AppColors.textPrimary,
+                ...languages.map((item) {
+                  final isSelected = item['code'] == currentCode;
+                  return ListTile(
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
                     ),
-                  ),
-                  trailing: lang == _selectedLanguage
-                      ? const Icon(Icons.check_circle_rounded, color: AppColors.primary)
-                      : null,
-                  onTap: () {
-                    setState(() => _selectedLanguage = lang);
-                    Navigator.pop(ctx);
-                  },
-                )),
+                    title: Text(
+                      item['name']!,
+                      style: TextStyle(
+                        fontWeight:
+                            isSelected ? FontWeight.bold : FontWeight.normal,
+                        color:
+                            isSelected ? AppColors.primary : AppColors.textPrimary,
+                      ),
+                    ),
+                    trailing: isSelected
+                        ? const Icon(Icons.check_circle_rounded,
+                            color: AppColors.primary)
+                        : null,
+                    onTap: () {
+                      if (localeCubit != null) {
+                        localeCubit.changeLanguage(item['code']!);
+                      }
+                      setState(() {
+                        _selectedLanguage = item['name']!;
+                      });
+                      Navigator.pop(ctx);
+                    },
+                  );
+                }),
               ],
             ),
           ),
@@ -157,6 +114,16 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
 
   @override
   Widget build(BuildContext context) {
+    LocaleCubit? localeCubit;
+    try {
+      localeCubit = context.watch<LocaleCubit>();
+    } catch (_) {}
+
+    final currentCode = localeCubit?.state.languageCode;
+    final displayedLanguage = currentCode != null
+        ? _getLanguageDisplayName(currentCode)
+        : _selectedLanguage;
+
     return Column(
       children: [
         // Top App Bar
@@ -182,16 +149,18 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                       ),
                     ],
                   ),
-                  child: const Icon(
-                    Icons.arrow_back_ios_new_rounded,
+                  child: Icon(
+                    context.isRtl
+                        ? Icons.arrow_forward_ios_rounded
+                        : Icons.arrow_back_ios_new_rounded,
                     color: AppColors.textPrimary,
                     size: 16,
                   ),
                 ),
               ),
-              const Text(
-                "Settings & Privacy",
-                style: TextStyle(
+              Text(
+                context.tr('settings_title'),
+                style: const TextStyle(
                   color: AppColors.textPrimary,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -210,7 +179,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // CARD 1: PREFERENCES
-                _buildSectionHeader("Preferences"),
+                _buildSectionHeader(context.tr('settings_sec_preferences')),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -231,7 +200,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.notifications_active_rounded,
                         iconColor: const Color(0xFF3B82F6),
                         iconBg: const Color(0xFFEFF6FF),
-                        title: "Push Notifications",
+                        title: context.tr('settings_push_notifications'),
                         value: _pushNotifications,
                         onChanged: (val) => setState(() => _pushNotifications = val),
                       ),
@@ -240,7 +209,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.fingerprint_rounded,
                         iconColor: const Color(0xFF6366F1),
                         iconBg: const Color(0xFFEEF2FF),
-                        title: "Face ID / Biometrics",
+                        title: context.tr('settings_biometrics'),
                         value: _biometrics,
                         onChanged: (val) => setState(() => _biometrics = val),
                       ),
@@ -249,7 +218,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.volume_up_rounded,
                         iconColor: const Color(0xFF8B5CF6),
                         iconBg: const Color(0xFFF5F3FF),
-                        title: "Sound & Vibrations",
+                        title: context.tr('settings_sound_vibrate'),
                         value: _soundAndVibrate,
                         onChanged: (val) => setState(() => _soundAndVibrate = val),
                       ),
@@ -258,7 +227,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.mark_email_read_rounded,
                         iconColor: const Color(0xFF10B981),
                         iconBg: const Color(0xFFECFDF5),
-                        title: "Email Appointment Updates",
+                        title: context.tr('settings_email_alerts'),
                         value: _emailAlerts,
                         onChanged: (val) => setState(() => _emailAlerts = val),
                       ),
@@ -267,8 +236,8 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.language_rounded,
                         iconColor: const Color(0xFF06B6D4),
                         iconBg: const Color(0xFFECFEFF),
-                        title: "Language",
-                        trailingText: _selectedLanguage,
+                        title: context.tr('settings_language'),
+                        trailingText: displayedLanguage,
                         onTap: _showLanguagePicker,
                       ),
                     ],
@@ -278,7 +247,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                 const SizedBox(height: 20),
 
                 // CARD 2: ACCOUNT & SECURITY
-                _buildSectionHeader("Account & Security"),
+                _buildSectionHeader(context.tr('settings_sec_account')),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -299,8 +268,10 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.lock_outline_rounded,
                         iconColor: const Color(0xFF6366F1),
                         iconBg: const Color(0xFFEEF2FF),
-                        title: "Change Password",
-                        trailingIcon: Icons.chevron_right_rounded,
+                        title: context.tr('settings_change_password'),
+                        trailingIcon: context.isRtl
+                            ? Icons.chevron_left_rounded
+                            : Icons.chevron_right_rounded,
                         onTap: () {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
@@ -315,8 +286,10 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         icon: Icons.shield_outlined,
                         iconColor: const Color(0xFF10B981),
                         iconBg: const Color(0xFFECFDF5),
-                        title: "Privacy & Data Permissions",
-                        trailingIcon: Icons.chevron_right_rounded,
+                        title: context.tr('settings_privacy_data'),
+                        trailingIcon: context.isRtl
+                            ? Icons.chevron_left_rounded
+                            : Icons.chevron_right_rounded,
                         onTap: () {},
                       ),
                     ],
@@ -326,7 +299,7 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                 const SizedBox(height: 20),
 
                 // CARD 3: LEGAL & SUPPORT
-                _buildSectionHeader("Legal & Support"),
+                _buildSectionHeader(context.tr('settings_sec_legal')),
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -348,9 +321,9 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            const Text(
-                              "App Version",
-                              style: TextStyle(
+                            Text(
+                              context.tr('settings_app_version'),
+                              style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
@@ -380,16 +353,16 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              "Terms of Service",
-                              style: TextStyle(
+                              context.tr('settings_terms_of_service'),
+                              style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textMuted),
+                            const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textMuted),
                           ],
                         ),
                       ),
@@ -398,75 +371,20 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 4),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: const [
+                          children: [
                             Text(
-                              "Privacy Policy",
-                              style: TextStyle(
+                              context.tr('settings_privacy_policy'),
+                              style: const TextStyle(
                                 fontSize: 13,
                                 color: AppColors.textSecondary,
                                 fontWeight: FontWeight.w500,
                               ),
                             ),
-                            Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textMuted),
+                            const Icon(Icons.open_in_new_rounded, size: 16, color: AppColors.textMuted),
                           ],
                         ),
                       ),
                     ],
-                  ),
-                ),
-
-                const SizedBox(height: 20),
-
-                // LOGOUT CARD
-                Container(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: AppColors.cancelled.withValues(alpha: 0.2)),
-                  ),
-                  child: Material(
-                    color: Colors.transparent,
-                    borderRadius: BorderRadius.circular(20),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(20),
-                      onTap: () => _showLogoutDialog(context),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-                        child: Row(
-                          children: [
-                            Container(
-                              height: 38,
-                              width: 38,
-                              decoration: BoxDecoration(
-                                color: AppColors.cancelled.withValues(alpha: 0.1),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: const Icon(
-                                Icons.logout_rounded,
-                                color: AppColors.cancelled,
-                                size: 18,
-                              ),
-                            ),
-                            const SizedBox(width: 14),
-                            const Expanded(
-                              child: Text(
-                                "Log Out",
-                                style: TextStyle(
-                                  color: AppColors.cancelled,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            const Icon(
-                              Icons.chevron_right_rounded,
-                              color: AppColors.cancelled,
-                              size: 18,
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
                 ),
 
@@ -497,12 +415,12 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Row(
-                      children: const [
-                        Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-                        SizedBox(width: 10),
+                      children: [
+                        const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                        const SizedBox(width: 10),
                         Text(
-                          "Settings saved successfully",
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                          context.tr('settings_saved_success'),
+                          style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -535,9 +453,9 @@ class _SettingsViewBodyState extends State<SettingsViewBody> {
                   ],
                 ),
                 alignment: Alignment.center,
-                child: const Text(
-                  "Save Settings",
-                  style: TextStyle(
+                child: Text(
+                  context.tr('settings_save_button'),
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 15,
                     fontWeight: FontWeight.bold,

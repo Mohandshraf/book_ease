@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/cubit/locale_cubit.dart';
 import 'package:book_ease/core/services/auth_services.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
@@ -47,6 +48,7 @@ Future<void> setupServiceLocator() async {
   sl.registerLazySingleton<ProviderAvailabilityRepo>(() => ProviderAvailabilityRepoImpl());
 
   // Cubits / Blocs
+  sl.registerLazySingleton<LocaleCubit>(() => LocaleCubit());
   sl.registerLazySingleton<SavedProvidersCubit>(() => SavedProvidersCubit());
   sl.registerFactory<AuthCubit>(() => AuthCubit(sl<AuthRepo>()));
   sl.registerFactory<UserCubit>(() => UserCubit(sl<AuthRepo>()));

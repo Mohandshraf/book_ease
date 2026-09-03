@@ -47,17 +47,23 @@ class NotificationServices {
     final uid = (userId != null && userId.isNotEmpty) ? userId : currentUserId;
     if (uid.isEmpty) return;
 
-    final unreadDocs = await _firestore
+    final userDocs = await _firestore
         .collection('notifications')
         .where('userId', isEqualTo: uid)
-        .where('isRead', isEqualTo: false)
         .get();
 
     final batch = _firestore.batch();
-    for (var doc in unreadDocs.docs) {
-      batch.update(doc.reference, {'isRead': true});
+    var hasUpdates = false;
+    for (var doc in userDocs.docs) {
+      final data = doc.data();
+      if (data['isRead'] != true) {
+        batch.update(doc.reference, {'isRead': true});
+        hasUpdates = true;
+      }
     }
-    await batch.commit().catchError((_) {});
+    if (hasUpdates) {
+      await batch.commit().catchError((_) {});
+    }
   }
 
   Future<void> deleteNotification(String notificationId) async {

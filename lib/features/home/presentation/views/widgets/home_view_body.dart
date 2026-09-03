@@ -6,6 +6,8 @@ import 'package:book_ease/core/utils/app_animations.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
 import 'package:book_ease/features/booking/data/models/booking_model.dart';
 import 'package:book_ease/features/booking/data/repo/booking_repo.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_state.dart';
 import 'package:book_ease/features/profile/cubit/saved_providers_cubit.dart';
 import 'package:book_ease/features/provider_services/data/models/service_model.dart';
 import 'package:book_ease/features/provider_services/data/repo/provider_services_repo.dart';
@@ -379,46 +381,76 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                       onTap: () {
                         Navigator.pushNamed(context, AppRoutes.notifications);
                       },
-                      child: Container(
-                        width: 46,
-                        height: 46,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(
-                            color: AppColors.border,
-                            width: 1.2,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color: const Color(0xFF0F172A).withValues(alpha: .04),
-                              blurRadius: 10,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            const Icon(
-                              Icons.notifications_none_rounded,
-                              color: AppColors.textPrimary,
-                              size: 22,
-                            ),
-                            Positioned(
-                              top: 12,
-                              right: 12,
-                              child: Container(
-                                width: 8,
-                                height: 8,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.accentAmber,
-                                  shape: BoxShape.circle,
-                                ),
+                      child: BlocBuilder<NotificationCubit, NotificationState>(
+                        builder: (context, notifState) {
+                          final unreadCount =
+                              notifState is NotificationLoaded ? notifState.unreadCount : 0;
+                          return Container(
+                            width: 46,
+                            height: 46,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                color: AppColors.border,
+                                width: 1.2,
                               ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: const Color(0xFF0F172A).withValues(alpha: .04),
+                                  blurRadius: 10,
+                                  offset: const Offset(0, 2),
+                                ),
+                              ],
                             ),
-                          ],
-                        ),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              alignment: Alignment.center,
+                              children: [
+                                const Icon(
+                                  Icons.notifications_none_rounded,
+                                  color: AppColors.textPrimary,
+                                  size: 22,
+                                ),
+                                if (unreadCount > 0)
+                                  Positioned(
+                                    top: -2,
+                                    right: -2,
+                                    child: Container(
+                                      padding: const EdgeInsets.all(3),
+                                      constraints: const BoxConstraints(minWidth: 16, minHeight: 16),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFFEF4444),
+                                        shape: BoxShape.circle,
+                                        border: Border.all(
+                                          color: Colors.white,
+                                          width: 1.5,
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: const Color(0xFFEF4444).withValues(alpha: 0.45),
+                                            blurRadius: 4,
+                                            offset: const Offset(0, 1),
+                                          ),
+                                        ],
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          unreadCount > 9 ? '9+' : '$unreadCount',
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.bold,
+                                            height: 1,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ],

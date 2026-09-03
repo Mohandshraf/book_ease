@@ -9,6 +9,7 @@ class MenuOptionTile extends StatelessWidget {
   final Color iconColor;
   final Color iconBackgroundColor;
   final VoidCallback onTap;
+  final int? badgeCount;
 
   const MenuOptionTile({
     super.key,
@@ -18,6 +19,7 @@ class MenuOptionTile extends StatelessWidget {
     required this.iconColor,
     required this.iconBackgroundColor,
     required this.onTap,
+    this.badgeCount,
   });
 
   @override
@@ -87,6 +89,35 @@ class MenuOptionTile extends StatelessWidget {
                     ],
                   ),
                 ),
+                if (badgeCount != null && badgeCount! > 0) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
+                    constraints: const BoxConstraints(minWidth: 20, minHeight: 20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFFEF4444),
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFFEF4444).withValues(alpha: 0.35),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Center(
+                      child: Text(
+                        badgeCount! > 99 ? '99+' : '${badgeCount!}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          height: 1,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                ],
                 // Trailing Chevron
                 const Icon(
                   Icons.chevron_right_rounded,

@@ -1,3 +1,4 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/features/booking/data/cubit/booking_cubit.dart';
@@ -7,6 +8,7 @@ import 'package:book_ease/features/home/presentation/views/widgets/home_view.dar
 import 'package:book_ease/features/messages/data/cubit/chat_cubit.dart';
 import 'package:book_ease/features/messages/data/cubit/chat_state.dart';
 import 'package:book_ease/features/messages/presentation/views/messages_view.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/profile/presentation/views/profile_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,6 +48,7 @@ class _CustomerRootViewState extends State<CustomerRootView> {
     super.initState();
     currentIndex = widget.initialIndex;
     context.read<ChatCubit>().initConversations();
+    context.read<NotificationCubit>().subscribeToNotifications();
     pages = [
       const HomeView(),
       const DiscoverView(),
@@ -113,9 +116,9 @@ class _CustomerRootViewState extends State<CustomerRootView> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _buildNavItem(0, Icons.home_rounded, Icons.home_outlined, "Home"),
-              _buildNavItem(1, Icons.explore_rounded, Icons.explore_outlined, "Discover"),
-              _buildNavItem(2, Icons.calendar_month_rounded, Icons.calendar_month_outlined, "Bookings"),
+              _buildNavItem(0, Icons.home_rounded, Icons.home_outlined, context.tr('nav_home')),
+              _buildNavItem(1, Icons.explore_rounded, Icons.explore_outlined, context.tr('nav_discover')),
+              _buildNavItem(2, Icons.calendar_month_rounded, Icons.calendar_month_outlined, context.tr('nav_bookings')),
               BlocBuilder<ChatCubit, ChatState>(
                 builder: (context, chatState) {
                   final unreadCount =
@@ -124,12 +127,12 @@ class _CustomerRootViewState extends State<CustomerRootView> {
                     3,
                     Icons.chat_bubble_rounded,
                     Icons.chat_bubble_outline_rounded,
-                    "Messages",
+                    context.tr('nav_messages'),
                     badgeCount: unreadCount,
                   );
                 },
               ),
-              _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, "Profile"),
+              _buildNavItem(4, Icons.person_rounded, Icons.person_outline_rounded, context.tr('nav_profile')),
             ],
           ),
         ),

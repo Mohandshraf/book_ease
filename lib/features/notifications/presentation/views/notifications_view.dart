@@ -1,6 +1,5 @@
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_animations.dart';
-import 'package:book_ease/core/di/service_locator.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
 import 'package:book_ease/features/notifications/data/cubit/notification_state.dart';
 import 'package:book_ease/features/notifications/presentation/views/widgets/notification_tile.dart';
@@ -8,15 +7,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 
-class NotificationsView extends StatelessWidget {
+class NotificationsView extends StatefulWidget {
   const NotificationsView({super.key});
 
   @override
+  State<NotificationsView> createState() => _NotificationsViewState();
+}
+
+class _NotificationsViewState extends State<NotificationsView> {
+  @override
+  void initState() {
+    super.initState();
+    final cubit = context.read<NotificationCubit>();
+    if (cubit.state is NotificationInitial) {
+      cubit.subscribeToNotifications();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => sl<NotificationCubit>()..subscribeToNotifications(),
-      child: const _NotificationsViewContent(),
-    );
+    return const _NotificationsViewContent();
   }
 }
 

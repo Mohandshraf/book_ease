@@ -1,4 +1,7 @@
 import 'package:book_ease/core/di/service_locator.dart';
+import 'package:book_ease/core/localization/app_localizations.dart';
+import 'package:book_ease/core/localization/cubit/locale_cubit.dart';
+import 'package:book_ease/core/localization/cubit/locale_state.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_theme.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
@@ -16,6 +19,7 @@ import 'package:book_ease/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +37,7 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
+        BlocProvider<LocaleCubit>(create: (_) => sl<LocaleCubit>()),
         BlocProvider<AuthCubit>(create: (_) => sl<AuthCubit>()),
         BlocProvider<UserCubit>(create: (_) => sl<UserCubit>()),
         BlocProvider<BookingCubit>(create: (_) => sl<BookingCubit>()),
@@ -59,11 +64,28 @@ class MainApp extends StatelessWidget {
           create: (_) => sl<SavedProvidersCubit>()..loadSavedProviders(),
         ),
       ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.lightTheme,
-        initialRoute: AppRoutes.splash,
-        onGenerateRoute: AppRoutes.onGenerateRoute,
+      child: BlocBuilder<LocaleCubit, LocaleState>(
+        builder: (context, localeState) {
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            theme: AppTheme.lightTheme,
+            locale: localeState.locale,
+            supportedLocales: const [
+              Locale('en', ''),
+              Locale('ar', ''),
+              Locale('fr', ''),
+              Locale('es', ''),
+            ],
+            localizationsDelegates: const [
+              AppLocalizations.delegate,
+              GlobalMaterialLocalizations.delegate,
+              GlobalWidgetsLocalizations.delegate,
+              GlobalCupertinoLocalizations.delegate,
+            ],
+            initialRoute: AppRoutes.splash,
+            onGenerateRoute: AppRoutes.onGenerateRoute,
+          );
+        },
       ),
     );
   }

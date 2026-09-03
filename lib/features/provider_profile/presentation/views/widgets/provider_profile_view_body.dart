@@ -1,8 +1,11 @@
+import 'package:book_ease/core/localization/app_localizations.dart';
 import 'package:book_ease/core/routes/app_routes.dart';
 import 'package:book_ease/core/theme/app_colors.dart';
 import 'package:book_ease/core/utils/app_reset_helper.dart';
 import 'package:book_ease/features/auth/data/cubit/auth_cubit.dart';
 import 'package:book_ease/features/auth/data/cubit/user_cubit.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_cubit.dart';
+import 'package:book_ease/features/notifications/data/cubit/notification_state.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/logout_button.dart';
 import 'package:book_ease/features/profile/presentation/views/widgets/menu_option_tile.dart';
 import 'package:book_ease/features/provider_profile/presentation/views/widgets/credentials_dialog.dart';
@@ -21,25 +24,25 @@ class ProviderProfileViewBody extends StatelessWidget {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text(
-          "Log out",
-          style: TextStyle(
+        title: Text(
+          context.tr('profile_log_out_title'),
+          style: const TextStyle(
             color: AppColors.textPrimary,
             fontWeight: FontWeight.bold,
           ),
         ),
-        content: const Text(
-          "Are you sure you want to log out of your Provider account?",
-          style: TextStyle(color: AppColors.textSecondary),
+        content: Text(
+          context.tr('profile_log_out_confirm'),
+          style: const TextStyle(color: AppColors.textSecondary),
         ),
         actionsPadding:
             const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(dialogContext),
-            child: const Text(
-              "Cancel",
-              style: TextStyle(
+            child: Text(
+              context.tr('common_cancel'),
+              style: const TextStyle(
                 color: AppColors.textSecondary,
                 fontWeight: FontWeight.w600,
               ),
@@ -70,9 +73,9 @@ class ProviderProfileViewBody extends StatelessWidget {
               ),
               elevation: 0,
             ),
-            child: const Text(
-              "Log out",
-              style: TextStyle(
+            child: Text(
+              context.tr('profile_log_out'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
               ),
@@ -227,14 +230,21 @@ class ProviderProfileViewBody extends StatelessWidget {
           ),
           const Gap(10),
 
-          MenuOptionTile(
-            icon: Icons.notifications_none_rounded,
-            title: "Booking Notifications",
-            subtitle: "Alerts for new requests",
-            iconColor: iconColor,
-            iconBackgroundColor: iconBgColor,
-            onTap: () {
-              Navigator.pushNamed(context, AppRoutes.notifications);
+          BlocBuilder<NotificationCubit, NotificationState>(
+            builder: (context, notifState) {
+              final unreadCount =
+                  notifState is NotificationLoaded ? notifState.unreadCount : 0;
+              return MenuOptionTile(
+                icon: Icons.notifications_none_rounded,
+                title: "Booking Notifications",
+                subtitle: "Alerts for new requests",
+                iconColor: iconColor,
+                iconBackgroundColor: iconBgColor,
+                badgeCount: unreadCount,
+                onTap: () {
+                  Navigator.pushNamed(context, AppRoutes.notifications);
+                },
+              );
             },
           ),
           MenuOptionTile(
